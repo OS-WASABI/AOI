@@ -13,10 +13,15 @@ RUN apt-get -qq -d update
 RUN apt-get -qq -y install \
     cmake \
     cppcheck \
+    curl \
     g++-6 \
+    git \
+    libboost-all-dev \
     libcpprest-dev \
     libspdlog-dev \
+    nano \
     software-properties-common \
+    vim \
     wget
 
 # Make g++ 6 the default g++ executable
