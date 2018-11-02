@@ -10,7 +10,6 @@ namespace aoi_rest {
 Controller::Controller() {}
 Controller::~Controller() {}
 void Controller::endpoint(const std::string& value) {
-    std::cout << "Entering into controller endpoint method." << std::endl;
     uri endpointURI(value);
     uri_builder endpointBuilder;
     endpointBuilder.set_scheme(endpointURI.scheme());
@@ -26,7 +25,6 @@ std::string Controller::endpoint() const {
     return listener__.uri().to_string();
 }
 pplx::task<void> Controller::Accept() {
-    std::cout << "Entering into controller accept method." << std::endl;
     InitHandlers();
     return listener__.open();
 }

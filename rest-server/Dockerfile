@@ -1,5 +1,5 @@
 # Get the base test environment image from Docker Hub
-FROM aoi-test-env
+FROM oswasabi/aoi-test-env:latest
 
 # Set the working directory
 WORKDIR "/usr/src/aoi-rest-server"
