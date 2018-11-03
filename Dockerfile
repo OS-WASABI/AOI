@@ -11,7 +11,11 @@ COPY . .
 RUN cppcheck --error-exitcode=1 .
 
 # Lint the files
-RUN ./cpplint.py --headers=h --extensions=cpp *.cpp
+RUN ./cpplint.py --headers=hpp --extensions=cpp \
+        /usr/src/aoi/*.cpp \
+        /usr/src/aoi/rest-server/src/rest_server.cpp \
+        /usr/src/aoi/rest-server/src/controller/controller.cpp \
+        /usr/src/aoi/rest-server/src/controller/example_controller.cpp
 
 # Create build directory
 RUN mkdir build
