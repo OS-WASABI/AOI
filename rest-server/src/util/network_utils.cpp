@@ -25,6 +25,7 @@
 //
 
 #include "network_utils.hpp"
+using boost::asio::io_service;
 
 namespace aoi_rest {
 

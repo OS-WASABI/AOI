@@ -27,10 +27,10 @@
 #pragma once
 
 #include <string>
-#include "std_aoi_rest.hpp"
+#include <boost/asio.hpp>
 
-using namespace boost::asio;
-using namespace boost::asio::ip;
+using boost::asio::ip::tcp;
+using boost::asio::ip::host_name;
 
 namespace aoi_rest {
    
@@ -48,11 +48,10 @@ namespace aoi_rest {
 
       // gets the host IP6 string formatted
       static std::string hostIP6() {
-
          return hostIP(AF_INET6);
       }
       static std::string hostName() {
-         return ip::host_name();
+         return host_name();
       }
    };
       

@@ -3,7 +3,6 @@
 #include <cpprest/uri_builder.h>
 #include <cpprest/base_uri.h>
 #include "example_controller.hpp"
-#include "std_aoi_rest.hpp"
 
 namespace aoi_rest {
 void ExampleController::InitHandlers() {
