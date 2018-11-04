@@ -27,10 +27,10 @@
 #pragma once
 
 #include <string>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 
-using boost::asio::ip::tcp;
-using boost::asio::ip::host_name;
+using asio::ip::tcp;
+using asio::ip::host_name;
 
 namespace aoi_rest {
    
