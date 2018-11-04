@@ -11,12 +11,12 @@ void AnotherController::InitHandlers() {
             this, std::placeholders::_1));
 }
 void AnotherController::HandleGet(http_request message) {
-    // This is an example of how to extract information from the 
+    // This is an example of how to extract information from the
     // http_request message and form a json return
     auto response = json::value::object();
     response["uri"] = json::value::string(message.relative_uri().to_string());
     response["headers"] = json::value::object();
-    for (auto& header: message.headers())
+    for (auto& header : message.headers())
         response["headers"][header.first] = json::value::string(header.second);
     response["method"] = json::value::string(message.method());
     response["request dump"] = json::value::string(message.to_string());
