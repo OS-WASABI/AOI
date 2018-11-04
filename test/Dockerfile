@@ -12,14 +12,14 @@ RUN cppcheck --error-exitcode=1 .
 
 # Lint the files
 RUN ./cpplint.py --headers=hpp --extensions=cpp \
-        /usr/src/aoi/*.cpp \
-        /usr/src/aoi/rest-server/src/rest_server.cpp \
-        /usr/src/aoi/rest-server/src/controller/controller.cpp \
-        /usr/src/aoi/rest-server/src/controller/example_controller.cpp
+        /usr/src/aoi/test/*.cpp \
+        /usr/src/aoi/rest-server/src/*.cpp \
+        /usr/src/aoi/rest-server/src/controller/*.cpp
 
 # Create build directory
+WORKDIR "/usr/src/aoi/test"
 RUN mkdir build
-WORKDIR "/usr/src/aoi/build"
+WORKDIR "/usr/src/aoi/test/build"
 
 # Build and run tests
 RUN cmake -G "Unix Makefiles" ..

@@ -3,4 +3,4 @@ language: generic
 
 services: docker
 
-script: docker build --rm -t aoi:test .
+script: docker build --rm -t aoi:test -f ./test/Dockerfile .
