@@ -16,6 +16,7 @@ RUN apt-get -qq -y install \
     curl \
     g++-6 \
     git \
+    libasio \
     libcpprest-dev \
     libspdlog-dev \
     nano \
