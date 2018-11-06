@@ -11,7 +11,7 @@ COPY . .
 RUN cppcheck --error-exitcode=1 .
 
 # Lint the files
-RUN ./cpplint.py --headers=hpp --extensions=cpp \
+RUN ./cpplint.py --headers=hpp --extensions=cpp --linelength=120 \
         /usr/src/aoi/test/*.cpp \
         /usr/src/aoi/rest-server/src/*.cpp \
         /usr/src/aoi/rest-server/src/controller/*.cpp

@@ -11,14 +11,43 @@ Then run with the following command. The first port number is where your compute
 ```
 docker run -d -it -p 8080:8080 aoi-rest-server
 ```
-In postman or your browser, navigate to
+In Postman or your browser, navigate to
 ```
-http://localhost:8080/v1/aoi/api/service/test
+http://localhost:8080/v1/aoi/api/users
 ```
 And the response for a GET request will be
 ```
 {
-    "status": "ready!",
-    "version": "0.1.1"
+    "users": {
+        "12": {
+            "name": "Shawn Hulce",
+            "password": "ecluhwordpass!4"
+        },
+        "17": {
+            "name": "Kris Hoadley",
+            "password": "TheBestLikeNoOneEverWas"
+        }
+    }
 }
 ```
+A POST with a well formed body with the same schema will add new users.
+Example POST body
+```
+{
+    "users": {
+        "23": {
+            "name": "Michael McCully",
+            "password": "Starbucks32"
+        },
+        "97": {
+            "name": "Vaniya Agawal",
+            "password": "p8932rqfn;fjp8weER$Q#E9"
+        },
+        "76": {
+            "name": "Ross Arcemont",
+            "password": "dankmemes"
+        }
+    }
+}
+```
+Run a GET again to see the updated collection of users!
