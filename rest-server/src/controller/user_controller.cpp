@@ -4,6 +4,7 @@
 #include <cpprest/base_uri.h>
 #include <algorithm>
 #include <iostream>
+#include <string>
 #include "user_controller.hpp"
 
 namespace aoi_rest {
@@ -25,17 +26,17 @@ void UserController::HandleGet(http_request message) {
         for (auto const& query : queries)
             std::cout << "name: " << query.first << " value: " << query.second << std::endl;
         // end test section
-        if(relative_path.length() > 1 && relative_path.at(1) != '?') {
+        if (relative_path.length() > 1 && relative_path.at(1) != '?') {
             auto next_forward_slash = relative_path.find("/", 1);
             std::string id_as_string;
-            if(next_forward_slash == std::string::npos)  // no more slashes
+            if (next_forward_slash == std::string::npos)  // no more slashes
                 id_as_string = relative_path.substr(1);
             else
                 id_as_string = relative_path.substr(1, next_forward_slash - 1);
-            if(id_as_string.find_first_not_of("0123456789") == std::string::npos) {
+            if (id_as_string.find_first_not_of("0123456789") == std::string::npos) {
                 int id = std::stoi(id_as_string);
                 for (auto& user : users) {
-                    if(user.id == id) {
+                    if (user.id == id) {
                         auto user_json  = json::value::object();
                         user_json["name"] = json::value::string(user.name);
                         user_json["password"] = json::value::string(user.password);
@@ -43,10 +44,10 @@ void UserController::HandleGet(http_request message) {
                     }
                 }
             }
-        } else if(queries.count("name") > 0) {
+        } else if (queries.count("name") > 0) {
             for (auto& user : users) {
                 // this long if statement is needed for case insensitive matches
-                if(std::search(user.name.begin(), user.name.end(),
+                if (std::search(user.name.begin(), user.name.end(),
                             queries["name"].begin(), queries["name"].end(),
                             [](char ch1, char ch2) { return std::toupper(ch1) == std::toupper(ch2);
                             }) != user.name.end()) {
