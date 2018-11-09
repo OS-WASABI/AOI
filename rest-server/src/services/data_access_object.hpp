@@ -15,6 +15,8 @@ class DataAccessObject : DataAccessInterface {
     void operator=(DataAccessObject const&) = delete;
 
     std::vector<User> GetUsers() override;
+    std::vector<User> GetUsersByName(const std::string& name) override;
+    std::vector<User> GetUserByID(int id) override;
     bool RemoveUser(User user) override;
     void AddUser(User user) override;
   private:

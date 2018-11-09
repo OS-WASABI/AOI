@@ -16,9 +16,7 @@ void UserController::InitHandlers() {
 }
 void UserController::HandleGet(http_request message) {
     try {
-        auto path = RequestPath(message);
         auto response = json::value::object();
-        auto users = DataAccessObject::Instance().GetUsers();
         response["users"] = json::value::object();
         auto queries = Queries(message.relative_uri().query());
         auto relative_path = message.relative_uri().to_string();
@@ -27,42 +25,13 @@ void UserController::HandleGet(http_request message) {
             std::cout << "name: " << query.first << " value: " << query.second << std::endl;
         // end test section
         if (relative_path.length() > 1 && relative_path.at(1) != '?') {
-            auto next_forward_slash = relative_path.find("/", 1);
-            std::string id_as_string;
-            if (next_forward_slash == std::string::npos)  // no more slashes
-                id_as_string = relative_path.substr(1);
-            else
-                id_as_string = relative_path.substr(1, next_forward_slash - 1);
-            if (id_as_string.find_first_not_of("0123456789") == std::string::npos) {
-                int id = std::stoi(id_as_string);
-                for (auto& user : users) {
-                    if (user.id == id) {
-                        auto user_json  = json::value::object();
-                        user_json["name"] = json::value::string(user.name);
-                        user_json["password"] = json::value::string(user.password);
-                        response["users"][std::to_string(user.id)] = user_json;
-                    }
-                }
-            }
+            GetUserByID(response, relative_path);
         } else if (queries.count("name") > 0) {
-            for (auto& user : users) {
-                // this long if statement is needed for case insensitive matches
-                if (std::search(user.name.begin(), user.name.end(),
-                            queries["name"].begin(), queries["name"].end(),
-                            [](char ch1, char ch2) { return std::toupper(ch1) == std::toupper(ch2);
-                            }) != user.name.end()) {
-                    auto user_json  = json::value::object();
-                    user_json["name"] = json::value::string(user.name);
-                    user_json["password"] = json::value::string(user.password);
-                    response["users"][std::to_string(user.id)] = user_json;
-                }
-            }
+            GetUsersByName(response, queries["name"]);
         } else {
+            auto users = DataAccessObject::Instance().GetUsers();
             for (auto& user : users) {
-                auto user_json  = json::value::object();
-                user_json["name"] = json::value::string(user.name);
-                user_json["password"] = json::value::string(user.password);
-                response["users"][std::to_string(user.id)] = user_json;
+                response["users"][std::to_string(user.id)] = user.to_json();
             }
         }
         message.reply(status_codes::OK, response);
@@ -99,5 +68,29 @@ void UserController::HandlePost(http_request message) {
 }
 void UserController::HandleDelete(http_request message) {
     message.reply(status_codes::NotImplemented, ResponseNotImpl(methods::DEL));
+}
+void UserController::GetUserByID(json::value& response, const std::string& path) {
+    auto id_as_string = ParseUserID(path);
+    if (id_as_string.find_first_not_of("0123456789") == std::string::npos) {
+        int id = std::stoi(id_as_string);
+        auto users = DataAccessObject::Instance().GetUserByID(id);
+        if (users.size() > 0)
+            response["users"][std::to_string(users[0].id)] = users[0].to_json();
+    }
+}
+void UserController::GetUsersByName(json::value& response, const std::string& user_name) {
+    auto users = DataAccessObject::Instance().GetUsersByName(user_name);
+    for (auto& user : users) {
+        response["users"][std::to_string(user.id)] = user.to_json();
+    }
+}
+std::string UserController::ParseUserID(const std::string& path) {
+    auto next_forward_slash = path.find("/", 1);
+    std::string id_as_string;
+    if (next_forward_slash == std::string::npos)  // no more slashes
+        id_as_string = path.substr(1);
+    else
+        id_as_string = path.substr(1, next_forward_slash - 1);
+    return id_as_string;
 }
 }  // namespace aoi_rest

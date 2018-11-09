@@ -21,6 +21,9 @@ class UserController: public Controller {
     void HandlePut(http_request message) override;
     void HandlePost(http_request message) override;
     void HandleDelete(http_request message) override;
+    void GetUserByID(json::value& response, const std::string& path);
+    void GetUsersByName(json::value& response, const std::string& user_name);
+    std::string ParseUserID(const std::string& path);
 };
 }
 #endif // USER_CONTROLLER_H
