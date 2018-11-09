@@ -1,0 +1,20 @@
+version: "3"
+services:
+        apache:
+                build: ../docker-aoi-apache
+                ports:
+                        - "8080:80"
+                networks:
+                        - aoinet
+        aoi:
+                build: ../rest-server/
+                networks:
+                        - aoinet
+                command: tail -F anything 
+        db:
+                image: mysql
+                networks:
+                        - aoinet
+                command: tail -F anything
+networks:
+        aoinet:
