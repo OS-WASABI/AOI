@@ -29,7 +29,7 @@ void UserController::HandleGet(http_request message) {
         } else if (queries.count("name") > 0) {
             GetUsersByName(response, queries["name"]);
         } else {
-            auto users = DataAccessObject::Instance().GetUsers();
+            auto users = dao__.GetUsers();
             for (auto& user : users) {
                 response["users"][std::to_string(user.id)] = user.to_json();
             }
@@ -55,7 +55,7 @@ void UserController::HandlePost(http_request message) {
             const json::value &value = iter->second;
             if (value.is_object()) {
                 auto user_json = value.as_object();
-                DataAccessObject::Instance().AddUser(
+                dao__.AddUser(
                         User {user_json["name"].as_string(),
                         std::stoi(key), user_json["password"].as_string()});
             }
@@ -73,13 +73,13 @@ void UserController::GetUserByID(json::value& response, const std::string& path)
     auto id_as_string = ParseUserID(path);
     if (id_as_string.find_first_not_of("0123456789") == std::string::npos) {
         int id = std::stoi(id_as_string);
-        auto users = DataAccessObject::Instance().GetUserByID(id);
+        auto users = dao__.GetUserByID(id);
         if (users.size() > 0)
             response["users"][std::to_string(users[0].id)] = users[0].to_json();
     }
 }
 void UserController::GetUsersByName(json::value& response, const std::string& user_name) {
-    auto users = DataAccessObject::Instance().GetUsersByName(user_name);
+    auto users = dao__.GetUsersByName(user_name);
     for (auto& user : users) {
         response["users"][std::to_string(user.id)] = user.to_json();
     }

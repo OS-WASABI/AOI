@@ -8,7 +8,7 @@
 #include "data_access_interface.hpp"
 
 namespace aoi_rest {
-class DataAccessObject : DataAccessInterface {
+class DataAccessObject : public DataAccessInterface {
   public:
     static DataAccessObject& Instance();
     DataAccessObject(DataAccessObject const&) = delete;
