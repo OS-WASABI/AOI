@@ -10,7 +10,7 @@ services:
                 build: ../rest-server/
                 networks:
                         - aoinet
-                command: tail -F anything 
+                tty: true
         db:
                 image: mysql
                 networks:
