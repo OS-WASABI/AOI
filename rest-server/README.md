@@ -15,7 +15,7 @@ In Postman or your browser, navigate to
 ```
 http://localhost:8080/v1/aoi/api/users
 ```
-And the response for a GET request will be
+The response for a GET request will be for the whole collection of users
 ```
 {
     "users": {
@@ -23,6 +23,36 @@ And the response for a GET request will be
             "name": "Shawn Hulce",
             "password": "ecluhwordpass!4"
         },
+        "17": {
+            "name": "Kris Hoadley",
+            "password": "TheBestLikeNoOneEverWas"
+        }
+    }
+}
+```
+To get a user by id
+```
+http://localhost:8080/v1/aoi/api/users/12
+```
+The response
+```
+{
+    "users": {
+        "12": {
+            "name": "Shawn Hulce",
+            "password": "ecluhwordpass!4"
+        }
+    }
+}
+```
+To get a user by partial name match, use a query like
+```
+http://localhost:8080/v1/aoi/api/users?name=kris
+```
+The response
+```
+{
+    "users": {
         "17": {
             "name": "Kris Hoadley",
             "password": "TheBestLikeNoOneEverWas"

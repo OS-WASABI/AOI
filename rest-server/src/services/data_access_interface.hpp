@@ -10,6 +10,8 @@ namespace aoi_rest {
 class DataAccessInterface {
   public:
     virtual std::vector<User> GetUsers() = 0;
+    virtual std::vector<User> GetUsersByName(const std::string& name) = 0;
+    virtual std::vector<User> GetUserByID(int id) = 0;
     virtual bool RemoveUser(User user) = 0;
     virtual void AddUser(User user) = 0;
 };

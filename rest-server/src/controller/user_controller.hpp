@@ -3,15 +3,15 @@
 #ifndef USER_CONTROLLER_H
 #define USER_CONTROLLER_H
 #include <controller.hpp>
-#include "data_access_object.hpp"
-using aoi_rest::DataAccessObject;
+#include "data_access_interface.hpp"
+using aoi_rest::DataAccessInterface;
 
 namespace aoi_rest {
 class UserController: public Controller {
   public: 
-    UserController() : Controller() {
-      DataAccessObject::Instance().AddUser(User {"Kris Hoadley", 17, "TheBestLikeNoOneEverWas"});
-      DataAccessObject::Instance().AddUser(User {"Shawn Hulce", 12, "ecluhwordpass!4"});
+    UserController(DataAccessInterface& dao__) : dao__(dao__), Controller() {
+      dao__.AddUser(User {"Kris Hoadley", 17, "TheBestLikeNoOneEverWas"});
+      dao__.AddUser(User {"Shawn Hulce", 12, "ecluhwordpass!4"});
     }
     ~UserController() { }
 
@@ -21,6 +21,11 @@ class UserController: public Controller {
     void HandlePut(http_request message) override;
     void HandlePost(http_request message) override;
     void HandleDelete(http_request message) override;
+    void GetUserByID(json::value& response, const std::string& path);
+    void GetUsersByName(json::value& response, const std::string& user_name);
+    std::string ParseUserID(const std::string& path);
+  private:
+    DataAccessInterface& dao__;
 };
 }
 #endif // USER_CONTROLLER_H

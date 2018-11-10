@@ -8,13 +8,15 @@
 #include "data_access_interface.hpp"
 
 namespace aoi_rest {
-class DataAccessObject : DataAccessInterface {
+class DataAccessObject : public DataAccessInterface {
   public:
     static DataAccessObject& Instance();
     DataAccessObject(DataAccessObject const&) = delete;
     void operator=(DataAccessObject const&) = delete;
 
     std::vector<User> GetUsers() override;
+    std::vector<User> GetUsersByName(const std::string& name) override;
+    std::vector<User> GetUserByID(int id) override;
     bool RemoveUser(User user) override;
     void AddUser(User user) override;
   private:
