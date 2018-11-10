@@ -7,6 +7,7 @@
 #include "user.hpp"
 
 namespace aoi_rest {
+// this purely defines the interface for what a data access object should do.
 class DataAccessInterface {
   public:
     virtual std::vector<User> GetUsers() = 0;

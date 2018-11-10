@@ -6,6 +6,7 @@
 #include <cpprest/json.h>
 
 namespace aoi_rest {
+// a struct IS a class. The only difference is everything is public by default
 struct User {
     std::string name;
     int id;
@@ -17,6 +18,8 @@ struct User {
         return user_json;
     }
 };
+// Just like in Java, how you have to define an explicit 
+// implementation of '.equals(object that)' to compare objects
 inline bool operator==(const User &a, const User &b) {
     return a.name == b.name &&
            a.id == b.id &&

@@ -13,6 +13,8 @@ void AnotherController::InitHandlers() {
 void AnotherController::HandleGet(http_request message) {
     // This is an example of how to extract information from the
     // http_request message and form a json return
+    // documentation on the http_request object is here:
+    // https://microsoft.github.io/cpprestsdk/classweb_1_1http_1_1http__request.html
     auto response = json::value::object();
     response["uri"] = json::value::string(message.relative_uri().to_string());
     response["headers"] = json::value::object();

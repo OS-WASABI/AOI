@@ -10,7 +10,11 @@
 namespace aoi_rest {
 class DataAccessObject : public DataAccessInterface {
   public:
+    // The implementation of the data access object is a singleton.
+    // Therefore you get an instance of the DAO, but you cannot construct a new one.
     static DataAccessObject& Instance();
+    // Deleting the below methods enforces singleton behavior.
+    // If you don't delete the copy and compare methods, the compiler auto-generates them.
     DataAccessObject(DataAccessObject const&) = delete;
     void operator=(DataAccessObject const&) = delete;
 

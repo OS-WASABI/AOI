@@ -60,6 +60,8 @@ void UserController::HandlePost(http_request message) {
                         std::stoi(key), user_json["password"].as_string()});
             }
         }
+        // unfortunately, the documentation for cpprestsdk isn't great. for a list of status_codes:
+        // https://github.com/Microsoft/cpprestsdk/blob/68b0ddf52cf1d8364b64900e8cf1a0629f5d3bef/Release/include/cpprest/details/http_constants.dat
         // respond with successfully created (201)
         message.reply(status_codes::Created);
     } catch (std::exception&  e) {  // for testing purposes
@@ -71,7 +73,10 @@ void UserController::HandleDelete(http_request message) {
 }
 void UserController::GetUserByID(json::value& response, const std::string& path) {
     auto id_as_string = ParseUserID(path);
+    // when finding in a string, if there is no match you get back a 'std::string::npos'
+    // which means not found, or no position
     if (id_as_string.find_first_not_of("0123456789") == std::string::npos) {
+        // std::stoi is 'string to int'
         int id = std::stoi(id_as_string);
         auto users = dao__.GetUserByID(id);
         if (users.size() > 0)
@@ -84,6 +89,7 @@ void UserController::GetUsersByName(json::value& response, const std::string& us
         response["users"][std::to_string(user.id)] = user.to_json();
     }
 }
+// This function really just gets the next portion of the url path, should probably rename...
 std::string UserController::ParseUserID(const std::string& path) {
     auto next_forward_slash = path.find("/", 1);
     std::string id_as_string;
