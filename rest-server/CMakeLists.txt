@@ -13,7 +13,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 -DBOOST_LOG_DYN_LINK")
 # source files
 add_executable(${PROJECT_NAME}  
                                 ./src/rest_server.cpp                                     
-								./src/controller/another_controller.cpp                                
+				./src/controller/another_controller.cpp                                
                                 ./src/controller/controller.cpp
                                 ./src/controller/example_controller.cpp
                                 ./src/controller/user_controller.cpp                       
