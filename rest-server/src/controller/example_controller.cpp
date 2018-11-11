@@ -6,18 +6,10 @@
 
 namespace aoi_rest {
 void ExampleController::InitHandlers() {
-    listener__.support(methods::GET,
-            std::bind(&ExampleController::HandleGet,
-            this, std::placeholders::_1));
-    listener__.support(methods::PUT,
-            std::bind(&ExampleController::HandlePut,
-            this, std::placeholders::_1));
-    listener__.support(methods::POST,
-            std::bind(&ExampleController::HandlePost,
-            this, std::placeholders::_1));
-    listener__.support(methods::DEL,
-            std::bind(&ExampleController::HandleDelete,
-            this, std::placeholders::_1));
+    listener__.support(methods::GET, std::bind(&ExampleController::HandleGet, this, std::placeholders::_1));
+    listener__.support(methods::PUT, std::bind(&ExampleController::HandlePut, this, std::placeholders::_1));
+    listener__.support(methods::POST, std::bind(&ExampleController::HandlePost, this, std::placeholders::_1));
+    listener__.support(methods::DEL, std::bind(&ExampleController::HandleDelete, this, std::placeholders::_1));
 }
 void ExampleController::HandleGet(http_request message) {
     auto path = RequestPath(message);
