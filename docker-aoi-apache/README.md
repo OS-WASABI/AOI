@@ -4,9 +4,9 @@ This utilizes version 2.4 of the Apache httpd server. The configuration file is 
 
 To build locally
 ```
-docker build -t image-name:tag .
+docker build -t aoi-apache:tag .
 ```
-Note: Replace image-name:tag with your desired nomenclature. Also note that you can pull the current prototype image from the docker hub with:
+Note: Replace tag with your desired nomenclature. Also note that you can pull the current prototype image from the docker hub with:
 ```
 docker pull os-wasabi/aoi-apache:prototype
 ```
