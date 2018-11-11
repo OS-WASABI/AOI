@@ -1,34 +1,28 @@
-### This creates the base image for the Build and Test Environment for AOI
-
-# Get the base Ubuntu image from Docker Hub
-FROM ubuntu:18.04
+### This script automates setting up a
+### Build and Test Environment on Ubuntu 18.04 for AOI
 
 # Add ubuntu toolchain repository
-RUN apt-get -qq -d update
-RUN apt-get install -qq -y software-properties-common
-RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test
-RUN apt-get -qq -d update
+apt-get -q -d update
+apt-get install -q -y software-properties-common
+add-apt-repository -y ppa:ubuntu-toolchain-r/test
+apt-get -q -d update
 
 # Install tools
-RUN apt-get -qq -y install \
+apt-get -q -y install \
     cmake \
     cppcheck \
-    curl \
     g++-6 \
-    git \
-    libasio \
     libcpprest-dev \
     libspdlog-dev \
-    nano \
     software-properties-common \
-    vim \
     wget
 
 # Make g++ 6 the default g++ executable
-RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
+update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
 
 # Google Fruit dependency injection, build install remove old files
-RUN mkdir gfruit &&\
+cd /usr/src &&\
+    mkdir gfruit &&\
     cd gfruit &&\
     wget https://github.com/google/fruit/archive/v3.4.0.tar.gz &&\
     tar -xvzf v3.4.0.tar.gz &&\
@@ -38,7 +32,8 @@ RUN mkdir gfruit &&\
     ldconfig
 
 # Get gtest libraries, compile, move to lib folder, cleanup
-RUN apt-get install libgtest-dev -y -qq &&\
+cd /usr/src &&\
+    apt-get install libgtest-dev -y -q &&\
     cd /usr/src/gtest &&\
     cmake CMakeLists.txt &&\
     make &&\
@@ -46,10 +41,9 @@ RUN apt-get install libgtest-dev -y -qq &&\
     cd .. &&\
     rm -R gtest
 
-WORKDIR /usr/src/aoi
-
 # Download cpplint.py and set the file permissions so that it is executable
-RUN wget https://raw.githubusercontent.com/google/styleguide/gh-pages/cpplint/cpplint.py &&\
+cd /usr/src &&\
+    mkdir aoi &&\
+    cd aoi &&\
+    wget https://raw.githubusercontent.com/google/styleguide/gh-pages/cpplint/cpplint.py &&\
     chmod +x cpplint.py
-
-### Concludes base image

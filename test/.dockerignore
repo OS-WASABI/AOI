@@ -1,0 +1,6 @@
+/docker-test-env/*
+.gitignore
+.travis.yml
+Dockerfile
+LICENSE
+README.md

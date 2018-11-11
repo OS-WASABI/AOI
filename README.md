@@ -5,5 +5,5 @@ This is an open source solution that can be run on commodity hardware to allow a
 ## Using Docker to Build and Test Locally
 To run locally
 ```
-docker build --rm -t aoi:test-1 .
+docker build --rm -t aoi:test-1 -f ./test/Dockerfile
 ```
