@@ -4,7 +4,7 @@ This utilizes version 2.4 of the Apache httpd server. The configuration file is 
 
 To build locally
 ```
-docker build -t aoi-apache:tag .
+docker build -t aoi-apache:prototype .
 ```
 Note: Replace tag with your desired nomenclature. Also note that you can pull the current prototype image from the docker hub with:
 ```
@@ -14,6 +14,5 @@ docker pull os-wasabi/aoi-apache:prototype
 Run Directions:
 To run this container you will need to provide it port information as well as a name. As below:
 ```
-docker run -d --name container-name -p 8080:80 aoi-apache:prototype
+docker run -d --name aoi-apache -p 8080:80 aoi-apache:prototype
 ```
-Note: If you built the image locally and named it something different substitute that in the previous command.
