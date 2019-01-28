@@ -11,12 +11,18 @@ services:
                 networks:
                         - aoinet
                 tty: true
-        db:
-                image: mysql
+                depends_on:
+                        - "aoi-db"
+                environment:
+                        - AOI_DB_NAME=${AOI_DB_NAME}
+                        - AOI_DB_USER_TABLE=${AOI_DB_USER_TABLE}
+                        - AOI_DB_PASSWORD=${AOI_DB_PASSWORD}
+                        - AOI_DB_PORT=${AOI_DB_PORT}
+                        - AOI_DB_SERVER=${AOI_DB_SERVER}
+                        - AOI_DB_UID=${AOI_DB_UID}
+        aoi-db:
+                build: ../aoi-db
                 networks:
                         - aoinet
-                command: --default-authentication-plugin=mysql_native_password
-                environment:
-                        MYSQL_ROOT_PASSWORD: example
 networks:
         aoinet:
