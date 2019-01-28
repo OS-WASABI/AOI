@@ -11,14 +11,19 @@ apt-get -q -d update
 apt-get -q -y install \
     cmake \
     cppcheck \
-    g++-6 \
+    doxygen \
+    g++-8 \
+    libasio-dev \
     libcpprest-dev \
     libspdlog-dev \
+    nano \
     software-properties-common \
+    unixodbc-dev \
+    vim \
     wget
 
-# Make g++ 6 the default g++ executable
-update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
+# Make g++ 8 the default g++ executable
+update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 90
 
 # Google Fruit dependency injection, build install remove old files
 cd /usr/src &&\
@@ -40,6 +45,16 @@ cd /usr/src &&\
     cp *.a /usr/lib &&\
     cd .. &&\
     rm -R gtest
+
+# Download and install MySQL8 odbc
+cd /usr/src &&\
+    wget https://dev.mysql.com/get/Downloads/Connector-ODBC/8.0/mysql-connector-odbc-8.0.13-linux-ubuntu18.04-x86-64bit.tar.gz &&\
+    gunzip mysql-connector-odbc-8.0.13-linux-ubuntu18.04-x86-64bit.tar.gz && \
+    tar xvf mysql-connector-odbc-8.0.13-linux-ubuntu18.04-x86-64bit.tar &&\
+    cp mysql-connector-odbc-8.0.13-linux-ubuntu18.04-x86-64bit/bin/* /usr/local/bin &&\
+    cp mysql-connector-odbc-8.0.13-linux-ubuntu18.04-x86-64bit/lib/* /usr/local/lib &&\
+    myodbc-installer -a -d -n "MySQL8Driver" -t "Driver=/usr/local/lib/libmyodbc8w.so" &&\
+    myodbc-installer -a -d -n "MySQL8" -t "Driver=/usr/local/lib/libmyodbc8a.so"
 
 # Download cpplint.py and set the file permissions so that it is executable
 cd /usr/src &&\
