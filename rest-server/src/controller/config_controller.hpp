@@ -8,22 +8,27 @@
  * @date        January 2019
  */
 
-#ifndef AOI_REST_SERVER_CONFIG_CONTROLLER_HPP
-#define AOI_REST_SERVER_CONFIG_CONTROLLER_HPP
+#ifndef CONFIG_CONTROLLER_HPP
+#define CONFIG_CONTROLLER_HPP
 #include <controller.hpp>
 
 namespace aoi_rest {
-    class ConfigController : public Controller{
+    class ConfigController : public Controller {
     public:
-        ConfigController() : Controller() { }
-        ~ConfigController() { }
+        ConfigController() : Controller() {}
+
+        ~ConfigController() {}
 
         void InitHandlers() override;
 
-        void HandleGet(http_message request) override;
-        void HandlePost(http_message request) override;
-        void HandlePut(http_message request) override;
-        void HandleDelete(http_message request) override;
+        void HandleGet(http_request message) override;
+
+        void HandlePost(http_request message) override;
+
+        void HandlePut(http_request message) override;
+
+        void HandleDelete(http_request message) override;
+    };
 
 } // namespace aoi_rest
 
