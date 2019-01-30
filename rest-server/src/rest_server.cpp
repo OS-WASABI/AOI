@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include "another_controller.hpp"
+#include "config_controller.hpp"
 #include "example_controller.hpp"
 #include "user_controller.hpp"
 #include "data_access_interface.hpp"
@@ -10,6 +11,7 @@
 using aoi_rest::DataAccessInterface;
 using aoi_rest::DataAccessObject;
 using aoi_rest::AnotherController;
+using aoi_rest::ConfigController;
 using aoi_rest::ExampleController;
 using aoi_rest::UserController;
 
@@ -17,6 +19,7 @@ int main(int argc, const char * argv[]) {
     std::cout << "Starting aoi rest server" << std::endl;
     DataAccessInterface* user_dao = &DataAccessObject::Instance();
     AnotherController another_controller;
+    ConfigController config_controller;
     ExampleController example_controller;
     UserController user_controller(*user_dao);
     std::string server_address;

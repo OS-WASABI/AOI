@@ -17,5 +17,5 @@ class AnotherController: public Controller {
     void HandlePost(http_request message) override;
     void HandleDelete(http_request message) override;
 };
-}
+}  // namespace aoi_rest
 #endif // ANOTHER_CONTROLLER_H
