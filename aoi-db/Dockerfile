@@ -2,6 +2,6 @@
 
 FROM mysql
 
-ENV MYSQL_ROOT_PASSWORD="password"
+ENV MYSQL_ROOT_PASSWORD="example"
 
 ADD create_aoi_db.sql /docker-entrypoint-initdb.d
