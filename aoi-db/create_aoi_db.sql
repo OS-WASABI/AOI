@@ -28,4 +28,21 @@ CREATE TABLE IF NOT EXISTS `aoi_db`.`user` (
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `userID_UNIQUE` (`user_id` ASC),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC))
-ENGINE = InnoDB
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `aoi-db`.`alert`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `aoi_db`.`alert` ;
+
+CREATE TABLE IF NOT EXISTS `aoi_db`.`alert` (
+  `alert_id` INT NOT NULL AUTO_INCREMENT,
+  `message_type` ENUM('ACTUAL', 'EXERCISE', 'SYSTEM', 'TEST', 'DRAFT') NOT NULL,
+  `scope` ENUM('PUBLIC', 'RESTRICTED', 'PRIVATE') NOT NULL,
+  `status` ENUM('ACTIVE', 'CANCELED', 'EXPIRED') NOT NULL,
+  `urgency` ENUM('IMMEDIATE', 'EXPECTED', 'FUTURE', 'PAST', 'UNKNOWN') NOT NULL,
+  `severity` ENUM('EXTREME', 'SEVERE', 'MODERATE', 'MINOR', 'UNKNOWN') NOT NULL,
+  `sent_time` VARCHAR(50) NOT NULL,
+  `cap_xml` TEXT NOT NULL,
+  PRIMARY KEY (`alert_id`))
+ENGINE = InnoDB;
