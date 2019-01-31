@@ -11,10 +11,35 @@
 #define ALERT_INFO_H
 #include <string>
 #include <vector>
+#include <ctime>
 #include <cpprest/json.h>
 
 namespace aoi_rest {
 struct AlertInfo {
+    //Required elements
+    std::vector<AlertResource> resources;
+    std::vector<AlertArea> areas;
+    std::vector<std::string> categories;
+    std::string event;
+    std::string urgency;
+    std::string severity;
+    std::string certainty;
+    //Optional elements
+    std::string language;
+    std::vector<std::string> response_types;
+    std::string audience;
+    std::vector<std::string> event_codes;
+    std::time_t effective_time;
+    std::time_t onset_time;
+    std::time_t expire_time;
+    std::string sender_name;
+    std::string headline;
+    std::string description;
+    std::string instruction;
+    std::string web_url;
+    std::string contact;
+    std::vector<std::string> parameters;
+    
     /**
      * Converts the alert info entity to a json object.
      * 
@@ -46,13 +71,4 @@ struct AlertInfo {
         }
     }      
 };
-/// Necessary for comparing if two entities are equal.
-inline bool operator==(const AlertInfo &a, const AlertInfo &b) {
-    return a.id == b.id 
-        && a.name == b.name
-        && a.type == b.type
-        && a.format == b.format
-        && a.ip == b.ip;
-}
-}
 #endif // ALERT_INFO_H

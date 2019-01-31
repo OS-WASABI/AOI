@@ -15,6 +15,12 @@
 
 namespace aoi_rest {
 struct AlertResource {
+    std::string resource_description;
+    std::string mime_type;
+    int size;
+    std::string uri;
+    std::string dereferenced_uri;
+    std::string digest;
     /**
      * Converts the alert resource entity to a json object.
      * 
@@ -46,9 +52,5 @@ struct AlertResource {
         }
     }      
 };
-/// Necessary for comparing if two entities are equal.
-inline bool operator==(const AlertResource &a, const AlertResource &b) {
-    return true;
-}
 }
 #endif // ALERT_RESOURCE_H

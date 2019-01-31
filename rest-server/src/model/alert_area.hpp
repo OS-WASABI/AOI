@@ -15,6 +15,12 @@
 
 namespace aoi_rest {
 struct AlertArea {
+    std::string area_description;
+    std::vector<std::string> polygons;
+    std::vector<std::string> circles;
+    std::vector<std::string> geocode;
+    std::string altitude;
+    std::string ceiling;
     /**
      * Converts the alert area entity to a json object.
      * 
@@ -46,9 +52,5 @@ struct AlertArea {
         }
     }      
 };
-/// Necessary for comparing if two entities are equal.
-inline bool operator==(const AlertArea &a, const AlertArea &b) {
-    return true;
-}
 }
 #endif // ALERT_AREA_H
