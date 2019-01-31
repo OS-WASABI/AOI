@@ -11,10 +11,30 @@
 #define ALERT_H
 #include <string>
 #include <vector>
+#include <ctime>
 #include <cpprest/json.h>
 
 namespace aoi_rest {
 struct Alert {
+    // Required elements
+    std::string identifier;
+    std::string sender;
+    std::time_t sent_time;
+    std::string status;
+    std::string msg_type;
+    std::string scope;
+    std::vector<AlertInfo> info;
+    // Conditional elements
+    std::string restriction;    // Used when scope is "Restricted" (optional?)
+    std::string addresses;      // Required when scope is "Private", optional otherwise.
+    // Optional elements    
+    std::vector<string> handling_codes;
+    std::string source; 
+    std::string note;
+    std::string references;     // Reference earlier messages in form "sender,identifier,sent"
+                                // with multiple references separated by whitespace. 
+    std::string incidents;      // Multiples separated by whitespace. If names include whitespace,
+                                // surround with double-quotes.
     /**
      * Converts the alert entity to a json object.
      * 
@@ -33,11 +53,23 @@ struct Alert {
      * 
      * @return std::optional<Alert>
      */     
-    static std::optional<Alert> from_json(web::json::value json) {
+    static std::optional<Alert> from_json(web::json::value alert_json) {
         try {
-            if(true) {
+            if(  alert_json.has_field("identifier")
+                 && alert_json.has_field("sender")
+                 && alert_json.has_field("sent_time")
+                 && alert_json.has_field("status")
+                 && alert_json.has_field("msg_type")
+                 && alert_json.has_field("scope")
+            ) {
                 Alert alert;
-                return alert;
+                alert.identifier = alert_json["identifier"].as_string();
+                alert.sender = alert_json["sender"].as_string();
+                alert.sent_time = alert_json["sent_time"].as_string();
+                alert.status = alert_json["status"].as_string();
+                alert.msg_type = alert_json["msg_type"].as_string();
+                alert.scope = alert_json["scope"].as_string();
+                //TODO (Mike): alert info, area, resource from json
             } else {
                 return std::nullopt;
             }
@@ -48,7 +80,7 @@ struct Alert {
 };
 /// Necessary for comparing if two entities are equal.
 inline bool operator==(const Alert &a, const Alert &b) {
-    return true;
+    return a.identifier == b.identifier;
 }
 }
 #endif // ALERT_H
