@@ -39,10 +39,27 @@ struct AlertArea {
      * 
      * @return std::optional<AlertArea>
      */     
-    static std::optional<AlertArea> from_json(web::json::value json) {
+    static std::optional<AlertArea> from_json(web::json::value area_json) {
         try {
-            if(true) {
+            if (area_json.has_field("area_description") && area_json["area_description"].is_string()) {
                 AlertArea alert_area;
+                alert_area.area_description = area_json["area_description"].as_string();
+                //TODO (Mike): validate format of area elements.
+                if (area_json.has_field("polygons") && area_json["polygons"].is_array()) {
+                    alert_area.polygons = area_json["polygons"].as_array();
+                }                
+                if (area_json.has_field("circles") && area_json["circles"].is_array()) {
+                    alert_area.circles = area_json["circles"].as_array();
+                }                
+                if (area_json.has_field(geocode) && area_json["geocode"].is_array()) {
+                    alert_area.geocode = area_json["geocode"].as_array();
+                }
+                if (area_json.has_field("altitude") && area_json["altitude"].is_string()) {
+                    alert_area.altitude = area_json["altitude"].as_string();
+                }
+                if (area_json.has_field(ceiling) && area_json["ceiling"].is_string()) {
+                    alert_area.ceiling = area_json["ceiling"].as_string();
+                }
                 return alert_area;
             } else {
                 return std::nullopt;
@@ -50,7 +67,7 @@ struct AlertArea {
         } catch (std::exception&  e) {  
             return std::nullopt;
         }
-    }      
+    }
 };
 }
 #endif // ALERT_AREA_H
