@@ -39,13 +39,30 @@ struct AlertResource {
      * 
      * @return std::optional<AlertResource>
      */     
-    static std::optional<AlertResource> from_json(web::json::value json) {
+    static std::optional<AlertResource> from_json(web::json::value resource_json) {
         try {
-            if(true) {
-                AlertResource alert_resource;
+            if (resource_json.has_field("resource_description") && area_json["resource_description"].is_string()) {
+                AlertResource resource_json;
+                resource_json.resource_description = resource_json["resource_description"].as_string();
+                //TODO (Mike): validate format of resource elements.
+                if (resource_json.has_field("mime_type") && resource_json["mime_type"].is_string()) {
+                    alert_resource.mime_type = resource_json["mime_type"].as_string();
+                }
+                if (resource_json.has_field(size) && resource_json["size"].integer()) {
+                    alert_resource.size = resource_json["size"].as_integer();
+                }
+                if (resource_json.has_field("uri") && resource_json["uri"].is_string()) {
+                    alert_resource.uri = resource_json["uri"].as_string();
+                }
+                if (resource_json.has_field("dereferenced_uri") && resource_json["dereferenced_uri"].is_string()) {
+                    alert_resource.dereferenced_uri = resource_json["dereferenced_uri"].as_string();
+                }
+                if (resource_json.has_field("digest") && resource_json["digest"].is_string()) {
+                    alert_resource.digest = resource_json["digest"].as_string();
+                }
                 return alert_resource;
             } else {
-                return std::nullopt;
+            return std::nullopt;
             }
         } catch (std::exception&  e) {  
             return std::nullopt;
