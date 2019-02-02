@@ -60,33 +60,81 @@ struct AlertInfo {
      */     
     static std::optional<AlertInfo> from_json(web::json::value info_json) {
         try {
-            if (
-                    info_json.has_field("event") && area_json["event"].is_string()
-                    && info_json.has_field("urgency") && area_json["urgency"].is_string()
-                    && info_json.has_field("severity") && area_json["severity"].is_string()
-                    && info_json.has_field("certainty") && area_json["certainty"].is_string()
-                    && info_json.has_field("expire_time") && area_json["expire_time"].is_string()
-                ) {
-                AlertInfo alert_info;
+            AlertInfo alert_info;
+            if (info_json.has_field("event") && area_json["event"].is_string())
                 alert_info.event = info_json["event"].as_string();
+            if (info_json.has_field("urgency") && area_json["urgency"].is_string())
                 alert_info.urgency = info_json["urgency"].as_string();
+            if (info_json.has_field("severity") && area_json["severity"].is_string())
                 alert_info.severity = info_json["severity"].as_string();
-                alert_info.certainty = info_json["certainty"].as_string();
-                //TODO (Mike): convert expire_time to time_t
-                //info_json.expire_time = CONVERT(info_json["expire_time"].as_string());
-                if (info_json.has_field("resources") && info_json["resources"].is_array()) {
-                    web::json:array json_array = info_json["resources"].as_array();
-                    for (web::json::value resource = json_array.begin(); resource != json_array.end(); ++json_array) {
-                        if (resource.is_object() && (AlertResource temp_resource = AlertResource.from_json(resource))) {
-                            alert_info.resources.push_back(temp_resource);
-                        }
+            if (info_json.has_field("certainty") && area_json["certainty"].is_string())
+                alert_info.certainty = info_json["certainty"].as_string();                    
+            //TODO (Mike): convert expire_time to time_t
+            //if (info_json.has_field("expire_time") && area_json["expire_time"].is_string())
+            //alert_info.expire_time = CONVERT(info_json["expire_time"].as_string());
+            if (info_json.has_field("resources") && info_json["resources"].is_array()) {
+                web::json:array json_array = info_json["resources"].as_array();
+                for (web::json::value resource_json = json_array.begin(); resource_json != json_array.end(); ++resource_json) {
+                    if (*resource_json.is_object() && (AlertResource alert_resource = AlertResource.from_json(*resource_json))) {
+                        // TODO (Mike): validate format
+                        alert_info.resources.push_back(alert_resource);
                     }
                 }
-
-                return alert_info;
-            } else {
-            return std::nullopt;
             }
+            if (info_json.has_field("areas") && info_json["areas"].is_array()) {
+                web::json:array json_array = info_json["areas"].as_array();
+                for (web::json::value area_json = json_array.begin(); area_json != json_array.end(); ++area_json) {
+                    if (*area_json.is_object() && (AlertAlert alert_area = AlertArea.from_json(*area_json))) {
+                        // TODO (Mike): validate format
+                        alert_info.areas.push_back(alert_area);
+                    }
+                }
+            }
+            if (info_json.has_field("categories") && info_json["categories"].is_array()) {
+                web::json:array json_array = info_json["categories"].as_array();
+                for (web::json::value category_json = json_array.begin(); area_json != json_array.end(); ++category_json) {
+                    if (*category_json.is_string()) 
+                        alert_info.categories.push_back(*category_json.as_string());
+                }
+            } 
+            if (info_json.has_field("language") && info_json["language"].is_string())
+                alert_info.language = info_json["language"].to_string();
+            if (info_json.has_field("response_types") && info_json["response_types"].is_array()) {
+                web::json:array json_array = info_json["response_types"].as_array();
+                for (web::json::value response_type_json = json_array.begin(); area_json != json_array.end(); ++response_type_json) {
+                    if (*response_type_json.is_string()) 
+                        alert_info.response_types.push_back(*response_type_json.as_string());
+                }
+            } 
+            if (info_json.has_field("audience") && info_json["audience"].is_string())
+                alert_info.audience = info_json["audience"].to_string();
+            if (info_json.has_field("event_codes") && info_json["event_codes"].is_array()) {
+                web::json:array json_array = info_json["event_codes"].as_array();
+                for (web::json::value event_code_json = json_array.begin(); area_json != json_array.end(); ++event_code_json) {
+                    if (*event_code_json.is_string()) 
+                        alert_info.event_codes.push_back(*event_code_json.as_string());
+                }
+            } 
+            if (info_json.has_field("sender_name") && info_json["sender_name"].is_string())
+                alert_info.sender_name = info_json["sender_name"].to_string();
+            if (info_json.has_field("headline") && info_json["headline"].is_string())
+                alert_info.headline = info_json["headline"].to_string();
+            if (info_json.has_field("description") && info_json["description"].is_string())
+                alert_info.description = info_json["description"].to_string();
+            if (info_json.has_field("instruction") && info_json["instruction"].is_string())
+                alert_info.instruction = info_json["instruction"].to_string();
+            if (info_json.has_field("web_url") && info_json["web_url"].is_string())
+                alert_info.web_url = info_json["web_url"].to_string();
+            if (info_json.has_field("contact") && info_json["contact"].is_string())
+                alert_info.contact = info_json["contact"].to_string();
+            if (info_json.has_field("paremeters") && info_json["paremeters"].is_array()) {
+                web::json:array json_array = info_json["paremeters"].as_array();
+                for (web::json::value parameter_json = json_array.begin(); area_json != json_array.end(); ++parameter_json) {
+                    if (*parameter_json.is_string()) 
+                        alert_info.paremeters.push_back(*parameter_json.as_string());
+                }
+            } 
+            return alert_info;
         } catch (std::exception&  e) {  
             return std::nullopt;
         }
