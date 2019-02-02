@@ -8,6 +8,8 @@
 #include <cpprest/http_listener.h>
 #include <cpprest/http_msg.h>
 #include <pplx/pplxtasks.h>
+#include "logger_interface.hpp"
+#include "logger.hpp"
 using namespace web;
 using namespace http;
 using namespace http::experimental::listener;
