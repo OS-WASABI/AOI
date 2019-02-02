@@ -1,6 +1,12 @@
-//
-// Created by shulce on 11/27/18.
-//
+/// Simple SOAP endpoint for testing.
+/**
+ * Copyright 2018   Vaniya Agrawal, Ross Arcemont, Kristofer Hoadley,
+                    Shawn Hulce, Michael McCulley
+
+ * @file        soap_controller.cpp
+ * @authors     Shawn Hulce
+ * @date        January, 2019
+ */
 #include <cpprest/uri_builder.h>
 #include <cpprest/base_uri.h>
 #include <algorithm>
@@ -24,38 +30,28 @@ namespace aoi_soap {
         logger__.LogNetworkActivity(message, endpoint(), 1);
         try {
             _ns2__alert alertMessage;
-            std::stringstream strStream;  // creates a string stream
-            std::string bodyContent = "";
-            //Should generate soap context that can read input and create alert. Not sure how
+            // Should generate soap context that can read input and create alert. Not sure how
             struct soap ctx = *soap_new2(SOAP_XML_STRICT, SOAP_XML_INDENT);
             auto body = message.extract_string().get();
-
             logger__.Log(LogLevel::DEBUG, "SOAP Received: " + body, "SoapController", "HandlePost");
-
-            strStream.str(body);  // passes message body to into the string stream
-
-            ctx.is = &strStream;  // sets the instream of the soap ctx  object to the string input stream
-
-            soap_read__ns2__alert(&ctx, &alertMessage);  // should read the soap context and output the details to the alertMessage object
-
+            std::stringstream str_stream;
+            str_stream.str(body);  // passes message body to into the string stream
+            ctx.is = &str_stream;  // sets the instream of the soap ctx  object to the string input stream
+            // should read the soap context and output the details to the alertMessage object
+            soap_read__ns2__alert(&ctx, &alertMessage);
             logger__.Log(LogLevel::DEBUG, alertMessage.sender, "SoapController", "HandlePost");
             message.reply(status_codes::OK, "Got it");
-
         } catch (std::exception& e) {
             message.reply(SOAP_FAULT);
         }
     }
-
     void SoapController::HandleGet(http_request message) {
         message.reply(status_codes::NotImplemented);
     }
-
     void SoapController::HandlePut(http_request message) {
         message.reply(status_codes::NotImplemented);
     }
-
     void SoapController::HandleDelete(http_request message) {
         message.reply(status_codes::NotImplemented);
     }
-
-} //end aoi_soap
+}  // namespace aoi_soap
