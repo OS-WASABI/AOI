@@ -114,4 +114,4 @@ Logger::Logger() {
     p_net_logger__->set_level(spdlog::level::trace);  // trace level will log everything
     p_net_logger__->flush_on(spdlog::level::trace);  // trace level will flush to file on every log message
 }
-}  // namespace cadg_rest
+}  // namespace aoi_rest
