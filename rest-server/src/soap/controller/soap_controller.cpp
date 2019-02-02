@@ -27,16 +27,16 @@ namespace aoi_soap {
             std::stringstream strStream;  // creates a string stream
             std::string bodyContent = "";
             //Should generate soap context that can read input and create alert. Not sure how
-            struct soap *ctx = soap_new2(SOAP_XML_STRICT, SOAP_XML_INDENT);
+            struct soap ctx = *soap_new2(SOAP_XML_STRICT, SOAP_XML_INDENT);
             auto body = message.extract_string().get();
 
             logger__.Log(LogLevel::DEBUG, "SOAP Received: " + body, "SoapController", "HandlePost");
 
             strStream.str(body);  // passes message body to into the string stream
 
-            ctx->is = &strStream;  // sets the instream of the soap ctx  object to the string input stream
+            ctx.is = &strStream;  // sets the instream of the soap ctx  object to the string input stream
 
-            soap_read__ns2__alert(ctx, &alertMessage);  // should read the soap context and output the details to the alertMessage object
+            soap_read__ns2__alert(&ctx, &alertMessage);  // should read the soap context and output the details to the alertMessage object
 
             logger__.Log(LogLevel::DEBUG, alertMessage.sender, "SoapController", "HandlePost");
             message.reply(status_codes::OK, "Got it");
