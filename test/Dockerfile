@@ -15,7 +15,8 @@ RUN ./cpplint.py --headers=hpp --extensions=cpp --linelength=120 \
         /usr/src/aoi/test/*.cpp \
         /usr/src/aoi/rest-server/src/*.cpp \
         /usr/src/aoi/rest-server/src/controller/*.cpp \
-        /usr/src/aoi/rest-server/src/services/*.cpp
+        /usr/src/aoi/rest-server/src/services/*.cpp \
+        /usr/src/aoi/rest-server/src/soap/*/*.cpp
 
 # Create build directory
 WORKDIR "/usr/src/aoi/test"
