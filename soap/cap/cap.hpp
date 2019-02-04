@@ -7,6 +7,7 @@
 #include <ctime>
 #include "../pugixml-1.9/src/pugixml.hpp"
 #include "../pugixml-1.9/src/pugixml.cpp"
+#include "../../rest-server/src/model/alert.hpp"
 
 #ifndef AOI_REST_SERVER_CAP_H
 #define AOI_REST_SERVER_CAP_H
@@ -15,7 +16,7 @@
 class CAP {
 public:
     CAP();
-    void create_cap_doc(std::string data_input, std::string cap_filename);
+    void create_cap_doc(aoi_rest::Alert data_input, std::string cap_filename);
 
 private:
     pugi::xml_document cap_doc;
@@ -33,31 +34,12 @@ private:
     auto scope = alert.append_child("scope");
     auto restriction = alert.append_child("restriction");
     auto addresses = alert.append_child("addresses");
-    auto code = alert.append_child("code"); //TODO: Allow for multiple codes
+
     auto note = alert.append_child("note");
     auto references = alert.append_child("references");
     auto incidents = alert.append_child("incidents");
 
-    auto info = alert.append_child("info"); //TODO: Allow for multiple info blocks
-    auto language = info.append_child("language");
-    auto category = info.append_child("category"); //TODO: Allow for multiple categories
-    auto event = info.append_child("event");
-    auto response_type = info.append_child("responseType"); //TODO: Allow for multiple response types
-    auto urgency = info.append_child("urgency");
-    auto severity = info.append_child("severity");
-    auto certainty = info.append_child("certainty");
-    auto audience = info.append_child("audience");
-    auto event_code = info.append_child("eventCode"); //TODO: Allow for multiple event codes
-    auto effective = info.append_child("effective");
-    auto onset = info.append_child("onset");
-    auto expires = info.append_child("expires");
-    auto sender_name = info.append_child("senderName");
-    auto headline = info.append_child("headline");
-    auto description = info.append_child("description");
-    auto instruction = info.append_child("instruction");
-    auto web = info.append_child("web");
-    auto contact = info.append_child("contact");
-    auto parameter = info.append_child("parameter"); //TODO: Allow for multiple parameters
+
 
     auto resource = info.append_child("resource"); //TODO: Allow for multiple resource blocks
     auto resource_desc = resource.append_child("resourceDesc");
