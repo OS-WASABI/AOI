@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/header-content.css';
+import '../../css/header-content.css';
 
 const headerContent = () => {
     return (<div className="App">
