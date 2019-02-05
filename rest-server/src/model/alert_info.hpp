@@ -41,6 +41,16 @@ struct AlertInfo {
     std::vector<std::string> parameters;
     
     /**
+    * Evaluates the AlertInfo as valid per CAP v1.2 IPAWS profile.
+    * 
+    * @return boolean
+    * 
+    */   
+    static bool is_valid_cap_ipaws(AlertInfo alert_info) {
+        //TODO(Mike): You know, implement this thing.
+        return true;
+    }    
+    /**
      * Converts the alert info entity to a json object.
      * 
      * @return a json object representation of a alert info.
@@ -61,6 +71,7 @@ struct AlertInfo {
     static std::optional<AlertInfo> from_json(web::json::value info_json) {
         try {
             AlertInfo alert_info;
+            // TODO (Mike): validate format of elements
             if (info_json.has_field("event") && area_json["event"].is_string())
                 alert_info.event = info_json["event"].as_string();
             if (info_json.has_field("urgency") && area_json["urgency"].is_string())
@@ -76,7 +87,6 @@ struct AlertInfo {
                 web::json:array json_array = info_json["resources"].as_array();
                 for (web::json::value resource_json = json_array.begin(); resource_json != json_array.end(); ++resource_json) {
                     if (*resource_json.is_object() && (AlertResource alert_resource = AlertResource.from_json(*resource_json))) {
-                        // TODO (Mike): validate format
                         alert_info.resources.push_back(alert_resource);
                     }
                 }
@@ -85,7 +95,6 @@ struct AlertInfo {
                 web::json:array json_array = info_json["areas"].as_array();
                 for (web::json::value area_json = json_array.begin(); area_json != json_array.end(); ++area_json) {
                     if (*area_json.is_object() && (AlertAlert alert_area = AlertArea.from_json(*area_json))) {
-                        // TODO (Mike): validate format
                         alert_info.areas.push_back(alert_area);
                     }
                 }
@@ -134,7 +143,8 @@ struct AlertInfo {
                         alert_info.paremeters.push_back(*parameter_json.as_string());
                 }
             } 
-            return alert_info;
+            if (alert_info.is_valid()) 
+                return alert_info;
         } catch (std::exception&  e) {  
             return std::nullopt;
         }
