@@ -102,11 +102,51 @@ void CAP::create_cap_doc(aoi_rest::Alert data_input, std::string cap_filename) {
         }
 
         for (int j = 0; j < data_input.info.at(i).resources.size(); j++) {
-            //TODO: Create resource blocks
+            auto resource = info.append_child("resource");
+            auto resource_desc = resource.append_child("resourceDesc");
+            resource_desc.text().set(data_input.info.at(i).resources.at(j).resource_description);
+
+            auto mime_type = resource.append_child("mimeType");
+            mime_type.text().set(data_input.info.at(i).resources.at(j).mime_type);
+
+            auto size = resource.append_child("size");
+            size.text().set(data_input.info.at(i).resources.at(j).size);
+
+            auto uri = resource.append_child("uri");
+            uri.text().set(data_input.info.at(i).resources.at(j).uri);
+
+            auto dereferenced_uri = resource.append_child("derefUri");
+            dereferenced_uri.text().set(data_input.info.at(i).resources.at(j).dereferenced_uri);
+
+            auto digest = resource.append_child("digest");
+            digest.text().set(data_input.info.at(i).resources.at(j).digest);
         }
 
         for (int j = 0; j < data_input.info.at(i).areas.size(); j++) {
-            //TODO: Create area blocks
+            auto area = info.append_child("area");
+            auto area_desc = area.append_child("areaDesc");
+            area_desc.text().set(data_input.info.at(i).areas.at(j).area_description);
+
+            for (int k = 0; k < data_input.info.at(i).areas.at(j).polygons.size(); k++) {
+                auto polygon = area.append_child("polygon");
+                polygon.text().set(data_input.info.at(i).areas.at(j).polygons.at(k));
+            }
+
+            for (int k = 0; k < data_input.info.at(i).areas.at(j).circles.size(); k++) {
+                auto circle = area.append_child("circle");
+                circle.text().set(data_input.info.at(i).areas.at(j).circles.at(k));
+            }
+
+            for (int k = 0; k < data_input.info.at(i).areas.at(j).geocode.size(); k++) {
+                auto geocode = area.append_child("geocode");
+                geocode.text().set(data_input.info.at(i).areas.at(j).geocode.at(k));
+            }
+
+            auto altitude = area.append_child("altitude");
+            altitude.text().set(data_input.info.at(i).areas.at(j).altitude);
+
+            auto ceiling = area.append_child("ceiling");
+            ceiling.text().set(data_input.info.at(i).areas.at(j).ceiling);
         }
     }
 }

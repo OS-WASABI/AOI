@@ -41,21 +41,9 @@ private:
 
 
 
-    auto resource = info.append_child("resource"); //TODO: Allow for multiple resource blocks
-    auto resource_desc = resource.append_child("resourceDesc");
-    auto mime_type = resource.append_child("mimeType");
-    auto size = resource.append_child("size");
-    auto uri = resource.append_child("uri");
-    auto dereferenced_uri = resource.append_child("derefUri");
-    auto digest = resource.append_child("digest");
 
-    auto area = info.append_child("area"); //TODO: Allow for multiple area blocks
-    auto area_desc = area.append_child("areaDesc");
-    auto polygon = area.append_child("polygon"); //TODO: Allow for multiple polygons
-    auto circle = area.append_child("circle"); //TODO: Allow for multiple circles
-    auto geocode = area.append_child("geocode"); //TODO: Allow for multiple geocodes
-    auto altitude = area.append_child("altitude");
-    auto ceiling = area.append_child("ceiling");
+
+
 };
 
 
