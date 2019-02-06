@@ -1,3 +1,11 @@
+/// The entrypoint for the GUI.
+/**
+ * Copyright 2018   Vaniya Agrawal, Ross Arcemont, Kristofer Hoadley,
+ *                  Shawn Hulce, Michael McCulley
+ * @file index.js
+ * @date January 2019
+ * @authors Ross Arcemont, Vaniya Agrawal
+ */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/index.css';

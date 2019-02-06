@@ -1,7 +1,7 @@
 /// General implementation of Controller.
 /**
  * Copyright 2018   Vaniya Agrawal, Ross Arcemont, Kristofer Hoadley,
-                    Shawn Hulce, Michael McCulley
+                   Shawn Hulce, Michael McCulley
 
  * @file        controller.cpp
  * @authors     Kristofer Hoadley

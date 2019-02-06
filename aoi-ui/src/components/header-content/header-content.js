@@ -24,4 +24,5 @@ const mapStateToProps = state => ({
   currUser: state.users.allUsers[state.users.currUser].name
 })
 
-export default connect(mapStateToProps, null)(headerContent);
+
+export default connect(mapStateToProps, { updateUser })(headerContent);

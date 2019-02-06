@@ -1,3 +1,15 @@
+/// The root of the GUI.
+/**
+ * This class represents the highest-level component of the GUI.
+ * It wraps the components of the application in a Provider component
+ * so they can connect to the centralized store if needed.
+ *
+ * Copyright 2018   Vaniya Agrawal, Ross Arcemont, Kristofer Hoadley,
+ *                  Shawn Hulce, Michael McCulley
+ * @file App.js
+ * @date January 2018
+ * @authors Ross Arcemont, Vaniya Agrawal
+ */
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import './css/App.css';
