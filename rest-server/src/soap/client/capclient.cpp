@@ -1,6 +1,8 @@
 #include "soapCAPSoapHttpProxy.h"
 #include "CAPSoapHttp.nsmap"
 #include <stdio.h>
+#include <string>
+#include <fstream>
 
 const char server[] = "http://localhost:8080/aoi/soap/alerts";
 
@@ -13,30 +15,35 @@ int main(int argc, char **argv)
         fprintf(stderr, "Usage: [send] filename \n");
         exit(0);
     }
-    std::string filename = argv[3];
-    struct soap
-    _ns2__alert outboundAlert;
-    struct soap ctx = *soap_new2(SOAP_XML_STRICT, SOAP_XML_INDENT);
-    std::ifstream fileIn("./alert1", std::ifstream::in);
+    try {
+        std::string filename = argv[2];
+        _ns5__alert outboundAlert;
+        struct soap ctx = *soap_new2(SOAP_XML_STRICT, SOAP_XML_INDENT);
+        std::fstream fileIn(filename, std::fstream::in);
 
-    //ctx.is = &fileIn;
+        ctx.is = &fileIn;
 
-    //soap_read__ns2__alert(&ctx, &outboundAlert);
+        soap_read__ns5__alert(&ctx, &outboundAlert);
 
-    //std::cout << "Sender Read: " << outboundAlert.sender << std::endl;
+        std::cout << "Sender Read: " << outboundAlert.sender << std::endl;
 
-    CAPSoapHttpProxy cap;
-    cap.soap_endpoint = server;
-    _ns2__postCAPRequestTypeDef postRequest;   // request needs to contain data
-    _ns2__postCAPResponseTypeDef response; // data holder for response
-    
-    cap.send_postCAP(server, *SOAP_POST, postRequest);
+        CAPSoapHttpProxy cap;
+        cap.soap_endpoint = server;
+        _ns2__postCAPRequestTypeDef postRequest;   // request needs to contain data
+        _ns2__postCAPResponseTypeDef response; // data holder for response
 
-    //cap.postCAP(&ns1__postCAPRequestTypeDef, ns1__postCAPResponseTypeDef);
-    if (cap.soap->error)
-         cap.soap_stream_fault(std::cerr);
-     else
-         printf("result = %s\n", ns1__postCAPResponseTypeDef.postCAPReturn);
-     cap.destroy(); /* clean up mem */
-    return 0;
+        postRequest.ns5__alert = &outboundAlert; // Assigns parsed alert to the request object
+        postRequest.soap_serialize(&ctx); // Should serialize the alert for output? XML tags seem to have ns5: prefix
+
+        cap.postCAP(&postRequest, response);
+
+        if (cap.soap->error)
+            cap.soap_stream_fault(std::cerr);
+        else
+            printf("result = %s\n", response.postCAPReturn);
+            cap.destroy(); /* clean up mem */
+        return 0;
+    } catch (std::exception& e) {
+        std::cout << e.what() << std::endl;
+    }
 }
