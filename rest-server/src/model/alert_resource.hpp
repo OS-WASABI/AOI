@@ -53,7 +53,6 @@ struct AlertResource {
     static std::optional<AlertResource> from_json(web::json::value resource_json) {
         try {
             AlertResource resource_json;
-            //TODO (Mike): validate format of resource elements.
             if (resource_json.has_field("resource_description") && area_json["resource_description"].is_string()) 
                 resource_json.resource_description = resource_json["resource_description"].as_string();
             if (resource_json.has_field("mime_type") && resource_json["mime_type"].is_string()) {
