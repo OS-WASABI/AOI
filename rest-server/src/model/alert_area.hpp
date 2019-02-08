@@ -5,7 +5,7 @@
  *
  * @file        alert_area.hpp
  * @authors     Michael McCulley
- * @date        January, 2019
+ * @date        February, 2019
  */
 #ifndef ALERT_AREA_H
 #define ALERT_AREA_H

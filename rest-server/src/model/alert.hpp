@@ -5,17 +5,20 @@
  *
  * @file        alert.hpp
  * @authors     Michael McCulley
- * @date        January, 2019
+ * @date        February, 2019
  */
 #ifndef ALERT_H
 #define ALERT_H
 #include <string>
 #include <vector>
+#include <array>
 #include <ctime>
 #include <cpprest/json.h>
 
 namespace aoi_rest {
 struct Alert {
+    static std::array<std::string,5> std:
+    
     // Required elements
     std::string identifier;
     std::string sender;
@@ -33,7 +36,12 @@ struct Alert {
     std::string note;
     std::string references; 
     std::string incidents;
-                                
+    
+    // Allowed codes as per CAP 1.2.
+    static const std::array<std::string,5> status_codes {"ACTUAL","EXERCISE","SYSTEM","TEST","DRAFT"};
+    static const std::array<std::string,5> msg_type_codes {"ALERT","UPDATE","CANCEL","ACK","ERROR"};
+    static const std::array<std::string,3> scope_codes {"PUBLIC","RESTRICTED","PRIVATE"};
+    
     /**
     * Validates an Alert's identifier field. If valid, returns a 
     * string represenation. If invalid, returns std::nullopt.
@@ -92,7 +100,14 @@ struct Alert {
     */   
     static std::optional<std::string> validate_status(web::json::value& alert_json) {
         if (alert_json.has_field("status") && alert_json["status"].is_string()) {
-            return alert_json["status"].as_string();
+            std::string status = alert_json["status"].as_string();
+            for (std::string::size_type i=0; i<status.length(); ++i)
+               status[i] = std::toupper(status[i]);
+            for (auto status_code = status_codes.begin(); status_code != status_codes.end(); status_code++) {
+                if (status == *status_code)
+                    return status;
+            }
+            return std::nullopt;
         } else {
             return std::nullopt;
         }
@@ -106,7 +121,14 @@ struct Alert {
     */   
     static std::optional<std::string> validate_msg_type(web::json::value& alert_json) {
         if (alert_json.has_field("msg_type") && alert_json["msg_type"].is_string()) {
-            return alert_json["msg_type"].as_string();
+            std::string msg_type = alert_json["msg_type"].as_string();
+            for (std::string::size_type i=0; i<msg_type.length(); ++i)
+               msg_type[i] = std::toupper(msg_type[i]);
+            for (auto msg_type_code = msg_type_codes.begin(); msg_type_code != msg_type_codes.end(); msg_type_code++) {
+                if (msg_type == *msg_type_code)
+                    return msg_type;
+            }
+            return std::nullopt;
         } else {
             return std::nullopt;
         }
@@ -120,7 +142,14 @@ struct Alert {
     */   
     static std::optional<std::string> validate_scope(web::json::value& alert_json) {
         if (alert_json.has_field("scope") && alert_json["scope"].is_string()) {
-            return alert_json["scope"].as_string();
+            std::string scope = alert_json["scope"].as_string();
+            for (std::string::size_type i=0; i<scope.length(); ++i)
+               scope[i] = std::toupper(scope[i]);
+            for (auto scope_code = scope_codes.begin(); scope_code != scope_codes.end(); scope_code++) {
+                if (scope == *scope_code)
+                    return scope;
+            }
+            return std::nullopt;
         } else {
             return std::nullopt;
         }
@@ -136,7 +165,7 @@ struct Alert {
         if (alert_json.has_field("info") && alert_json["info"].is_array()) {
             web::json::array json_array = alert_json["info"].as_array();
             std::vector<AlertInfo> alert_info;
-            for (web::json::value info_json = json_array.begin(); info_json != json_array.end(); ++info_json) {
+            for (auto info_json = json_array.begin(); info_json != json_array.end(); ++info_json) {
                 if (*info_json.is_object() && (AlertInfo alert_info = AlertInfo.from_json(*info_json))) {
                     alert_infos.push_back(alert_info);
                 } else {
@@ -175,10 +204,22 @@ struct Alert {
     * 
     */   
     static std::optional<std::string> validate_addresses(web::json::value& alert_json) {
-        if (alert_json.has_field("addresses") && alert_json["addresses"].is_string()) {
-            return alert_json["addresses"].as_string();
+        if (Alert::validate_scope(alert_json) == "PRIVATE") {
+            if (alert_json.has_field("addresses") 
+                && alert_json["addresses"].is_string() 
+                && alert_json["addresses"].as_string() != "") {
+                //TODO(Mike): Parse addresses
+            } else {
+                return std::nullopt;
+            }
         } else {
-            return std::nullopt;
+            if (!alert_json.has_field("addresses")) {
+                return "";
+            } else if (alert_json["addresses"].is_string() {
+                //TODO(Mike): Parse addresses
+            } else {
+                return std::nullopt;
+            }
         }
     }
     /**
@@ -192,7 +233,7 @@ struct Alert {
         if (alert_json.has_field("handling_codes") && alert_json["handling_codes"].is_array()) {
             web::json::array json_array = alert_json["handling_codes"].as_array();
             std::vector<string> handling_codes;
-            for (web::json::value handling_codes_json = json_array.begin(); handling_codes_json != json_array.end(); ++handling_codes_json) {
+            for (auto handling_codes_json = json_array.begin(); handling_codes_json != json_array.end(); ++handling_codes_json) {
                 if (*handling_codes_json.is_string()) {
                     handling_codes.push_back(*handling_codes_json.as_string());
                 } else {
@@ -302,7 +343,7 @@ struct Alert {
                 alert.scope = alert_json["scope"].as_string();
             if (alert_json.has_field("info") && alert_json["info"].is_array()) {
                 web::json:array json_array = alert_json["info"].as_array();
-                for (web::json::value info_json = json_array.begin(); area_json != json_array.end(); ++info_json) {
+                for (auto info_json = json_array.begin(); area_json != json_array.end(); ++info_json) {
                     if (*info_json.is_object() && (AlertInfo alert_info = AlertInfo.from_json(*info_json))) {
                         alert.info.push_back(alert_info);
                     }
@@ -314,7 +355,7 @@ struct Alert {
                 alert.addresses = alert_json["addresses"].as_string();
             if (alert_json.has_field("handling_codes") && alert_json["handling_codes"].is_array()) {
                 web::json:array json_array = alert_json["handling_codes"].as_array();
-                for (web::json::value handling_codes_json = json_array.begin(); area_json != json_array.end(); ++handling_codes_json) {
+                for (auto handling_codes_json = json_array.begin(); area_json != json_array.end(); ++handling_codes_json) {
                     if (*handling_codes_json.is_string()) 
                         alert.handling_codes.push_back(*handling_codes_json.as_string());
                 }
