@@ -12,10 +12,12 @@
  */
 
 import { combineReducers } from 'redux';
+import { connectRouter } from 'connected-react-router'
 import userReducer from './userReducer';
 import alertReducer from './alertReducer';
 
-export default (combineReducers({
+export default (history) => combineReducers({
   users: userReducer,
   alerts: alertReducer,
-}))
+  router: connectRouter(history)
+})

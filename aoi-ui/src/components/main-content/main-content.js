@@ -1,16 +1,16 @@
 import React from 'react';
+import {Route} from "react-router-dom";
 import '../../css/main-content.css';
+import Home from './home';
+import Test from './test';
 
 const mainContent = () => {
-    return (<div className="App">
-        <header className="App-content">
-            <h1>Welcome!</h1>
-            <h2>Please sign in:</h2><br/>
-            Username: <input/><br/>
-            Password: <input type="password"/><br/>
-            <button formAction="POST">Login</button>
-        </header>
-    </div>);
+    return (
+      <div className="App">
+        <Route path="/" component={Home}/>
+        <Route path="/test" component={Test}/>
+      </div>
+    );
 };
 
 export default mainContent;

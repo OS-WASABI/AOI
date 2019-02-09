@@ -27,7 +27,7 @@ const middleware = [
 ]; // Specifies which middleware is being utilized
 
 const store = createStore(
-  connectRouter(history)(rootReducer),
+  rootReducer(history),
   initialState,
   compose(
     applyMiddleware(...middleware),
