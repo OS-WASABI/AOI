@@ -4,35 +4,72 @@
 
 #include "cap.hpp"
 
-CAP::CAP() {
-    //TODO: Verify this information
-    //Default node attributes
+void CAP::create_cap_doc(aoi_rest::Alert data_input, std::string cap_filename) {
+    pugi::xml_document cap_doc;
+    auto declaration_node = cap_doc.append_child(pugi::node_declaration);
     declaration_node.append_attribute("version") = "1.0";
     declaration_node.append_attribute("encoding") = "utf-8";
+
+    auto root_node = cap_doc.append_child("SOAP-ENV:Envelope");
     root_node.append_attribute("xmlns:SOAP-ENV") = "\"http://www.w3.org/2001/12/soap-envelope\"";
     root_node.append_attribute("SOAP-ENV:encodingStyle") = "\"http://www.w3.org/2001/12/soap-encoding\"";
-    alert.append_attribute("xmlns") = "\"urn:oasis:names:tc:emergency:cap:1.2\"";
-}
 
-void CAP::create_cap_doc(aoi_rest::Alert data_input, std::string cap_filename) {
+    auto soap_body = root_node.append_child("SOAP-ENV:Body");
+    auto alert = soap_body.append_child("alert");
+    alert.append_attribute("xmlns") = "\"urn:oasis:names:tc:emergency:cap:1.2\"";
+
+    auto identifier = alert.append_child("identifier");
     identifier.text().set(data_input.identifier);
+
+    auto sender = alert.append_child("sender");
     sender.text().set(data_input.sender);
+
+    auto sent = alert.append_child("sent");
     sent.text().set(data_input.sent_time);
+
+    auto status = alert.append_child("status");
     status.text().set(data_input.status);
+
+    auto msg_type = alert.append_child("msgType");
     msg_type.text().set(data_input.msg_type);
-    source.text().set(data_input.source);
+
+    if (data_input.source.compare("") != 0) {
+        auto source = alert.append_child("source");
+        source.text().set(data_input.source);
+    }
+
+    auto scope = alert.append_child("scope");
     scope.text().set(data_input.scope);
-    restriction.text().set(data_input.restriction);
-    addresses.text().set(data_input.addresses);
+
+    if (data_input.scope.compare("Restricted") == 0) {
+        auto restriction = alert.append_child("restriction");
+        restriction.text().set(data_input.restriction);
+    }
+
+    if (data_input.scope.compare("Private") == 0 || ((data_input.scope.compare("Public") == 0 || data_input.scope.compare("Restricted") == 0) && data_input.addresses.compare("") != 0)) {
+        auto addresses = alert.append_child("addresses");
+        addresses.text().set(data_input.addresses);
+    }
 
     for (int i = 0; i < data_input.handling_codes.size(); i++) {
         auto code = alert.append_child("code");
         code.text().set(data_input.handling_codes.at(i));
     }
 
-    note.text().set(data_input.note);
-    references.text().set(data_input.references);
-    incidents.text().set(data_input.incidents);
+    if (data_input.note.compare("") != 0 || (data_input.status.compare("Exercise") == 0 && data_input.msg_type.compare("Error") == 0)) {
+        auto note = alert.append_child("note");
+        note.text().set(data_input.note);
+    }
+
+    if (data_input.references.compare("") != 0) {
+        auto references = alert.append_child("references");
+        references.text().set(data_input.references);
+    }
+
+    if (data_input.incidents.compare("") != 0) {
+        auto incidents = alert.append_child("incidents");
+        incidents.text().set(data_input.incidents);
+    }
 
     for (int i = 0; i < data_input.info.size(); i++) {
         auto info = alert.append_child("info");
