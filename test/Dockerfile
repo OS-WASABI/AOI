@@ -8,14 +8,15 @@ WORKDIR "/usr/src/aoi"
 COPY . .
 
 # You have to set an explicit error code, otherwise it goes undetected and you have to check the logs to see if there is an issue
-RUN cppcheck --error-exitcode=1 .
+RUN cppcheck --error-exitcode=1 -i/usr/src/aoi/gSoapFiles -i/usr/src/aoi/nanodbc .
 
 # Lint the files
 RUN ./cpplint.py --headers=hpp --extensions=cpp --linelength=120 \
         /usr/src/aoi/test/*.cpp \
         /usr/src/aoi/rest-server/src/*.cpp \
         /usr/src/aoi/rest-server/src/controller/*.cpp \
-        /usr/src/aoi/rest-server/src/services/*.cpp
+        /usr/src/aoi/rest-server/src/services/*.cpp \
+        /usr/src/aoi/rest-server/src/soap/*/*.cpp
 
 # Create build directory
 WORKDIR "/usr/src/aoi/test"

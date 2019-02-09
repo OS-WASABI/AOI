@@ -5,7 +5,8 @@ FROM oswasabi/aoi-test-env:latest
 WORKDIR "/usr/src/aoi-rest-server"
 
 # Copy the current folder which contains C++ source code to the Docker image under /usr/src
-COPY . .
+COPY "./src/" "./src/"
+COPY CMakeLists.txt .
 
 RUN mkdir build
 WORKDIR "/usr/src/aoi-rest-server/build"
