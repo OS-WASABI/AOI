@@ -18,7 +18,7 @@ add_executable(${PROJECT_NAME}
                                 ./src/controller/example_controller.cpp
                                 ./src/controller/user_controller.cpp                       
                                 ./src/services/data_access_object.cpp
-                                ./src/util/network_utils.cpp)
+                                ./src/util/network_utils.cpp src/controller/alert_controller.cpp src/controller/alert_controller.hpp)
 
 # header locations
 set(CONTROLLER_INCLUDE_DIR "./src/controller")
