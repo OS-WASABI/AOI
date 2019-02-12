@@ -11,6 +11,8 @@
 #define ALERT_AREA_H
 #include <string>
 #include <vector>
+#include <utility>
+#include <regex>
 #include <cpprest/json.h>
 
 namespace aoi_rest {
@@ -18,7 +20,7 @@ struct AlertArea {
     std::string area_description;
     std::vector<std::string> polygons;
     std::vector<std::string> circles;
-    std::vector<std::string> geocode;
+    std::vector<std::pair<std::string,std::string>> geocode;
     std::string altitude;
     std::string ceiling;
     

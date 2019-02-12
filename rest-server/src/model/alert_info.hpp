@@ -5,12 +5,14 @@
  *
  * @file        alert_info.hpp
  * @authors     Michael McCulley
- * @date        January, 2019
+ * @date        February, 2019
  */
 #ifndef ALERT_INFO_H
 #define ALERT_INFO_H
 #include <string>
 #include <vector>
+#include <utility>
+#include <regex>
 #include <ctime>
 #include <cpprest/json.h>
 
@@ -21,9 +23,9 @@ struct AlertInfo {
     std::string urgency;
     std::string severity;
     std::string certainty;
-    std::time_t expire_time;
-    std::time_t effective_time; // generated upon creation
-    std::time_t onset_time;     // generated upon creation
+    XMLDateTime expire_time;
+    XMLDateTime effective_time; // generated upon creation
+    XMLDateTime onset_time;     // generated upon creation
     //Optional elements
     std::vector<AlertResource> resources;
     std::vector<AlertArea> areas;
@@ -31,15 +33,20 @@ struct AlertInfo {
     std::string language;
     std::vector<std::string> response_types;
     std::string audience;
-    std::vector<std::string> event_codes;
+    std::vector<std::pair<std::string,std::string>> event_codes;
     std::string sender_name;
     std::string headline;
     std::string description;
     std::string instruction;
     std::string web_url;
     std::string contact;
-    std::vector<std::string> parameters;
+    std::vector<std::pair<std::string,std::string>> parameters;
     
+    static const std::array<std::string,12> category_codes = {"GEO", "MET", "SAFETY", "SECURITY", "RESCUE", "FIRE", "HEALTH", "ENV", "TRANSPORT", "INFRA", "CBRNE", "OTHER"};
+    static const std::array<std::string,8> response_type_codes = {"SHELTER", "EVACUATE", "PREPARE", "EXECUTE", "MONITOR", "ASSESS", "ALLCLEAR", "NONE"};
+    static const std::array<std::string,5> urgency_codes = {"IMMEDIATE", "EXPECTED", "FUTURE", "PAST", "UNKNOWN"};
+    static const std::array<std::string,5> severity_codes = {"EXTREME", "SEVERE", "MODERATE", "MINOR", "UNKNOWN"};
+    static const std::array<std::string,6> certainty_codes = {"OBSERVED", "LIKELY", "VERY LIKELY", "POSSIBLE", "UNLIKELY", "UNKNOWN"};
     /**
     * Evaluates the AlertInfo as valid per CAP v1.2 IPAWS profile.
     * 
