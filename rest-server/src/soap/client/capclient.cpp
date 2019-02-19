@@ -3,10 +3,11 @@
 #include <stdio.h>
 #include <string>
 #include <fstream>
+#include <sstream>
 
-const char server[] = "http://localhost:8080/aoi/soap/alerts";
+const char server[] = "https://localhost:8443/cadg/soap/alerts";
 
-// c++ -o capclient capclient.cpp stdsoap2.cpp soapC.cpp soapCAPSoapHttpProxy.cpp
+//  c++ -o capclient capclient.cpp stdsoap2.cpp soapC.cpp soapCAPSoapHttpProxy.cpp -DWITH_OPENSSL -lssl -lcrypto
 
 int main(int argc, char **argv)
 {
@@ -32,8 +33,17 @@ int main(int argc, char **argv)
         _ns2__postCAPRequestTypeDef postRequest;   // request needs to contain data
         _ns2__postCAPResponseTypeDef response; // data holder for response
 
+
+        std::stringstream outstr;
+        ctx.os = &outstr;
+        soap_write__ns5__alert(&ctx, &outboundAlert);
+        auto alertStr = outstr.str();
+        ctx.os = NULL;
+        std::cout << "Alert Structure as String: " << alertStr << std::endl;
+
+
         postRequest.ns5__alert = &outboundAlert; // Assigns parsed alert to the request object
-        postRequest.soap_serialize(&ctx); // Should serialize the alert for output? XML tags seem to have ns5: prefix
+        //postRequest.soap_serialize(&ctx); // Should serialize the alert for output? XML tags seem to have ns5: prefix
 
         cap.postCAP(&postRequest, response);
 
