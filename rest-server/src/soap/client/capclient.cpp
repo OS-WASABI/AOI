@@ -33,19 +33,24 @@ int main(int argc, char **argv)
         _ns2__postCAPRequestTypeDef postRequest;   // request needs to contain data
         _ns2__postCAPResponseTypeDef response; // data holder for response
 
+        const auto constAlert = &outboundAlert;
 
         std::stringstream outstr;
         ctx.os = &outstr;
+        soap_set_omode(&ctx, SOAP_XML_NOTYPE);
         soap_write__ns5__alert(&ctx, &outboundAlert);
         auto alertStr = outstr.str();
         ctx.os = NULL;
         std::cout << "Alert Structure as String: " << alertStr << std::endl;
 
-
+        postRequest.soap = &ctx;
+        soap_omode(postRequest.soap, SOAP_XML_DEFAULTNS);
         postRequest.ns5__alert = &outboundAlert; // Assigns parsed alert to the request object
-        //postRequest.soap_serialize(&ctx); // Should serialize the alert for output? XML tags seem to have ns5: prefix
+        postRequest.soap_serialize(&ctx); // Should serialize the alert for output? XML tags seem to have ns5: prefix
 
+        soap_omode(cap.soap, SOAP_XML_DEFAULTNS);
         cap.postCAP(&postRequest, response);
+        //cap.send_postCAP(server, "stuff", &postRequest);
 
         if (cap.soap->error)
             cap.soap_stream_fault(std::cerr);
