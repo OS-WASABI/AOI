@@ -63,6 +63,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "postbuild": "if [ -d ../docker-aoi-apache ]; then mkdir -p ../docker-aoi-apache/html_files && rm -rf ../docker-aoi-apache/html_files/* && cp -r build/. ../docker-aoi-apache/html_files; fi",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
