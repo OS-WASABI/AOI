@@ -11,18 +11,25 @@
  * @authors Ross Arcemont, Vaniya Agrawal
  */
 import React, { Component } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch
+} from 'react-router-dom';
+import Header from './components/header/header';
+import Home from './components/main/home';
 import './css/App.css';
-import HeaderContent from './components/header-content/header-content';
-import Sidebar from './components/sidebar/sidebar';
-import MainContent from './components/main-content/main-content'
 
 class App extends Component {
   render() {
     return (
         <div className="App">
-            <HeaderContent/>
-            <Sidebar/>
-            <MainContent/>
+            <Header/>
+          <Router>
+            <Switch>
+              <Route exact path={'/'} component={Home}/>
+            </Switch>
+          </Router>
         </div>
     );
   }

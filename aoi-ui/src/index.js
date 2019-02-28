@@ -8,12 +8,12 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './css/index.css';
-import * as serviceWorker from './serviceWorker';
-import Provider from "react-redux/es/components/Provider";
 import { ConnectedRouter } from 'connected-react-router'
+import Provider from "react-redux/es/components/Provider";
 import store, { history } from "./store";
 import App from './App';
+import * as serviceWorker from './serviceWorker';
+import 'bootstrap/dist/css/bootstrap.css';
 
 ReactDOM.render(
   <Provider store={store}>
