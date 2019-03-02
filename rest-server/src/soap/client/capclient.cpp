@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 
-const char server[] = "https://localhost:8443/cadg/soap/alerts";
+const char server[] = "http://127.0.1.1:8080/cadg/soap/alerts";
 
 //  c++ -o capclient capclient.cpp stdsoap2.cpp soapC.cpp soapCAPSoapHttpProxy.cpp -DWITH_OPENSSL -lssl -lcrypto
 
@@ -43,13 +43,11 @@ int main(int argc, char **argv)
         ctx.os = NULL;
         std::cout << "Alert Structure as String: " << alertStr << std::endl;
 
-        postRequest.soap = &ctx;
-        soap_omode(postRequest.soap, SOAP_XML_DEFAULTNS);
         postRequest.ns5__alert = &outboundAlert; // Assigns parsed alert to the request object
         postRequest.soap_serialize(&ctx); // Should serialize the alert for output? XML tags seem to have ns5: prefix
-
+        soap_POST_send__ns5__alert(&ctx, server, outboundAlert);
         soap_omode(cap.soap, SOAP_XML_DEFAULTNS);
-        cap.postCAP(&postRequest, response);
+        //cap.postCAP(&postRequest, response);
         //cap.send_postCAP(server, "stuff", &postRequest);
 
         if (cap.soap->error)
