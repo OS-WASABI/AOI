@@ -18,16 +18,21 @@ import {
 } from 'react-router-dom';
 import Header from './components/header/header';
 import Home from './components/main/home';
+import Alerts from './components/main/alerts';
 
 class App extends Component {
   render() {
     return (
         <div className="App">
-            <Header/>
           <Router>
-            <Switch>
-              <Route exact path={'/'} component={Home}/>
-            </Switch>
+            <div>
+              <Header/>
+              <Switch>
+                <Route exact path={'/'} component={Home}/>
+                <Route path={'/alerts'} component={Alerts}/>
+              </Switch>
+            </div>
+
           </Router>
         </div>
     );

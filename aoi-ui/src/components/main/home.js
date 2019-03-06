@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 
 const Home = () => {
   return (
-    <div className='full-height'>
+    <div>
       <br/><br/>
       <Jumbotron className={''}>
         <h1 className='display-4'>Alert Originator Interface</h1>
