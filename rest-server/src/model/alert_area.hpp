@@ -11,16 +11,18 @@
 #define ALERT_AREA_H
 #include <string>
 #include <vector>
+#include <optional>
+#include <utility>
 #include <cpprest/json.h>
 
 namespace aoi_rest {
 struct AlertArea {
-    std::string area_description;
-    std::vector<std::string> polygons;
-    std::vector<std::string> circles;
-    std::vector<std::string> geocode;
-    std::string altitude;
-    std::string ceiling;
+    std::optional<std::string> area_description;
+    std::optional<std::vector<std::string>> polygons;
+    std::optional<std::vector<std::string>> circles;
+    std::optional<std::vector<std::pair<std::string, std::string>>> geocode;
+    std::optional<std::string> altitude;
+    std::optional<std::string> ceiling;
     
     /**
     * Evaluates AlertArea as valid per CAP v1.2 IPAWS profile.
