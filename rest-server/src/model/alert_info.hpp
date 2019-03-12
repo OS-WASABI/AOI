@@ -12,33 +12,34 @@
 #include <string>
 #include <vector>
 #include <ctime>
+#include <optional>
 #include <cpprest/json.h>
 
 namespace aoi_rest {
 struct AlertInfo {
     //Required elements
-    std::string event;
-    std::string urgency;
-    std::string severity;
-    std::string certainty;
-    std::time_t expire_time;
-    std::time_t effective_time; // generated upon creation
-    std::time_t onset_time;     // generated upon creation
+    std::optional<std::string> event;
+    std::optional<std::string> urgency;
+    std::optional<std::string> severity;
+    std::optional<std::string> certainty;
+    std::optional<std::time_t> expire_time;
+    std::optional<std::time_t> effective_time; // generated upon creation
+    std::optional<std::time_t> onset_time;     // generated upon creation
     //Optional elements
-    std::vector<AlertResource> resources;
-    std::vector<AlertArea> areas;
-    std::vector<std::string> categories;
-    std::string language;
-    std::vector<std::string> response_types;
-    std::string audience;
-    std::vector<std::string> event_codes;
-    std::string sender_name;
-    std::string headline;
-    std::string description;
-    std::string instruction;
-    std::string web_url;
-    std::string contact;
-    std::vector<std::string> parameters;
+    std::optional<std::vector<AlertResource>> resources;
+    std::optional<std::vector<AlertArea>> areas;
+    std::optional<std::vector<std::string>> categories;
+    std::optional<std::string> language;
+    std::optional<std::vector<std::string>> response_types;
+    std::optional<std::string> audience;
+    std::optional<std::vector<std::string>> event_codes;
+    std::optional<std::string> sender_name;
+    std::optional<std::string> headline;
+    std::optional<std::string> description;
+    std::optional<std::string> instruction;
+    std::optional<std::string> web_url;
+    std::optional<std::string> contact;
+    std::optional<std::vector<std::string>> parameters;
     
     /**
     * Evaluates the AlertInfo as valid per CAP v1.2 IPAWS profile.

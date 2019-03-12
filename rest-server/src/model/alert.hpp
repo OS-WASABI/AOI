@@ -13,6 +13,7 @@
 #include <vector>
 #include <array>
 #include <ctime>
+#include <optional>
 #include <cpprest/json.h>
 
 namespace aoi_rest {
@@ -20,22 +21,22 @@ struct Alert {
     static std::array<std::string,5> std:
     
     // Required elements
-    std::string identifier;
-    std::string sender;
-    std::time_t sent_time;
-    std::string status;
-    std::string msg_type;
-    std::string scope;
-    std::vector<AlertInfo> info;
+    std::optional<std::string> identifier;
+    std::optional<std::string> sender;
+    std::optional<std::time_t> sent_time;
+    std::optional<std::string> status;
+    std::optional<std::string> msg_type;
+    std::optional<std::string> scope;
+    std::optional<std::vector<AlertInfo>> info;
     // Conditional elements
-    std::string restriction;
-    std::string addresses;      // Required when scope is "Private", optional otherwise.
+    std::optional<std::string> restriction;
+    std::optional<std::string> addresses;      // Required when scope is "Private", optional otherwise.
     // Optional elements    
-    std::vector<string> handling_codes;
-    std::string source; 
-    std::string note;
-    std::string references; 
-    std::string incidents;
+    std::optional<std::vector<string>> handling_codes;
+    std::optional<std::string> source;
+    std::optional<std::string> note;
+    std::optional<std::string> references;
+    std::optional<std::string> incidents;
     
     // Allowed codes as per CAP 1.2.
     static const std::array<std::string,5> status_codes {"ACTUAL","EXERCISE","SYSTEM","TEST","DRAFT"};

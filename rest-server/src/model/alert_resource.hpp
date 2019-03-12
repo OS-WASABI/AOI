@@ -11,16 +11,17 @@
 #define ALERT_RESOURCE_H
 #include <string>
 #include <vector>
+#include <optional>
 #include <cpprest/json.h>
 
 namespace aoi_rest {
 struct AlertResource {
-    std::string resource_description;
-    std::string mime_type;
-    int size;
-    std::string uri;
-    std::string dereferenced_uri;
-    std::string digest;
+    std::optional<std::string> resource_description;
+    std::optional<std::string> mime_type;
+    std::optional<int> size;
+    std::optional<std::string> uri;
+    std::optional<std::string> dereferenced_uri;
+    std::optional<::string> digest;
     
     /**
     * Evaluates AlertResource as valid per CAP v1.2 IPAWS profile.

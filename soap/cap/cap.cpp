@@ -18,23 +18,23 @@
  * @param cap_filename      Filepath and filename of the CAP document to be saved
  */
 void CAP::create_cap_doc(aoi_rest::Alert data_input, std::string cap_filename) {
-    //Creating SOAP envelope for the CAP message
+    // Creating SOAP envelope for the CAP message
     pugi::xml_document cap_doc;
     auto declaration_node = cap_doc.append_child(pugi::node_declaration);
     declaration_node.append_attribute("version") = "1.0";
     declaration_node.append_attribute("encoding") = "utf-8";
 
     auto root_node = cap_doc.append_child("SOAP-ENV:Envelope");
-    root_node.append_attribute("xmlns:SOAP-ENV") = "\"http://www.w3.org/2001/12/soap-envelope\"";
-    root_node.append_attribute("SOAP-ENV:encodingStyle") = "\"http://www.w3.org/2001/12/soap-encoding\"";
+    root_node.append_attribute("xmlns:SOAP-ENV") = "http://www.w3.org/2001/12/soap-envelope";
+    root_node.append_attribute("SOAP-ENV:encodingStyle") = "http://www.w3.org/2001/12/soap-encoding";
 
     auto soap_body = root_node.append_child("SOAP-ENV:Body");
-    //Creating CAP message main structure with necessary data
+    // Creating CAP message main structure with necessary data
     auto alert = soap_body.append_child("alert");
-    alert.append_attribute("xmlns") = "\"urn:oasis:names:tc:emergency:cap:1.2\"";
+    alert.append_attribute("xmlns") = "urn:oasis:names:tc:emergency:cap:1.2";
 
     auto identifier = alert.append_child("identifier");
-    identifier.text().set(data_input.identifier);
+    identifier.text().set(data_input.identifier.value().c_str());
 
     auto sender = alert.append_child("sender");
     sender.text().set(data_input.sender);
@@ -86,7 +86,7 @@ void CAP::create_cap_doc(aoi_rest::Alert data_input, std::string cap_filename) {
         incidents.text().set(data_input.incidents);
     }
 
-    //Creating info blocks with necessary data
+    // Creating info blocks with necessary data
     for (int i = 0; i < data_input.info.size(); i++) {
         auto info = alert.append_child("info");
         auto language = info.append_child("language");
@@ -142,7 +142,7 @@ void CAP::create_cap_doc(aoi_rest::Alert data_input, std::string cap_filename) {
 
         auto expires = info.append_child("expires");
         if (data_input.info.at(i).expires.compare("") == 0) {
-            //TODO: Determine default behavior
+            // TODO(Ross): Determine default behavior
         } else {
             expires.text().set(data_input.info.at(i).expire_time);
         }
@@ -182,7 +182,7 @@ void CAP::create_cap_doc(aoi_rest::Alert data_input, std::string cap_filename) {
             parameter.text().set(data_input.info.at(i).parameters.at(j));
         }
 
-        //Creating resource blocks with necessary data
+        // Creating resource blocks with necessary data
         for (int j = 0; j < data_input.info.at(i).resources.size(); j++) {
             auto resource = info.append_child("resource");
             auto resource_desc = resource.append_child("resourceDesc");
@@ -212,7 +212,7 @@ void CAP::create_cap_doc(aoi_rest::Alert data_input, std::string cap_filename) {
             }
         }
 
-        //Creating area blocks with necessary data
+        // Creating area blocks with necessary data
         for (int j = 0; j < data_input.info.at(i).areas.size(); j++) {
             auto area = info.append_child("area");
             auto area_desc = area.append_child("areaDesc");
@@ -233,7 +233,7 @@ void CAP::create_cap_doc(aoi_rest::Alert data_input, std::string cap_filename) {
                 geocode.text().set(data_input.info.at(i).areas.at(j).geocode.at(k));
             }
 
-            //TODO: Determine if parsing the lower limit from <ceiling> is necessary.
+            // TODO(Ross): Determine if parsing the lower limit from <ceiling> is necessary.
             if (data_input.info.at(i).areas.at(j).altitude.compare("") != 0) {
                 auto altitude = area.append_child("altitude");
                 altitude.text().set(data_input.info.at(i).areas.at(j).altitude);
