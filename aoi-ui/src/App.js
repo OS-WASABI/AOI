@@ -18,7 +18,7 @@ import {
 } from 'react-router-dom';
 import Header from './components/header/header';
 import Home from './components/main/home';
-import Alerts from './components/main/alerts';
+import AlertForm from './components/main/alertForm';
 
 class App extends Component {
   render() {
@@ -29,7 +29,8 @@ class App extends Component {
               <Header/>
               <Switch>
                 <Route exact path={'/'} component={Home}/>
-                <Route path={'/alerts'} component={Alerts}/>
+                <Route path={'/send/alert'} component={AlertForm}/>
+                <Route component={Home}/>
               </Switch>
             </div>
 
