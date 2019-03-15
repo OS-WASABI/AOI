@@ -10,7 +10,7 @@
 #ifndef SOAP_CONTROLLER_HPP
 #define SOAP_CONTROLLER_HPP
 #include <controller.hpp>
-#include "../../gSoapFiles/CAP/soapH.h"
+#include "../gSoapFiles/CAP/soapH.h"
 using aoi_rest::LoggerInterface;
 using aoi_rest::Logger;
 
