@@ -55,23 +55,23 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 -DBOOST_LOG_DYN_LINK")
 add_executable(${PROJECT_NAME}
 		./src/rest_server.cpp
 		./src/controller/controller.cpp
+		./src/controller/soap_controller.cpp
 		./src/nanodbc/nanodbc.cpp
 		./src/gSoapFiles/CAP/soapC.cpp
 		./src/gSoapFiles/CAP/stdsoap2.cpp
 		./src/services/logger.cpp
-		./src/soap/controller/soap_controller.cpp
 		./src/util/network_utils.cpp)
 
 # header locations
 set(CONTROLLER_INCLUDE_DIR "./src/controller")
 set(MODEL_INCLUDE_DIR "./src/model")
 set(SERVICES_INCLUDE_DIR "./src/services")
-set(SOAP_CONROLLER_DIR "./src/soap/controller")
+set(SOAP_CLIENT_DIR "./src/soap/")
 set(SOAP_INCLUDE_DIR "./src/gSoapFiles/CAP")
 set(UTILITIES_INCLUDE_DIR "./src/util")
 set(NANODBC_INCLUDE_DIR "./src/nanodbc")
 set(HEADER_PATHS ${CONTROLLER_INCLUDE_DIR} ${MODEL_INCLUDE_DIR} ${NANODBC_INCLUDE_DIR} ${SERVICES_INCLUDE_DIR}
-		${UTILITIES_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR} ${ODBC_INCLUDE_DIR} ${SOAP_CONTROLLER_DIR} ${SOAP_INCLUDE_DIR})
+		${UTILITIES_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR} ${ODBC_INCLUDE_DIR} ${SOAP_CLIENT_DIR} ${SOAP_INCLUDE_DIR})
 
 # library paths
 set(BOOST_LIBRARY "-lboost_system")

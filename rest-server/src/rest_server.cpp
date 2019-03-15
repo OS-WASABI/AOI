@@ -4,7 +4,7 @@
 #include <string>
 #include "logger.hpp"
 #include "log_level.hpp"
-#include "./soap/controller/soap_controller.hpp"
+#include "./controller/soap_controller.hpp"
 using aoi_rest::Logger;
 using aoi_rest::LoggerInterface;
 using aoi_soap::SoapController;
