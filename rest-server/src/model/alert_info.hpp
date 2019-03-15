@@ -71,7 +71,7 @@ struct AlertInfo {
      */     
     static std::optional<AlertInfo> from_json(web::json::value info_json) {
         try {
-            AlertInfo alert_info;
+            AlertInfo alert_info = AlertInfo();
             // TODO (Mike): validate format of elements
             if (info_json.has_field("event") && area_json["event"].is_string())
                 alert_info.event = info_json["event"].as_string();

@@ -60,7 +60,11 @@ add_executable(${PROJECT_NAME}
 		./src/gSoapFiles/CAP/stdsoap2.cpp
 		./src/services/logger.cpp
 		./src/soap/controller/soap_controller.cpp
-		./src/util/network_utils.cpp)
+		./src/util/network_utils.cpp
+		./src/model/alert.hpp
+		./src/model/alert_info.hpp
+		./src/model/alert_area.hpp
+		./src/model/alert_resource.hpp)
 
 # header locations
 set(CONTROLLER_INCLUDE_DIR "./src/controller")

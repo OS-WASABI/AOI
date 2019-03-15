@@ -350,7 +350,7 @@ struct Alert {
         return json;
     }
 
-    /**
+  /**
      * Creates an optional<Alert> from a web::json::value.
      *
      * If the json value does not contain all required fields,
