@@ -13,6 +13,7 @@
 #include <vector>
 #include <ctime>
 #include <optional>
+#include <utility>
 #include <cpprest/json.h>
 
 namespace aoi_rest {
@@ -32,7 +33,7 @@ struct AlertInfo {
     std::optional<std::string> language;
     std::optional<std::vector<std::string>> response_types;
     std::optional<std::string> audience;
-    std::optional<std::vector<std::string>> event_codes;
+    std::optional<std::vector<std::pair<std::string, std::string>>> event_codes;
     std::optional<std::string> sender_name;
     std::optional<std::string> headline;
     std::optional<std::string> description;
