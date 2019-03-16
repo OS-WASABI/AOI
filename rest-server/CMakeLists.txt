@@ -64,7 +64,7 @@ add_executable(${PROJECT_NAME}
 		./src/model/alert.hpp
 		./src/model/alert_info.hpp
 		./src/model/alert_area.hpp
-		./src/model/alert_resource.hpp)
+		./src/model/alert_resource.hpp src/model/alert.cpp)
 
 # header locations
 set(CONTROLLER_INCLUDE_DIR "./src/controller")
