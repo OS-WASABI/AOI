@@ -286,3 +286,14 @@ std::string CAP::create_cap_doc(aoi_rest::Alert data_input) {
     std::string cap_xml_string = cap_xml_stream.str();
     return cap_xml_string;
 }
+
+int main() {
+    aoi_rest::Alert test_alert;
+    test_alert.identifier = "9001";
+    test_alert.sender = "Ross";
+    test_alert.sent_time = "2019-03-28T19:54-9:00";
+    test_alert.status = "Actual";
+    test_alert.msg_type = "Alert";
+    test_alert.source = "CDC";
+    test_alert.scope = "Public";
+}
