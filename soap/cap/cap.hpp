@@ -32,7 +32,7 @@ public:
      * @param data_input        CAP object providing all necessary data
      * @param cap_filename      Filepath and filename of the CAP document to be saved
      */
-    static void create_cap_doc(aoi_rest::Alert data_input, std::string cap_filename);
+    static std::string create_cap_doc(aoi_rest::Alert data_input);
 };
 
 
