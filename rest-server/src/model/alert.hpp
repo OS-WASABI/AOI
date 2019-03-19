@@ -32,22 +32,22 @@ class Alert {
 private:
 
     // Required elements
-    std::optional<std::string> identifier;
-    std::optional<std::string> sender;
-    std::optional<std::time_t> sent_time;
-    std::optional<std::string> status;
-    std::optional<std::string> msg_type;
-    std::optional<std::string> scope;
-    std::optional<std::vector<AlertInfo>> info;
+    std::optional<std::string> identifier__;
+    std::optional<std::string> sender__;
+    std::optional<std::time_t> sent_time__;
+    std::optional<std::string> status__;
+    std::optional<std::string> msg_type__;
+    std::optional<std::string> scope__;
+    std::optional<std::vector<AlertInfo>> info__;
     // Conditional elements
-    std::optional<std::string> restriction;
-    std::optional<std::string> addresses;      // Required when scope is "Private", optional otherwise.
+    std::optional<std::string> restriction__;
+    std::optional<std::string> addresses__;      // Required when scope is "Private", optional otherwise.
     // Optional elements
-    std::optional<std::vector<std::string>> handling_codes;
-    std::optional<std::string> source;
-    std::optional<std::string> note;
-    std::optional<std::string> references;
-    std::optional<std::string> incidents;
+    std::optional<std::vector<std::string>> handling_codes__;
+    std::optional<std::string> source__;
+    std::optional<std::string> note__;
+    std::optional<std::string> references__;
+    std::optional<std::string> incidents__;
 
     /**
     * Validates an Alert's identifier field. If valid, the value for the
@@ -56,7 +56,7 @@ private:
     * @return bool
     *
     */
-    bool validate_identifier(web::json::value &alert_json);
+    bool validate_identifier(const std::string &identifier);
 
     /**
     * Validates an Alert's sender field. If valid, the value for the
@@ -65,7 +65,7 @@ private:
     * @return bool
     *
     */
-    bool validate_sender(web::json::value &alert_json);
+    bool validate_sender(const std::string &sender);
 
     /**
     * Validates an Alert's sent_time field. If valid, the value for the
@@ -74,7 +74,7 @@ private:
     * @return bool
     *
     */
-    bool validate_sent_time(web::json::value &alert_json);
+    bool validate_sent_time(const time_t &sent_time);
 
     /**
     * Validates an Alert's status field. If valid, the value for the
@@ -83,7 +83,7 @@ private:
     * @return bool
     *
     */
-    bool validate_status(web::json::value &alert_json);
+    bool validate_status(const std::string &status);
 
     /**
     * Validates an Alert's msg_type field. If valid, the value for the
@@ -92,7 +92,7 @@ private:
     * @return bool
     *
     */
-    bool validate_msg_type(web::json::value &alert_json);
+    bool validate_msg_type(const std::string &msg_type);
 
     /**
     * Validates an Alert's scope field. If valid, the value for the
@@ -101,16 +101,7 @@ private:
     * @return bool
     *
     */
-    bool validate_scope(web::json::value &alert_json);
-
-    /**
-    * Validates an Alert's info arary. If valid, the value for thevector of AlertInfo
-    * objects. If invalid, returns std::nullopt.
-    *
-    * @return bool
-    *
-    */
-    bool validate_info(web::json::value &alert_json);
+    bool validate_scope(const std::string &scope);
 
     /**
     * Validates an Alert's restriction field. If valid, the value for the
@@ -121,7 +112,7 @@ private:
     * @return bool
     *
     */
-    bool validate_restriction(web::json::value &alert_json);
+    bool validate_restriction(const std::string restriction);
 
     /**
     * Validates an Alert's addresses field. If valid, the value for the
@@ -134,7 +125,7 @@ private:
     * @return bool
     *
     */
-    bool validate_addresses(web::json::value &alert_json);
+    bool validate_addresses(const std::string addresses);
 
     /**
     * Validates an Alert's handling_codes elements. If valid, the value for thevector of
@@ -143,7 +134,7 @@ private:
     * @return bool
     *
     */
-    bool validate_handling_codes(web::json::value &alert_json);
+    bool validate_handling_codes(const std::string handling_codes);
 
     /**
     * Validates an Alert's source field. If valid, the value for the
@@ -152,7 +143,7 @@ private:
     * @return bool
     *
     */
-    bool validate_source(web::json::value &alert_json);
+    bool validate_source(const std::string source);
 
     /**
     * Validates an Alert's note field. If valid, the value for the
@@ -161,7 +152,7 @@ private:
     * @return bool
     *
     */
-    bool validate_note(web::json::value &alert_json);
+    bool validate_note(const std::string note);
 
     /**
     * Validates an Alert's incidents field. If valid, the value for the
@@ -173,7 +164,7 @@ private:
     * @return bool
     *
     */
-    bool validate_references(web::json::value &alert_json);
+    bool validate_references(const std::string references);
 
     /**
     * Validates an Alert's incidents field. If valid, the value for the
@@ -185,7 +176,7 @@ private:
     * @return bool
     *
     */
-    bool validate_incidents(web::json::value &alert_json);
+    bool validate_incidents(const std::string incidents);
 
 public:
     Alert();
@@ -201,12 +192,37 @@ public:
     static std::optional<Alert> from_json(web::json::value alert_json) {
         try {
             Alert alert = Alert();
-            alert.validate_identifier(alert_json);
-            alert.validate_sender(alert_json);
-            alert.validate_status(alert_json);
-            alert.validate_msg_type(alert_json);
-            alert.validate_scope(alert_json);
-            alert.validate_info(alert_json);
+            if (alert_json.has_field("identifier") && alert_json["identifier"].is_string())
+                if (!alert.validate_identifier(alert_json["identifier"].as_string()))
+                    return std::nullopt;
+            else
+                return std::nullopt;
+            if (alert_json.has_field("sender") && alert_json["sender"].is_string())
+                alert.validate_sender(alert_json["sender"].as_string());
+            if (alert_json.has_field("sent_time") && alert_json["sent_time"].is_string()) {
+                struct tm tm;
+                strptime(alert_json["sent_time"].as_string().c_str(), "%FT%T.000Z", &tm);
+                time_t sent_time = mktime(&tm);
+            }
+            if (alert_json.has_field("status") && alert_json["status"].is_string())
+                alert.validate_status(alert_json["status"].as_string());
+            if (alert_json.has_field("msg_type") && alert_json["msg_type"].is_string())
+                alert.validate_msg_type(alert_json["msg_type"].as_string());
+            if (alert_json.has_field("scope") && alert_json["scope"].is_string())
+                alert.validate_scope(alert_json["scope"].as_string());
+            if (alert_json.has_field("info") && alert_json["info"].is_array()) {
+                web::json::array json_array = alert_json["info"].as_array();
+                std::vector<AlertInfo> temp_infos;
+                for (auto info_json = json_array.begin(); info_json != json_array.end(); ++info_json) {
+                    if (info_json->is_object()) {
+                        if (std::optional<AlertInfo> temp_info = AlertInfo::from_json(*info_json)) {
+                            info__.push_back(temp_info.value());
+                        }
+                    }
+                }
+
+            }
+
             alert.validate_restriction(alert_json);
             alert.validate_addresses(alert_json);
             alert.validate_handling_codes(alert_json);
@@ -225,7 +241,7 @@ public:
 
 /// Necessary for comparing if two entities are equal.
 inline bool operator==(const Alert &a, const Alert &b) {
-    return a.identifier == b.identifier;
+    return a.identifier__ == b.identifier__;
 }
 }
 #endif // ALERT_H
