@@ -67,7 +67,7 @@ bool Alert::validate_msg_type(const std::string &msg_type) {
             msg_type_proper[i] = std::tolower(msg_type_proper[i]);
     }
     for (auto msg_type_code = msg_type_codes.begin();
-         msg_type_code != msg_type_codes.end(); msg_type_code++) {
+        msg_type_code != msg_type_codes.end(); msg_type_code++) {
         if (msg_type_proper == *msg_type_code) {
             msg_type__ = msg_type_proper;
             return true;
@@ -93,82 +93,42 @@ bool Alert::validate_scope(const std::string &scope) {
     return false;
 }
 
-bool Alert::validate_restriction(web::json::value &alert_json) {
-    if (alert_json.has_field("restriction") && alert_json["restriction"].is_string()) {
-        restriction__ = alert_json["restriction"].as_string();
-        return true;
-    }
-    return false;
+bool Alert::validate_restriction(const std::string restriction) {
+    restriction__ = restriction;
+    return true;
 }
 
-bool Alert::validate_addresses(web::json::value &alert_json) {
-    if (scope__.value() == "Private") {
-        if (alert_json.has_field("addresses")
-            && alert_json["addresses"].is_string()
-            && alert_json["addresses"].as_string() != "") {
-            //TODO(Mike): Parse addresses
-        } else {
-            return false;
-        }
-    } else {
-        if (alert_json["addresses"].is_string()) {
-            //TODO(Mike): Parse addresses
-        } else {
-            return false;
-        }
-    }
-}
-
-bool Alert::validate_handling_codes(web::json::value &alert_json) {
-    if (alert_json.has_field("handling_codes") && alert_json["handling_codes"].is_array()) {
-        web::json::array json_array = alert_json["handling_codes"].as_array();
-        for (auto handling_codes_json = json_array.begin();
-             handling_codes_json != json_array.end(); ++handling_codes_json) {
-            if (handling_codes_json->is_string()) {
-                handling_codes__.push_back(handling_codes_json->as_string());
-            } else {
-                return false;
-            }
-        }
-        return true;
-    } else {
+bool Alert::validate_addresses(const std::string addresses) {
+    if (scope__.value() == "Private" && addresses == "")
         return false;
-    }
+    //TODO(Mike): Parse addresses
+    return true;
 }
 
-bool Alert::validate_source(web::json::value &alert_json) {
-    if (alert_json.has_field("source") && alert_json["source"].is_string()) {
-        source__ = alert_json["source"].as_string();
-        return true;
-    } else {
-        return false;
-    }
+bool Alert::validate_handling_code(const std::string handling_code) {
+    //TODO(Mike): Parse addresses
+    handling_codes__.value().push_back(handling_code);
+    return true;
 }
 
-bool Alert::validate_note(web::json::value &alert_json) {
-    if (alert_json.has_field("note") && alert_json["note"].is_string()) {
-        note__ = alert_json["note"].as_string();
-        return true;
-    } else {
-        return false;
-    }
+bool Alert::validate_source(const std::string source) {
+      source__ = source;
+      return true;
 }
 
-bool Alert::validate_references(web::json::value &alert_json) {
-    if (alert_json.has_field("references") && alert_json["references"].is_string()) {
-        references__ = alert_json["references"].as_string();
-        return true;
-    } else {
-        return false;
-    }
+bool Alert::validate_note(const std::string note) {
+    note__ = note;
+    return true;
 }
 
-bool Alert::validate_incidents(web::json::value &alert_json) {
-    if (alert_json.has_field("incidents") && alert_json["incidents"].is_string()) {
-        incidents__ = alert_json["incidents"].as_string();
-        return true;
-    } else {
-        return false;
-    }
+bool Alert::validate_references(const std::string references) {
+    //TODO(Mike): Validate references
+    references__ = references;
+    return true;
 }
-} // namespace aoi_rest
+
+bool Alert::validate_incidents(const std::string incidents) {
+    incidents__ = incidents;
+    return true;
+}
+}
