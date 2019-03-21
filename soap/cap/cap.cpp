@@ -296,4 +296,16 @@ int main() {
     test_alert.msg_type = "Alert";
     test_alert.source = "CDC";
     test_alert.scope = "Public";
+    test_alert.restriction = "N/A";
+    test_alert.addresses = "1337 WestPhiladelphiaBornAndRaised Blvd";
+
+    std::vector<std::string> codeVector;
+    test_alert.handling_codes = codeVector;
+    test_alert.handling_codes.value().push_back("9001");
+    test_alert.handling_codes.value().push_back("9002");
+    test_alert.handling_codes.value().push_back("9003");
+
+    test_alert.note = "The playground is where I spent most of my days.";
+    test_alert.references = "Uncle Phil";
+    test_alert.incidents = "A couple of guys were up to no good.";
 }
