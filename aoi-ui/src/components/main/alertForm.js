@@ -174,12 +174,12 @@ class AlertForm extends Component {
     return this.state.categories.map((category, i) => (
       <ButtonGroup key={i}>
         <Button
-          variant={'info'}
+          variant={'secondary'}
           style={{'marginLeft':10}}>
           {category}
         </Button>
         <Button
-          variant={'info'}
+          variant={'secondary'}
           onClick={()=>this.popSelection('categories', category)}>
           X
         </Button>
@@ -193,7 +193,6 @@ class AlertForm extends Component {
         <br/><br/><br/>
         <Container>
           <h1>Send Alert</h1>
-          <br/>
           <Form>
             <Form.Row>
               <Form.Group>
@@ -284,22 +283,11 @@ class AlertForm extends Component {
               </Form.Row>
             </Form.Group>
             <Form.Group controlId={'area'}>
-            <Form.Row>
-              <Form.Label column sm={2}>Area</Form.Label>
-              <Col><Nav variant={'tabs'}>
-                <Nav.Item>
-                  <Nav.Link>Polygon</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link>Geocode</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link>Circle</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link>Description</Nav.Link>
-                </Nav.Item>
-              </Nav></Col>
+              <Form.Row>
+                <Form.Label column sm={2}>Area</Form.Label>
+                <Col>
+                  <Form.Control placeholder={'Description'} type={'text'}/>
+                </Col>
               </Form.Row>
             </Form.Group>
           </Form>
