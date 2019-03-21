@@ -206,6 +206,7 @@ class AlertForm extends Component {
                 </DropdownButton>
               </Form.Group>
             </Form.Row>
+            <br/>
             <Form.Group controlId={'event'}>
               <Form.Row>
               <Form.Label column sm={2}>Event Title</Form.Label>
