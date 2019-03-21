@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button';
 const Home = () => {
   return (
     <div>
-      <br/><br/>
       <Jumbotron className={''}>
         <h1 className='display-4'>Alert Originator Interface</h1>
         <p className='lead'>

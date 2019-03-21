@@ -35,8 +35,8 @@ export default class Header extends Component {
             <Nav className={'ml-auto'} navbar>
               <Nav.Link as={Link} to={'/dash'}><b>Dashboard</b></Nav.Link>
               <NavDropdown title={'Send'} alignRight>
-                <NavDropdown.Item as={Link} to={'/send/alert'}>Live Alert</NavDropdown.Item>
-                <NavDropdown.Item as={Link} to={'/send/poll'}>Test Poll</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to={'/send/alert'}>Send Alert</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to={'/send/poll'}>Send Poll</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title={'Configure'} alignRight>
                 <NavDropdown.Item as={Link} to={'/conf/db'}>Database</NavDropdown.Item>
