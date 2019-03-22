@@ -8,6 +8,12 @@
 
 #include "cap.hpp"
 #include <sstream>
+#include <optional>
+#include <vector>
+#include <utility>
+#include "../../rest-server/src/model/alert.hpp"
+#include "../pugixml-1.9/src/pugixml.hpp"
+#include "../pugixml-1.9/src/pugixml.cpp"
 
 ///Creates a CAP message from a provided CAP object.
 /**
@@ -101,7 +107,7 @@ std::string CAP::create_cap_doc(aoi_rest::Alert data_input) {
 
             for (int j = 0; j < data_input.info.value().at(i).categories.value().size(); j++) {
                 pugi::xml_node category = info.append_child("category");
-                category.text().set(data_input.info.value().at(i).categories.at(j).value().c_str());
+                category.text().set(data_input.info.value().at(i).categories.value().at(j).c_str());
             }
 
             pugi::xml_node event = info.append_child("event");
@@ -139,17 +145,17 @@ std::string CAP::create_cap_doc(aoi_rest::Alert data_input) {
                 }
             }
 
-            if (data_input.info.value().at(i).effective) {
+            if (data_input.info.value().at(i).effective_time) {
                 pugi::xml_node effective = info.append_child("effective");
                 effective.text().set(data_input.info.value().at(i).effective_time.value().c_str());
             }
 
-            if (data_input.info.value().at(i).onset) {
+            if (data_input.info.value().at(i).onset_time) {
                 pugi::xml_node onset = info.append_child("onset");
                 onset.text().set(data_input.info.value().at(i).onset_time.value().c_str());
             }
 
-            if (data_input.info.value().at(i).expires) {
+            if (data_input.info.value().at(i).expire_time) {
                 pugi::xml_node expires = info.append_child("expires");
                 expires.text().set(data_input.info.value().at(i).expire_time.value().c_str());
             }
@@ -181,18 +187,22 @@ std::string CAP::create_cap_doc(aoi_rest::Alert data_input) {
 
             if (data_input.info.value().at(i).contact) {
                 pugi::xml_node contact = info.append_child("contact");
-                contact.text().set(data_input.info.value.at(i).contact.value().c_str());
+                contact.text().set(data_input.info.value().at(i).contact.value().c_str());
             }
 
             if (data_input.info.value().at(i).parameters)
-            for (int j = 0; j < data_input.info.at(i).parameters.size(); j++) {
+            for (int j = 0; j < data_input.info.value().at(i).parameters.value().size(); j++) {
                 pugi::xml_node parameter = info.append_child("parameter");
-                parameter.text().set(data_input.info.value().at(i).parameters.value().at(j).c_str());
+                pugi::xml_node value_name = parameter.append_child("valueName");
+                pugi::xml_node value = parameter.append_child("value");
+
+                value_name.text().set(data_input.info.value().at(i).parameters.value().at(j).first.c_str());
+                value.text().set(data_input.info.value().at(i).parameters.value().at(j).second.c_str());
             }
 
             // Creating resource blocks with necessary data
             if (data_input.info.value().at(i).resources) {
-                for (int j = 0; j < data_input.info.value().at(i).resources.size(); j++) {
+                for (int j = 0; j < data_input.info.value().at(i).resources.value().size(); j++) {
                     pugi::xml_node resource = info.append_child("resource");
                     pugi::xml_node resource_desc = resource.append_child("resourceDesc");
                     resource_desc.text().set(data_input.info.value().at(i).resources.value().at(j)
@@ -253,7 +263,7 @@ std::string CAP::create_cap_doc(aoi_rest::Alert data_input) {
                     }
 
                     if (data_input.info.value().at(i).areas.value().at(j).geocode) {
-                        for (int k = 0; k < data_input.info.at(i).areas.at(j).geocode.size(); k++) {
+                        for (int k = 0; k < data_input.info.value().at(i).areas.value().at(j).geocode.value().size(); k++) {
                             pugi::xml_node geocode = area.append_child("geocode");
                             pugi::xml_node value_name = geocode.append_child("valueName");
                             pugi::xml_node value = geocode.append_child("value");
@@ -288,6 +298,7 @@ std::string CAP::create_cap_doc(aoi_rest::Alert data_input) {
 }
 
 int main() {
+    // Filling in the top level of an example CAP alert
     aoi_rest::Alert test_alert;
     test_alert.identifier = "9001";
     test_alert.sender = "Ross";
@@ -308,4 +319,93 @@ int main() {
     test_alert.note = "The playground is where I spent most of my days.";
     test_alert.references = "Uncle Phil";
     test_alert.incidents = "A couple of guys were up to no good.";
+
+    // Filling in the alert block of an example CAP alert
+    std::vector<aoi_rest::AlertInfo> info_vector;
+    test_alert.info = info_vector;
+    aoi_rest::AlertInfo test_info;
+    test_alert.info.value().push_back(test_info);
+
+    test_alert.info.value().at(0).language = "en-US";
+
+    std::vector<std::string> category_vector;
+    test_alert.info.value().at(0).categories = category_vector;
+    test_alert.info.value().at(0).categories.value().push_back("Safety");
+
+    test_alert.info.value().at(0).event = "Can't talk about it.";
+
+    std::vector<std::string> response_vector;
+    test_alert.info.value().at(0).response_types = response_vector;
+    test_alert.info.value().at(0).response_types.value().push_back("Shelter");
+
+    test_alert.info.value().at(0).urgency = "Expected";
+    test_alert.info.value().at(0).severity = "Extreme";
+    test_alert.info.value().at(0).certainty = "Observed";
+    test_alert.info.value().at(0).audience = "Everyone";
+
+    std::vector<std::pair<std::string, std::string>> event_code_vector;
+    test_alert.info.value().at(0).event_codes = event_code_vector;
+    std::pair<std::string, std::string> new_code;
+    new_code.first = "SAME";
+    new_code.second = "CEM";
+    test_alert.info.value().at(0).event_codes.value().push_back(new_code);
+
+    test_alert.info.value().at(0).effective_time = "2019-03-28T19:54-9:00";
+    test_alert.info.value().at(0).onset_time = "2019-03-28T19:54-9:00";
+    test_alert.info.value().at(0).expire_time = "2019-03-28T20:54-9:00";
+    test_alert.info.value().at(0).sender_name = "Ross";
+    test_alert.info.value().at(0).headline = "Attention: You must consume more cheese!";
+    test_alert.info.value().at(0).description = "Studies have shown cheese makes you live longer. JUST EAT IT!";
+    test_alert.info.value().at(0).instruction = "Go to the store. Buy cheese. Eat cheese. ??? PROFIT!";
+    test_alert.info.value().at(0).web_url = "http://www.cheese.com";
+    test_alert.info.value().at(0).contact = "cheese@cheese.com";
+
+//    std::vector<std::string> parameter_vector;
+//    std::pair<std::string, std::string> new_parameter;
+//    new_parameter.first = "SAME";
+//    new_parameter.second = "CEM";
+//    parameter_vector.push_back(new_parameter);
+//    test_alert.info.value().at(0).parameters = parameter_vector;
+
+    // Filling in the resource block of an example CAP alert
+    std::vector<aoi_rest::AlertResource> resource_vector;
+    test_alert.info.value().at(0).resources = resource_vector;
+    aoi_rest::AlertResource test_resource;
+    test_alert.info.value().at(0).resources.value().push_back(test_resource);
+
+    test_alert.info.value().at(0).resources.value().at(0).resource_description = "N/A1";
+    test_alert.info.value().at(0).resources.value().at(0).mime_type = "None";
+    test_alert.info.value().at(0).resources.value().at(0).size = "0";
+    test_alert.info.value().at(0).resources.value().at(0).uri = "N/A2";
+    test_alert.info.value().at(0).resources.value().at(0).dereferenced_uri = "N/A3";
+    test_alert.info.value().at(0).resources.value().at(0).digest = "N/A4";
+
+    // Filling in the area block of an example CAP alert
+    std::vector<aoi_rest::AlertArea> area_vector;
+    test_alert.info.value().at(0).areas = area_vector;
+    aoi_rest::AlertArea test_area;
+    test_alert.info.value().at(0).areas.value().push_back(test_area);
+
+    test_alert.info.value().at(0).areas.value().at(0).area_description = "A Hobbit hole";
+
+    std::vector<std::string> polygon_vector;
+    test_alert.info.value().at(0).areas.value().at(0).polygons = polygon_vector;
+    test_alert.info.value().at(0).areas.value().at(0).polygons.value().push_back("0,0 90,0 0,90 90,90");
+
+    std::vector<std::string> circle_vector;
+    test_alert.info.value().at(0).areas.value().at(0).circles = circle_vector;
+    test_alert.info.value().at(0).areas.value().at(0).circles.value().push_back("3.14");
+
+    std::vector<std::pair<std::string, std::string>> geocode_vector;
+    test_alert.info.value().at(0).areas.value().at(0).geocode = geocode_vector;
+    std::pair<std::string, std::string> test_geocode;
+    test_geocode.first = "SAME";
+    test_geocode.second = "006113";
+    test_alert.info.value().at(0).areas.value().at(0).geocode.value().push_back(test_geocode);
+
+    test_alert.info.value().at(0).areas.value().at(0).altitude = "5ft";
+    test_alert.info.value().at(0).areas.value().at(0).ceiling = "9001ft";
+
+    // Testing create_cap_doc using the object above
+    std::cout << CAP::create_cap_doc(test_alert);
 }
