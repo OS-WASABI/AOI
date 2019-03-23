@@ -14,7 +14,7 @@
 #include <string>
 #include "soap_controller.hpp"
 #include "log_level.hpp"
-#include "../gSoapFiles/CAP/ns2.nsmap"
+#include "../gSoapFiles/client/ns2.nsmap"
 using aoi_rest::LogLevel;
 
 namespace aoi_soap {
@@ -29,17 +29,19 @@ namespace aoi_soap {
         logger__.LogNetworkActivity(message, endpoint(), 1);
         try {
             auto body = message.extract_string().get();
-            logger__.Log(LogLevel::DEBUG, "SOAP Received: " + body, "SoapController", "HandlePost");
+            logger__.Log(LogLevel::DEBUG, "JSON Received: " + body, "SoapController", "HandlePost");
 
-            // TODO(Kris): parse CAP from string
-
+            // TODO(Kris): parse CAP json from string
+            const json::value body_json = message.extract_json().get();
+            // const json::object body_object = body_json.as_object();
+            
             // TODO(Kris): validate CAP
 
             // TODO(Kris): use SOAP client to send CAP to CADG
 
             message.reply(status_codes::OK, "Recieved: " + body);
         } catch (std::exception& e) {
-            message.reply(SOAP_FAULT);
+            message.reply(status_codes::BadRequest);
         }
     }
     void SoapController::HandleGet(http_request message) {
