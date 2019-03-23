@@ -20,6 +20,151 @@
 
 namespace aoi_rest {
 
+std::optional<Alert> Alert::from_json(web::json::value alert_json) {
+    try {
+        Alert alert = Alert();
+
+        //Required
+        if (alert_json.has_field("identifier") && alert_json["identifier"].is_string()) {
+            if (!alert.validate_identifier(alert_json["identifier"].as_string()))
+                return std::nullopt;
+        } else {
+            return std::nullopt;
+        }
+
+        //Required
+        if (alert_json.has_field("sender") && alert_json["sender"].is_string()) {
+            if (!alert.validate_sender(alert_json["sender"].as_string()))
+                return std::nullopt;
+        } else {
+            return std::nullopt;
+        }
+
+        //Required
+        if (alert_json.has_field("sent_time") && alert_json["sent_time"].is_string()) {
+            struct tm tm;
+            strptime(alert_json["sent_time"].as_string().c_str(), "%FT%T.000Z", &tm);
+            time_t sent_time = mktime(&tm);
+        } else {
+            return std::nullopt;
+        }
+
+        //Required
+        if (alert_json.has_field("status") && alert_json["status"].is_string()) {
+            if (!alert.validate_status(alert_json["status"].as_string()))
+                return std::nullopt;
+        } else {
+            return std::nullopt;
+        }
+
+        //Required
+        if (alert_json.has_field("msg_type") && alert_json["msg_type"].is_string()) {
+            if (!alert.validate_msg_type(alert_json["msg_type"].as_string()))
+                return std::nullopt;
+        } else {
+            return std::nullopt;
+        }
+
+        //Required
+        if (alert_json.has_field("scope") && alert_json["scope"].is_string()) {
+            if (!alert.validate_scope(alert_json["scope"].as_string()))
+                return std::nullopt;
+        } else {
+            return std::nullopt;
+        }
+
+        //Required per CAP IPAWS Profile
+        if (alert_json.has_field("handling_codes") && alert_json["handling_codes"].is_array()) {
+            web::json::array json_array = alert_json["handling_codes"].as_array();
+            for (auto handling_codes_json = json_array.begin();
+                 handling_codes_json != json_array.end(); ++handling_codes_json) {
+                if (handling_codes_json->is_string()) {
+                    alert.validate_handling_code(handling_codes_json->as_string());
+                }
+            }
+        } else {
+            return std::nullopt;
+        }
+
+        //Below are optional elements
+        if (alert_json.has_field("restriction")) {
+            if (alert_json["restriction"].is_string()) {
+                if (!alert.validate_restriction(alert_json["restrction"].as_string()))
+                    return std::nullopt;
+            } else {
+                return std::nullopt;
+            }
+        }
+
+        if (alert_json.has_field("addresses")) {
+            if (alert_json["addresses"].is_string()) {
+                if (!alert.validate_addresses(alert_json["addresses"].as_string()))
+                    return std::nullopt;
+            } else {
+                return std::nullopt;
+            }
+        }
+
+        if (alert_json.has_field("source")) {
+            if (alert_json["source"].is_string()) {
+                alert.validate_source(alert_json["source"].as_string());
+            } else {
+                return std::nullopt;
+            }
+        }
+
+        if (alert_json.has_field("note")) {
+            if (alert_json["note"].is_string()) {
+                alert.validate_note(alert_json["note"].as_string());
+            } else {
+                return std::nullopt;
+            }
+        }
+
+        if (alert_json.has_field("references")) {
+            if (alert_json["references"].is_string()) {
+                if (!alert.validate_references(alert_json["references"].as_string()))
+                    return std::nullopt;
+            } else {
+                return std::nullopt;
+            }
+        }
+
+        if (alert_json.has_field("incidents")) {
+            if (alert_json["incidents"].is_string()) {
+                if (!alert.validate_incidents(alert_json["incidents"].as_string()))
+                    return std::nullopt;;
+            } else {
+                return std::nullopt;
+            }
+        }
+
+        if (alert_json.has_field("info")) {
+            if (alert_json["info"].is_array()) {
+                web::json::array json_array = alert_json["info"].as_array();
+                std::vector<AlertInfo> temp_infos;
+                for (auto info_json = json_array.begin(); info_json != json_array.end(); ++info_json) {
+                    if (info_json->is_object()) {
+                        if (std::optional<AlertInfo> temp_info = AlertInfo::from_json(*info_json)) {
+                            alert.get_info().value().push_back(temp_info.value());
+                        } else {
+                            return std::nullopt;
+                        }
+                    } else {
+                        return std::nullopt;
+                    }
+                }
+            } else {
+                return std::nullopt;
+            }
+        }
+
+        return alert;
+    } catch (std::exception &e) {
+        return std::nullopt;
+    }
+}
+
 bool Alert::validate_identifier(const std::string &identifier) {
     if (identifier.find_first_of(restricted_chars) == std::string::npos) {
         identifier__ = identifier;
@@ -29,10 +174,10 @@ bool Alert::validate_identifier(const std::string &identifier) {
 }
 
 bool Alert::validate_sender(const std::string &sender) {
-        if (sender.find_first_of(restricted_chars) == std::string::npos) {
-            sender__ = sender;
-            return true;
-        }
+    if (sender.find_first_of(restricted_chars) == std::string::npos) {
+        sender__ = sender;
+        return true;
+    }
     return false;
 }
 
@@ -67,7 +212,7 @@ bool Alert::validate_msg_type(const std::string &msg_type) {
             msg_type_proper[i] = std::tolower(msg_type_proper[i]);
     }
     for (auto msg_type_code = msg_type_codes.begin();
-        msg_type_code != msg_type_codes.end(); msg_type_code++) {
+         msg_type_code != msg_type_codes.end(); msg_type_code++) {
         if (msg_type_proper == *msg_type_code) {
             msg_type__ = msg_type_proper;
             return true;
@@ -112,8 +257,8 @@ bool Alert::validate_handling_code(const std::string handling_code) {
 }
 
 bool Alert::validate_source(const std::string source) {
-      source__ = source;
-      return true;
+    source__ = source;
+    return true;
 }
 
 bool Alert::validate_note(const std::string note) {
@@ -130,5 +275,9 @@ bool Alert::validate_references(const std::string references) {
 bool Alert::validate_incidents(const std::string incidents) {
     incidents__ = incidents;
     return true;
+}
+
+std::optional<std::vector<AlertInfo>> Alert::get_info() {
+    return info__;
 }
 }
