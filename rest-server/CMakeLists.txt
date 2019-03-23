@@ -57,8 +57,8 @@ add_executable(${PROJECT_NAME}
 		./src/controller/controller.cpp
 		./src/controller/soap_controller.cpp
 		./src/nanodbc/nanodbc.cpp
-		./src/gSoapFiles/CAP/soapC.cpp
-		./src/gSoapFiles/CAP/stdsoap2.cpp
+		./src/gSoapFiles/client/soapC.cpp
+		./src/gSoapFiles/client/stdsoap2.cpp
 		./src/services/logger.cpp
 		./src/util/network_utils.cpp)
 
