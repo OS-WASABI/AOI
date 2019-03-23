@@ -33,7 +33,6 @@ namespace aoi_soap {
 
             // TODO(Kris): parse CAP json from string
             const json::value body_json = message.extract_json().get();
-            // const json::object body_object = body_json.as_object();
             
             // TODO(Kris): validate CAP
 
