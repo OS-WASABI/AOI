@@ -7,6 +7,9 @@
  * @authors Vaniya Agrawal
  */
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { sendAlert } from "../../actions/alertActions";
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -14,7 +17,6 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Nav from 'react-bootstrap/Nav';
 import Col from 'react-bootstrap/Col';
 
 const options = {
@@ -65,7 +67,7 @@ const options = {
     'Test',
     'Draft'
   ]
-}
+};
 
 class AlertForm extends Component {
   constructor(props) {
@@ -104,7 +106,13 @@ class AlertForm extends Component {
     }
     this.setState(prevState => ({
       ...prevState,
-      [name]: [...option]
+      alert: {
+        ...prevState.alert,
+        info: {
+          ...prevState.alert.info,
+          [name]: [...option]
+        }
+      }
     }))
   }
 
@@ -112,7 +120,13 @@ class AlertForm extends Component {
     if(!this.state.alert.info[name].includes(value)) {
       this.setState(prevState => ({
         ...prevState,
-        [name]: [...prevState[name], value]
+        alert: {
+          ...prevState.alert,
+          info: {
+            ...prevState.alert.info,
+            [name]: [...prevState.alert.info[name], value]
+          }
+        }
       }))
     }
   }
@@ -143,6 +157,7 @@ class AlertForm extends Component {
   getStatuses() {
     return options.statuses.map(status => (
       <Dropdown.Item
+        key={status}
         onClick={()=>this.addAlert('status', status)}>
         {status}
       </Dropdown.Item>
@@ -152,6 +167,7 @@ class AlertForm extends Component {
   getTypes() {
     return options.types.map(type => (
       <Dropdown.Item
+        key={type}
         onClick={()=>this.addAlert('msgType', type)}>
         {type}
       </Dropdown.Item>
@@ -161,6 +177,7 @@ class AlertForm extends Component {
   getScopes() {
     return options.scopes.map(scope => (
       <Dropdown.Item
+        key={scope}
         onClick={()=>this.addAlert('scope', scope)}>
         {scope}
       </Dropdown.Item>
@@ -170,6 +187,7 @@ class AlertForm extends Component {
   getUrgencies() {
     return options.urgencies.map(urgency => (
       <Dropdown.Item
+        key={urgency}
         onClick={()=>this.addInfo('urgency', urgency)}>
         {urgency}
       </Dropdown.Item>
@@ -179,6 +197,7 @@ class AlertForm extends Component {
   getCertainties() {
     return options.certainties.map(certainty => (
       <Dropdown.Item
+        key={certainty}
         onClick={()=>this.addInfo('certainty', certainty)}>
         {certainty}
       </Dropdown.Item>
@@ -188,6 +207,7 @@ class AlertForm extends Component {
   getCategories() {
     return options.categories.map(category => (
       <Dropdown.Item
+        key={category}
         disabled={this.state.alert.info.category.includes(category)}
         onClick={()=>this.pushSelection('category', category)}>
         {category}
@@ -267,31 +287,31 @@ class AlertForm extends Component {
               <ButtonGroup>
                 <Button
                   variant={'outline-danger'}
-                  onClick={()=>this.selection('severity','Extreme')}
+                  onClick={()=>this.addInfo('severity','Extreme')}
                   active={this.state.alert.info.severity==='Extreme'}>
                   Extreme
                 </Button>
                 <Button
                   variant={'outline-warning'}
-                  onClick={()=>this.selection('severity','Severe')}
+                  onClick={()=>this.addInfo('severity','Severe')}
                   active={this.state.alert.info.severity==='Severe'}>
                   Severe
                 </Button>
                 <Button
                   variant={'outline-info'}
-                  onClick={()=>this.selection('severity','Moderate')}
+                  onClick={()=>this.addInfo('severity','Moderate')}
                   active={this.state.alert.info.severity==='Moderate'}>
                   Moderate
                 </Button>
                 <Button
                   variant={'outline-primary'}
-                  onClick={()=>this.selection('severity','Minor')}
+                  onClick={()=>this.addInfo('severity','Minor')}
                   active={this.state.alert.info.severity==='Minor'}>
                   Minor
                 </Button>
                 <Button
                   variant={'outline-secondary'}
-                  onClick={()=>this.selection('severity','Unknown')}
+                  onClick={()=>this.addInfo('severity','Unknown')}
                   active={this.state.alert.info.severity==='Unknown'}>
                   Unknown
                 </Button>
@@ -321,12 +341,18 @@ class AlertForm extends Component {
                 </Col>
               </Form.Row>
             </Form.Group>
+            <Button variant={'dark'} onClick={()=>this.props.sendAlert(this.state)}>Send Alert</Button>
           </Form>
         </Container>
       </div>
     );
   }
+}
 
-};
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    sendAlert,
+  }, dispatch)
+}
 
-export default AlertForm;
+export default connect(null, mapDispatchToProps)(AlertForm);

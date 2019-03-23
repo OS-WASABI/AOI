@@ -42,6 +42,9 @@ export const getAlerts = (query) => dispatch => {
  * @returns {Function}  Dispatches an action.
  */
 export const sendAlert = (alert) => dispatch => {
+  alert.sender = "dummy-sender";
+  alert.sent = new Date();
+
   fetch('https://jsonplaceholder.typicode.com/posts', {
     method: 'POST',
     headers: {
@@ -56,44 +59,3 @@ export const sendAlert = (alert) => dispatch => {
     }));
 };
 
-/// Post updated alert data.
-/**
- * Posts new alert data to the server.
- * @param alert Contains all necessary items defined for an update by the CAP standard.
- * @returns {Function}  Dispatches an action.
- */
-export const updateAlert = (alert) => dispatch => {
-  fetch('https://jsonplaceholder.typicode.com/posts', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify(userData)
-  })
-    .then(res => res.json())
-    .then(res => dispatch({
-      type: UPDATE_ALERT,
-      payload: res
-    }))
-};
-
-/// Post alert cancellation data.
-/**
- * Posts alert cancellation data to the server.
- * @param alert Contains all necessary items defined by the CAP standard for a cancelling alert.
- * @returns {Function}  Dispatches an action.
- */
-export const cancelAlert = (alert) => dispatch => {
-  fetch('https://jsonplaceholder.typicode.com/posts', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify(alert)
-  })
-    .then(res => res.json())
-    .then(res => dispatch({
-      type: CANCEL_ALERT,
-      payload: res
-    }))
-};
