@@ -33,7 +33,7 @@ namespace aoi_soap {
 
             // TODO(Kris): parse CAP json from string
             const json::value body_json = message.extract_json().get();
-            
+
             // TODO(Kris): validate CAP
 
             // TODO(Kris): use SOAP client to send CAP to CADG
