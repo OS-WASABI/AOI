@@ -360,12 +360,12 @@ int main() {
     test_alert.info.value().at(0).web_url = "http://www.cheese.com";
     test_alert.info.value().at(0).contact = "cheese@cheese.com";
 
-//    std::vector<std::string> parameter_vector;
-//    std::pair<std::string, std::string> new_parameter;
-//    new_parameter.first = "SAME";
-//    new_parameter.second = "CEM";
-//    parameter_vector.push_back(new_parameter);
-//    test_alert.info.value().at(0).parameters = parameter_vector;
+    std::vector<std::pair<std::string, std::string>> parameter_vector;
+    std::pair<std::string, std::string> new_parameter;
+    new_parameter.first = "SAME";
+    new_parameter.second = "CEM";
+    parameter_vector.push_back(new_parameter);
+    test_alert.info.value().at(0).parameters = parameter_vector;
 
     // Filling in the resource block of an example CAP alert
     std::vector<aoi_rest::AlertResource> resource_vector;
