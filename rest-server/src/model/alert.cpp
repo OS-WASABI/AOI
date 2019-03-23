@@ -20,11 +20,24 @@
 
 namespace aoi_rest {
 
+std::optional<std::vector<std::string>> json_array_to_string_vector_optional(web::json::array json_array) {
+    std::optional<std::vector<std::string>> temp_vector;
+    for (auto json_element = json_array.begin();
+         json_element != json_array.end(); ++json_element) {
+        if (json_element->is_string()) {
+            temp_vector.value().push_back(json_element->as_string());
+        } else {
+            return std::nullopt;
+        }
+    }
+    return temp_vector;
+}
+
 std::optional<Alert> Alert::from_json(web::json::value alert_json) {
     try {
         Alert alert = Alert();
 
-        //Required
+        // Required
         if (alert_json.has_field("identifier") && alert_json["identifier"].is_string()) {
             if (!alert.validate_identifier(alert_json["identifier"].as_string()))
                 return std::nullopt;
@@ -32,7 +45,7 @@ std::optional<Alert> Alert::from_json(web::json::value alert_json) {
             return std::nullopt;
         }
 
-        //Required
+        // Required
         if (alert_json.has_field("sender") && alert_json["sender"].is_string()) {
             if (!alert.validate_sender(alert_json["sender"].as_string()))
                 return std::nullopt;
@@ -40,7 +53,7 @@ std::optional<Alert> Alert::from_json(web::json::value alert_json) {
             return std::nullopt;
         }
 
-        //Required
+        // Required
         if (alert_json.has_field("sent_time") && alert_json["sent_time"].is_string()) {
             struct tm tm;
             strptime(alert_json["sent_time"].as_string().c_str(), "%FT%T.000Z", &tm);
@@ -57,7 +70,7 @@ std::optional<Alert> Alert::from_json(web::json::value alert_json) {
             return std::nullopt;
         }
 
-        //Required
+        // Required
         if (alert_json.has_field("msg_type") && alert_json["msg_type"].is_string()) {
             if (!alert.validate_msg_type(alert_json["msg_type"].as_string()))
                 return std::nullopt;
@@ -65,7 +78,7 @@ std::optional<Alert> Alert::from_json(web::json::value alert_json) {
             return std::nullopt;
         }
 
-        //Required
+        // Required
         if (alert_json.has_field("scope") && alert_json["scope"].is_string()) {
             if (!alert.validate_scope(alert_json["scope"].as_string()))
                 return std::nullopt;
@@ -73,20 +86,20 @@ std::optional<Alert> Alert::from_json(web::json::value alert_json) {
             return std::nullopt;
         }
 
-        //Required per CAP IPAWS Profile
+        // Required per CAP IPAWS Profile
         if (alert_json.has_field("handling_codes") && alert_json["handling_codes"].is_array()) {
-            web::json::array json_array = alert_json["handling_codes"].as_array();
-            for (auto handling_codes_json = json_array.begin();
-                 handling_codes_json != json_array.end(); ++handling_codes_json) {
-                if (handling_codes_json->is_string()) {
-                    alert.validate_handling_code(handling_codes_json->as_string());
-                }
+            if (std::optional<std::vector<std::string>> temp_vector = json_array_to_string_vector_optional(
+                    alert_json["handling_codes"].as_array())) {
+                if (!alert.validate_handling_codes(temp_vector.value()))
+                    return std::nullopt;
+            } else {
+                return std::nullopt;
             }
         } else {
             return std::nullopt;
         }
 
-        //Below are optional elements
+        // Conditional
         if (alert_json.has_field("restriction")) {
             if (alert_json["restriction"].is_string()) {
                 if (!alert.validate_restriction(alert_json["restrction"].as_string()))
@@ -94,17 +107,32 @@ std::optional<Alert> Alert::from_json(web::json::value alert_json) {
             } else {
                 return std::nullopt;
             }
+        } else {
+            // Required when scope is restricted
+            if (alert.scope__.value() == "Restricted")
+                return std::nullopt;
         }
 
+        // Conditional
         if (alert_json.has_field("addresses")) {
-            if (alert_json["addresses"].is_string()) {
-                if (!alert.validate_addresses(alert_json["addresses"].as_string()))
+            if (alert_json["addresses"].is_array()) {
+                if (std::optional<std::vector<std::string>> temp_vector = json_array_to_string_vector_optional(
+                        alert_json["addresses"].as_array())) {
+                    if (!alert.validate_addresses(temp_vector.value()))
+                        return std::nullopt;
+                } else {
                     return std::nullopt;
+                }
             } else {
                 return std::nullopt;
             }
+        } else {
+            // Required when scope is private
+            if (alert.scope__.value() == "Public")
+                return std::nullopt;
         }
 
+        // Optional
         if (alert_json.has_field("source")) {
             if (alert_json["source"].is_string()) {
                 alert.validate_source(alert_json["source"].as_string());
@@ -122,18 +150,28 @@ std::optional<Alert> Alert::from_json(web::json::value alert_json) {
         }
 
         if (alert_json.has_field("references")) {
-            if (alert_json["references"].is_string()) {
-                if (!alert.validate_references(alert_json["references"].as_string()))
+            if (alert_json["references"].is_array()) {
+                if (std::optional<std::vector<std::string>> temp_vector = json_array_to_string_vector_optional(
+                        alert_json["references"].as_array())) {
+                    if (!alert.validate_references(temp_vector.value()))
+                        return std::nullopt;
+                } else {
                     return std::nullopt;
+                }
             } else {
                 return std::nullopt;
             }
         }
 
         if (alert_json.has_field("incidents")) {
-            if (alert_json["incidents"].is_string()) {
-                if (!alert.validate_incidents(alert_json["incidents"].as_string()))
-                    return std::nullopt;;
+            if (alert_json["incidents"].is_array()) {
+                if (std::optional<std::vector<std::string>> temp_vector = json_array_to_string_vector_optional(
+                        alert_json["incidents"].as_array())) {
+                    if (!alert.validate_incidents(temp_vector.value()))
+                        return std::nullopt;
+                } else {
+                    return std::nullopt;
+                }
             } else {
                 return std::nullopt;
             }
@@ -158,7 +196,6 @@ std::optional<Alert> Alert::from_json(web::json::value alert_json) {
                 return std::nullopt;
             }
         }
-
         return alert;
     } catch (std::exception &e) {
         return std::nullopt;
@@ -243,16 +280,17 @@ bool Alert::validate_restriction(const std::string restriction) {
     return true;
 }
 
-bool Alert::validate_addresses(const std::string addresses) {
-    if (scope__.value() == "Private" && addresses == "")
+bool Alert::validate_addresses(const std::vector<std::string> addresses) {
+    if (scope__.value() == "Private" && addresses.size() == 0)
         return false;
-    //TODO(Mike): Parse addresses
+    //TODO(Mike): Parse and validate addresses
+    addresses__ = addresses;
     return true;
 }
 
-bool Alert::validate_handling_code(const std::string handling_code) {
-    //TODO(Mike): Parse addresses
-    handling_codes__.value().push_back(handling_code);
+bool Alert::validate_handling_codes(const std::vector<std::string> handling_codes) {
+    //TODO(Mike): Parse handling codes (validate IPAWS Profile)
+    handling_codes__ = handling_codes;
     return true;
 }
 
@@ -266,13 +304,12 @@ bool Alert::validate_note(const std::string note) {
     return true;
 }
 
-bool Alert::validate_references(const std::string references) {
-    //TODO(Mike): Validate references
+bool Alert::validate_references(const std::vector<std::string> references) {
     references__ = references;
     return true;
 }
 
-bool Alert::validate_incidents(const std::string incidents) {
+bool Alert::validate_incidents(const std::vector<std::string> incidents) {
     incidents__ = incidents;
     return true;
 }

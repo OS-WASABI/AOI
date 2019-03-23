@@ -24,7 +24,7 @@ namespace aoi_rest {
 // Allowed codes as per CAP 1.2.
 static const std::array<std::string, 5> status_codes{"Actual", "Exercise", "System", "Test", "Draft"};
 static const std::array<std::string, 5> msg_type_codes{"Alert", "Update", "Cancel", "Ack", "Error"};
-static const std::array<std::string, 3> scope_codes{"Publc", "Restricted", "Private"};
+static const std::array<std::string, 3> scope_codes{"Public", "Restricted", "Private"};
 
 static const std::string restricted_chars = " ,<&";
 
@@ -41,13 +41,13 @@ private:
     std::optional<std::string> scope__;
     // Conditional elements
     std::optional<std::string> restriction__;
-    std::optional<std::string> addresses__;      // Required when scope is "Private", optional otherwise.
+    std::optional<std::vector<std::string>> addresses__;      // Required when scope is "Private", optional otherwise.
     // Optional elements
     std::optional<std::vector<std::string>> handling_codes__;
     std::optional<std::string> source__;
     std::optional<std::string> note__;
-    std::optional<std::string> references__;
-    std::optional<std::string> incidents__;
+    std::optional<std::vector<std::string>> references__;
+    std::optional<std::vector<std::string>> incidents__;
     std::optional<std::vector<AlertInfo>> info__;
 
     /**
@@ -126,7 +126,7 @@ private:
     * @return bool
     *
     */
-    bool validate_addresses(const std::string addresses);
+    bool validate_addresses(const std::vector<std::string> addresses);
 
     /**
     * Validates an Alert's handling_codes elements. If valid, the value for thevector of
@@ -135,7 +135,7 @@ private:
     * @return bool
     *
     */
-    bool validate_handling_code(const std::string handling_code);
+    bool validate_handling_codes(const std::vector<std::string> handling_codes);
 
     /**
     * Validates an Alert's source field. If valid, the value for the
@@ -165,7 +165,7 @@ private:
     * @return bool
     *
     */
-    bool validate_references(const std::string references);
+    bool validate_references(const std::vector<std::string> references);
 
     /**
     * Validates an Alert's incidents field. If valid, the value for the
@@ -177,7 +177,7 @@ private:
     * @return bool
     *
     */
-    bool validate_incidents(const std::string incidents);
+    bool validate_incidents(const std::vector<std::string> incidents);
 
 public:
     Alert();
@@ -201,5 +201,5 @@ public:
 inline bool operator==(const Alert &a, const Alert &b) {
     return a.identifier__ == b.identifier__;
 }
-}
+} // namespace aoi_rest
 #endif // ALERT_H
