@@ -71,23 +71,32 @@ class AlertForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categories: [],
-      severity: 'Severity',
-      urgency: 'Urgency',
-      certainty: 'Certainty',
-      scope: 'Scope',
-      type:'Type',
-      status:'Status',
-
+      alert: {
+        sender: "dummy-sender",
+        status: "Status",
+        msgType: "Message Type",
+        scope: "Scope",
+        info: {
+          category: [],
+          event: "",
+          urgency: "Urgency",
+          severity: "Severity",
+          certainty: "Certainty",
+          area: {
+            areaDesc: "",
+            polygon: []
+          }
+        }
+      }
     };
-    this.selection = this.selection.bind(this);
+    this.addInfo = this.addInfo.bind(this);
+    this.addAlert = this.addAlert.bind(this);
     this.pushSelection = this.pushSelection.bind(this);
     this.popSelection = this.popSelection.bind(this);
   }
 
   popSelection(name, value) {
-    console.log(this.state[name]);
-    let option = [...this.state[name]];
+    let option = [...this.state.alert.info[name]];
     for(let i=0; i<option.length; i++) {
       if(option[i] === value) {
         option.splice(i,1);
@@ -100,7 +109,7 @@ class AlertForm extends Component {
   }
 
   pushSelection(name, value) {
-    if(!this.state[name].includes(value)) {
+    if(!this.state.alert.info[name].includes(value)) {
       this.setState(prevState => ({
         ...prevState,
         [name]: [...prevState[name], value]
@@ -108,17 +117,33 @@ class AlertForm extends Component {
     }
   }
 
-  selection(name, value) {
+  addAlert(name, value) {
     this.setState(prevState => ({
       ...prevState,
-      [name]: value,
+      alert: {
+        ...prevState.alert,
+        [name]: value
+      },
+    }))
+  }
+
+  addInfo(name, value) {
+    this.setState(prevState => ({
+      ...prevState,
+      alert: {
+        ...prevState["alert"],
+        info: {
+          ...prevState.alert.info,
+          [name]: value
+        }
+      },
     }))
   }
 
   getStatuses() {
     return options.statuses.map(status => (
       <Dropdown.Item
-        onClick={()=>this.selection('status', status)}>
+        onClick={()=>this.addAlert('status', status)}>
         {status}
       </Dropdown.Item>
     ))
@@ -127,7 +152,7 @@ class AlertForm extends Component {
   getTypes() {
     return options.types.map(type => (
       <Dropdown.Item
-        onClick={()=>this.selection('type', type)}>
+        onClick={()=>this.addAlert('msgType', type)}>
         {type}
       </Dropdown.Item>
     ))
@@ -136,7 +161,7 @@ class AlertForm extends Component {
   getScopes() {
     return options.scopes.map(scope => (
       <Dropdown.Item
-        onClick={()=>this.selection('scope', scope)}>
+        onClick={()=>this.addAlert('scope', scope)}>
         {scope}
       </Dropdown.Item>
     ))
@@ -145,7 +170,7 @@ class AlertForm extends Component {
   getUrgencies() {
     return options.urgencies.map(urgency => (
       <Dropdown.Item
-        onClick={()=>this.selection('urgency', urgency)}>
+        onClick={()=>this.addInfo('urgency', urgency)}>
         {urgency}
       </Dropdown.Item>
     ))
@@ -154,7 +179,7 @@ class AlertForm extends Component {
   getCertainties() {
     return options.certainties.map(certainty => (
       <Dropdown.Item
-        onClick={()=>this.selection('certainty', certainty)}>
+        onClick={()=>this.addInfo('certainty', certainty)}>
         {certainty}
       </Dropdown.Item>
     ))
@@ -163,24 +188,25 @@ class AlertForm extends Component {
   getCategories() {
     return options.categories.map(category => (
       <Dropdown.Item
-        disabled={this.state.categories.includes(category)}
-        onClick={()=>this.pushSelection('categories', category)}>
+        disabled={this.state.alert.info.category.includes(category)}
+        onClick={()=>this.pushSelection('category', category)}>
         {category}
       </Dropdown.Item>
     ))
   }
 
   showCategories() {
-    return this.state.categories.map((category, i) => (
+    return this.state.alert.info.category.map((category, i) => (
       <ButtonGroup key={i}>
         <Button
           variant={'secondary'}
-          style={{'marginLeft':10}}>
+          style={{'marginLeft':10, 'marginBottom':10}}>
           {category}
         </Button>
         <Button
           variant={'secondary'}
-          onClick={()=>this.popSelection('categories', category)}>
+          style={{'marginBottom':10}}
+          onClick={()=>this.popSelection('category', category)}>
           X
         </Button>
       </ButtonGroup>
@@ -196,12 +222,12 @@ class AlertForm extends Component {
           <Form>
             <Form.Row>
               <Form.Group>
-                <DropdownButton title={this.state.status} variant={'light'}>
+                <DropdownButton title={this.state.alert.status} variant={'light'}>
                   {this.getStatuses()}
                 </DropdownButton>
               </Form.Group>
               <Form.Group style={{'marginLeft':10}}>
-                <DropdownButton title={this.state.type} variant={'light'}>
+                <DropdownButton title={this.state.alert.msgType} variant={'light'}>
                   {this.getTypes()}
                 </DropdownButton>
               </Form.Group>
@@ -216,19 +242,19 @@ class AlertForm extends Component {
                   <DropdownButton
                     as={InputGroup.Append}
                     variant={'light'}
-                    title={this.state.urgency}>
+                    title={this.state.alert.info.urgency}>
                     {this.getUrgencies()}
                   </DropdownButton>
                   <DropdownButton
                     as={InputGroup.Append}
                     variant={'light'}
-                    title={this.state.certainty}>
+                    title={this.state.alert.info.certainty}>
                     {this.getCertainties()}
                   </DropdownButton>
                   <DropdownButton
                     as={InputGroup.Append}
                     variant={'light'}
-                    title={this.state.scope}>
+                    title={this.state.alert.scope}>
                     {this.getScopes()}
                   </DropdownButton>
                 </InputGroup>
@@ -242,31 +268,31 @@ class AlertForm extends Component {
                 <Button
                   variant={'outline-danger'}
                   onClick={()=>this.selection('severity','Extreme')}
-                  active={this.state.severity==='Extreme'}>
+                  active={this.state.alert.info.severity==='Extreme'}>
                   Extreme
                 </Button>
                 <Button
                   variant={'outline-warning'}
                   onClick={()=>this.selection('severity','Severe')}
-                  active={this.state.severity==='Severe'}>
+                  active={this.state.alert.info.severity==='Severe'}>
                   Severe
                 </Button>
                 <Button
                   variant={'outline-info'}
                   onClick={()=>this.selection('severity','Moderate')}
-                  active={this.state.severity==='Moderate'}>
+                  active={this.state.alert.info.severity==='Moderate'}>
                   Moderate
                 </Button>
                 <Button
                   variant={'outline-primary'}
                   onClick={()=>this.selection('severity','Minor')}
-                  active={this.state.severity==='Minor'}>
+                  active={this.state.alert.info.severity==='Minor'}>
                   Minor
                 </Button>
                 <Button
                   variant={'outline-secondary'}
                   onClick={()=>this.selection('severity','Unknown')}
-                  active={this.state.severity==='Unknown'}>
+                  active={this.state.alert.info.severity==='Unknown'}>
                   Unknown
                 </Button>
               </ButtonGroup>
@@ -275,12 +301,16 @@ class AlertForm extends Component {
             <Form.Group controlId={'category'}>
               <Form.Row>
               <Form.Label column sm={2}>Category</Form.Label>
-                <DropdownButton
-                  variant={'light'}
-                  title={'Choose'}>
-                {this.getCategories()}
-              </DropdownButton>
-              {this.showCategories()}
+                <Col sm={2}>
+                  <DropdownButton
+                    variant={'light'}
+                    title={'Choose'}>
+                  {this.getCategories()}
+                  </DropdownButton>
+                </Col>
+                <Col>
+                  {this.showCategories()}
+                </Col>
               </Form.Row>
             </Form.Group>
             <Form.Group controlId={'area'}>
