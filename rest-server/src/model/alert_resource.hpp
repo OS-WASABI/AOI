@@ -16,12 +16,13 @@
 
 namespace aoi_rest {
 struct AlertResource {
-    std::optional<std::string> resource_description;
-    std::optional<std::string> mime_type;
-    std::optional<int> size;
-    std::optional<std::string> uri;
-    std::optional<std::string> dereferenced_uri;
-    std::optional<::string> digest;
+    std::optional <std::string> resource_description;
+    std::optional <std::string> mime_type;
+    std::optional<std::string> size;
+    std::optional <std::string> uri;
+    std::optional <std::string> dereferenced_uri;
+    std::optional<std::string> digest;
+};
     
     /**
     * Evaluates AlertResource as valid per CAP v1.2 IPAWS profile.
@@ -32,12 +33,12 @@ struct AlertResource {
     static bool is_valid_cap_ipaws(AlertResource alert_resource) {
         //TODO(Mike): You know, implement this thing.
         return true;
-    } 
+    }
     /**
      * Converts the alert resource entity to a json object.
-     * 
+     *
      * @return a json object representation of a alert resource.
-     * 
+     *
      */
     web::json::value to_json() {
         auto json  = web::json::value::object();
@@ -45,16 +46,16 @@ struct AlertResource {
     }
     /**
      * Creates an optional<AlertResource> from a web::json::value.
-     * 
+     *
      * If the json value does not contain all required fields,
      * a std::nullopt is returned.
-     * 
+     *
      * @return std::optional<AlertResource>
-     */     
+     */
     static std::optional<AlertResource> from_json(web::json::value resource_json) {
         try {
             AlertResource resource_json;
-            if (resource_json.has_field("resource_description") && area_json["resource_description"].is_string()) 
+            if (resource_json.has_field("resource_description") && area_json["resource_description"].is_string())
                 resource_json.resource_description = resource_json["resource_description"].as_string();
             if (resource_json.has_field("mime_type") && resource_json["mime_type"].is_string()) {
                 alert_resource.mime_type = resource_json["mime_type"].as_string();
@@ -72,13 +73,13 @@ struct AlertResource {
                 alert_resource.digest = resource_json["digest"].as_string();
             if (AlertResource::is_valid_cap_ipaws(alert_resource)
                 return alert_resource;
-            else 
+            else
                 return std::nullopt;
         }
-        } catch (std::exception&  e) {  
+        } catch (std::exception&  e) {
             return std::nullopt;
         }
-    }      
-};
+    }
 }
+
 #endif // ALERT_RESOURCE_H

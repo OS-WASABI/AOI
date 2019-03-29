@@ -15,33 +15,35 @@
 #include <ctime>
 #include <optional>
 #include <cpprest/json.h>
+#include "alert_info.hpp"
 
 namespace aoi_rest {
 struct Alert {
-    static std::array<std::string,5> std:
-    
+    // static std::array<std::string,5> std:
+
     // Required elements
-    std::optional<std::string> identifier;
-    std::optional<std::string> sender;
-    std::optional<std::time_t> sent_time;
-    std::optional<std::string> status;
-    std::optional<std::string> msg_type;
-    std::optional<std::string> scope;
-    std::optional<std::vector<AlertInfo>> info;
+    std::optional <std::string> identifier;
+    std::optional <std::string> sender;
+    std::optional <std::string> sent_time;
+    std::optional <std::string> status;
+    std::optional <std::string> msg_type;
+    std::optional <std::string> scope;
+    std::optional <std::vector<aoi_rest::AlertInfo>> info;
     // Conditional elements
-    std::optional<std::string> restriction;
-    std::optional<std::string> addresses;      // Required when scope is "Private", optional otherwise.
+    std::optional <std::string> restriction;
+    std::optional <std::string> addresses;      // Required when scope is "Private", optional otherwise.
     // Optional elements    
-    std::optional<std::vector<string>> handling_codes;
-    std::optional<std::string> source;
-    std::optional<std::string> note;
-    std::optional<std::string> references;
-    std::optional<std::string> incidents;
-    
+    std::optional <std::vector<std::string>> handling_codes;
+    std::optional <std::string> source;
+    std::optional <std::string> note;
+    std::optional <std::string> references;
+    std::optional <std::string> incidents;
+};
+
     // Allowed codes as per CAP 1.2.
-    static const std::array<std::string,5> status_codes {"ACTUAL","EXERCISE","SYSTEM","TEST","DRAFT"};
-    static const std::array<std::string,5> msg_type_codes {"ALERT","UPDATE","CANCEL","ACK","ERROR"};
-    static const std::array<std::string,3> scope_codes {"PUBLIC","RESTRICTED","PRIVATE"};
+    static const std::array<std::string, 5> status_codes{"ACTUAL", "EXERCISE", "SYSTEM", "TEST", "DRAFT"};
+    static const std::array<std::string, 5> msg_type_codes{"ALERT", "UPDATE", "CANCEL", "ACK", "ERROR"};
+    static const std::array<std::string, 3> scope_codes{"PUBLIC", "RESTRICTED", "PRIVATE"};
     
     /**
     * Validates an Alert's identifier field. If valid, returns a 
@@ -56,14 +58,14 @@ struct Alert {
         } else {
             return std::nullopt;
         }
-    }  
+    }
     /**
-    * Validates an Alert's sender field. If valid, returns a 
+    * Validates an Alert's sender field. If valid, returns a
     * string represenation. If invalid, returns std::nullopt.
-    * 
+    *
     * @return std::optional<std::string>
-    * 
-    */   
+    *
+    */
     static std::optional<std::string> validate_sender(web::json::value& alert_json) {
         if (alert_json.has_field("sender") && alert_json["sender"].is_string()) {
             return alert_json["sender"].as_string();
@@ -72,12 +74,12 @@ struct Alert {
         }
     }
     /**
-    * Validates an Alert's sent_time field. If valid, returns a 
+    * Validates an Alert's sent_time field. If valid, returns a
     * time_t represenation. If invalid, returns std::nullopt.
-    * 
+    *
     * @return std::optional<std::string>
-    * 
-    */   
+    *
+    */
     static std::optional<std::time_t> validate_sent_time(web::json::value& alert_json) {
         if (alert_json.has_field("sent_time") && alert_json["sent_time"].is_string()) {
             std::string sent_time_string = alert_json["sent_time"].as_string();
@@ -93,12 +95,12 @@ struct Alert {
         }
     }
     /**
-    * Validates an Alert's status field. If valid, returns a 
+    * Validates an Alert's status field. If valid, returns a
     * string represenation. If invalid, returns std::nullopt.
-    * 
+    *
     * @return std::optional<std::string>
-    * 
-    */   
+    *
+    */
     static std::optional<std::string> validate_status(web::json::value& alert_json) {
         if (alert_json.has_field("status") && alert_json["status"].is_string()) {
             std::string status = alert_json["status"].as_string();
@@ -114,12 +116,12 @@ struct Alert {
         }
     }
     /**
-    * Validates an Alert's msg_type field. If valid, returns a 
+    * Validates an Alert's msg_type field. If valid, returns a
     * string represenation. If invalid, returns std::nullopt.
-    * 
+    *
     * @return std::optional<std::string>
-    * 
-    */   
+    *
+    */
     static std::optional<std::string> validate_msg_type(web::json::value& alert_json) {
         if (alert_json.has_field("msg_type") && alert_json["msg_type"].is_string()) {
             std::string msg_type = alert_json["msg_type"].as_string();
@@ -135,12 +137,12 @@ struct Alert {
         }
     }
     /**
-    * Validates an Alert's scope field. If valid, returns a 
+    * Validates an Alert's scope field. If valid, returns a
     * string represenation. If invalid, returns std::nullopt.
-    * 
+    *
     * @return std::optional<std::string>
-    * 
-    */   
+    *
+    */
     static std::optional<std::string> validate_scope(web::json::value& alert_json) {
         if (alert_json.has_field("scope") && alert_json["scope"].is_string()) {
             std::string scope = alert_json["scope"].as_string();
@@ -158,10 +160,10 @@ struct Alert {
     /**
     * Validates an Alert's info arary. If valid, returns a vector of AlertInfo
     * objects. If invalid, returns std::nullopt.
-    * 
+    *
     * @return std::optional<std::string>
-    * 
-    */   
+    *
+    */
     static std::optional<std::vector<AlertInfo>> validate_info(web::json::value& alert_json) {
         if (alert_json.has_field("info") && alert_json["info"].is_array()) {
             web::json::array json_array = alert_json["info"].as_array();
@@ -179,14 +181,14 @@ struct Alert {
         }
     }
     /**
-    * Validates an Alert's restriction field. If valid, returns a 
+    * Validates an Alert's restriction field. If valid, returns a
     * string represenation. If invalid, returns std::nullopt.
-    * 
+    *
     * Used when scope is "Restricted" (optional?).
-    * 
+    *
     * @return std::optional<std::string>
-    * 
-    */   
+    *
+    */
     //TODO(Mike): Determine if this is optional when scope is restricted.
     static std::optional<std::string> validate_restriction(web::json::value& alert_json) {
         if (alert_json.has_field("restriction") && alert_json["restriction"].is_string()) {
@@ -196,18 +198,18 @@ struct Alert {
         }
     }
     /**
-    * Validates an Alert's addresses field. If valid, returns a 
+    * Validates an Alert's addresses field. If valid, returns a
     * string represenation. If invalid, returns std::nullopt.
-    * 
+    *
     * Addresses are required when scope is "Private", optional otherwise.
-    * 
+    *
     * @return std::optional<std::string>
-    * 
-    */   
+    *
+    */
     static std::optional<std::string> validate_addresses(web::json::value& alert_json) {
         if (Alert::validate_scope(alert_json) == "PRIVATE") {
-            if (alert_json.has_field("addresses") 
-                && alert_json["addresses"].is_string() 
+            if (alert_json.has_field("addresses")
+                && alert_json["addresses"].is_string()
                 && alert_json["addresses"].as_string() != "") {
                 //TODO(Mike): Parse addresses
             } else {
@@ -224,12 +226,12 @@ struct Alert {
         }
     }
     /**
-    * Validates an Alert's handling_codes elements. If valid, returns a vector of 
+    * Validates an Alert's handling_codes elements. If valid, returns a vector of
     * strings. If invalid, returns std::nullopt.
-    * 
+    *
     * @return std::optional<std::string>
-    * 
-    */   
+    *
+    */
     static std::optional<std::vector<AlertInfo>> validate_handling_codes(web::json::value& alert_json) {
         if (alert_json.has_field("handling_codes") && alert_json["handling_codes"].is_array()) {
             web::json::array json_array = alert_json["handling_codes"].as_array();
@@ -247,12 +249,12 @@ struct Alert {
         }
     }
     /**
-    * Validates an Alert's source field. If valid, returns a 
+    * Validates an Alert's source field. If valid, returns a
     * string represenation. If invalid, returns std::nullopt.
-    * 
+    *
     * @return std::optional<std::string>
-    * 
-    */   
+    *
+    */
     static std::optional<std::string> validate_source(web::json::value& alert_json) {
         if (alert_json.has_field("source") && alert_json["source"].is_string()) {
             return alert_json["source"].as_string();
@@ -261,12 +263,12 @@ struct Alert {
         }
     }
     /**
-    * Validates an Alert's note field. If valid, returns a 
+    * Validates an Alert's note field. If valid, returns a
     * string represenation. If invalid, returns std::nullopt.
-    * 
+    *
     * @return std::optional<std::string>
-    * 
-    */   
+    *
+    */
     static std::optional<std::string> validate_note(web::json::value& alert_json) {
         if (alert_json.has_field("note") && alert_json["note"].is_string()) {
             return alert_json["note"].as_string();
@@ -275,15 +277,15 @@ struct Alert {
         }
     }
     /**
-    * Validates an Alert's incidents field. If valid, returns a 
+    * Validates an Alert's incidents field. If valid, returns a
     * string represenation. If invalid, returns std::nullopt.
-    * 
+    *
     * References to earlier messages in form "sender,identifier,sent" (no whitespace).
     * Multiple references separated by whitespace.
     *
     * @return std::optional<std::string>
-    * 
-    */    
+    *
+    */
     static std::optional<std::string> validate_references(web::json::value& alert_json) {
         if (alert_json.has_field("references") && alert_json["references"].is_string()) {
             return alert_json["references"].as_string();
@@ -292,14 +294,14 @@ struct Alert {
         }
     }
     /**
-    * Validates an Alert's incidents field. If valid, returns a 
+    * Validates an Alert's incidents field. If valid, returns a
     * string represenation. If invalid, returns std::nullopt.
-    * 
+    *
     * Multiple incidents separated by whitespace. If incident name contains whitespace
     * then surround with double-quotes.
     *
     * @return std::optional<std::string>
-    * 
+    *
     */
     static std::optional<std::string> validate_incidents(web::json::value& alert_json) {
         if (alert_json.has_field("incidents") && alert_json["incidents"].is_string()) {
@@ -310,9 +312,9 @@ struct Alert {
     }
 /**
      * Converts the alert entity to a json object.
-     * 
+     *
      * @return a json object representation of a alert.
-     * 
+     *
      */
     web::json::value to_json() {
         auto json  = web::json::value::object();
@@ -320,12 +322,12 @@ struct Alert {
     }
     /**
      * Creates an optional<Alert> from a web::json::value.
-     * 
+     *
      * If the json value does not contain all required fields,
      * a std::nullopt is returned.
-     * 
+     *
      * @return std::optional<Alert>
-     */     
+     */
     static std::optional<Alert> from_json(web::json::value alert_json) {
         try {
             Alert alert;
@@ -357,10 +359,10 @@ struct Alert {
             if (alert_json.has_field("handling_codes") && alert_json["handling_codes"].is_array()) {
                 web::json:array json_array = alert_json["handling_codes"].as_array();
                 for (auto handling_codes_json = json_array.begin(); area_json != json_array.end(); ++handling_codes_json) {
-                    if (*handling_codes_json.is_string()) 
+                    if (*handling_codes_json.is_string())
                         alert.handling_codes.push_back(*handling_codes_json.as_string());
                 }
-            } 
+            }
             if (alert_json.has_field("source") && alert_json["source"].is_string())
                 alert.source = alert_json["source"].as_string();
             if (alert_json.has_field("note") && alert_json["note"].is_string())
@@ -371,12 +373,12 @@ struct Alert {
                 alert.incidents = alert_json["incidents"].as_string();
             if (Alert::is_valid_cap_ipaws(alert)
                 return alert;
-            else 
+            else
                 return std::nullopt;
-        } catch (std::exception&  e) {  
+        } catch (std::exception&  e) {
             return std::nullopt;
         }
-    }      
+    }
 };
 /// Necessary for comparing if two entities are equal.
 inline bool operator==(const Alert &a, const Alert &b) {
