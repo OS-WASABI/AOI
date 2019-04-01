@@ -16,35 +16,22 @@ import Col from 'react-bootstrap/Col';
 class Polygon extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      coordinatePairs: [
-        '',
-        '',
-        '',
-        ''
-      ]
-    };
-
     this.getPairs = this.getPairs.bind(this);
-    this.addPair = this.addPair.bind(this);
-    this.removePair = this.removePair.bind(this);
-    this.editPair = this.editPair.bind(this);
   }
 
-
   getPairs() {
-    return this.state.coordinatePairs.map((pair, i) => {
+    return this.props.pairs.map((pair, i) => {
     if (i > 3) {
       return (
         <Col key={i}>
           <InputGroup>
             <Form.Control
-              placeholder={(i+1)}
-              value={this.state.coordinatePairs[i]}
-              onChange={(event) => this.editPair(event.target.value, i)}/>
+              placeholder={"Coordinate Pair " + (i+1)}
+              value={this.props.pairs[i]}
+              onChange={(event) => this.props.editPair(event.target.value, i)}/>
             <InputGroup.Append>
               <Button
-                onClick={()=>this.removePair(i)}
+                onClick={()=>this.props.removePair(i)}
                 variant={'secondary'}>
                 X
               </Button>
@@ -58,52 +45,30 @@ class Polygon extends Component {
         <Col key={i}>
           <Form.Control
             placeholder={"Coordinate Pair " + (i+1)}
-            value={this.state.coordinatePairs[i]}
-            onChange={(event) => this.editPair(event.target.value, i)}/>
+            value={this.props.pairs[i]}
+            onChange={(event) => this.props.editPair(event.target.value, i)}/>
         </Col>
       )
     }
   })}
 
-  addPair() {
-    let newPairs = [...this.state.coordinatePairs];
-    newPairs.push('');
-    this.setState(prevState => ({
-      ...prevState,
-      coordinatePairs: [...newPairs]
-    }))
-  }
-
-  editPair(val, i) {
-    let newPairs = [...this.state.coordinatePairs];
-    newPairs[i] = val;
-    this.setState(prevState => ({
-      ...prevState,
-      coordinatePairs: [...newPairs]
-    }))
-  }
-
-  removePair(i) {
-    let newPairs = [...this.state.coordinatePairs];
-    newPairs.splice(i, 1);
-    this.setState(prevState => ({
-      ...prevState,
-      coordinatePairs: [...newPairs]
-    }))
-  }
-
   render() {
     return (
-      <div id='Polygon'>
+      <Form.Group controlId={'polygon'}>
         <Form.Row>
-          {this.getPairs()}
-          <Button
-            onClick={()=>this.addPair()}
-            variant={"light"}>
-            +
-          </Button>
+          <Form.Label column sm={2}>Area Polygon</Form.Label>
+          <Col>
+            <Form.Row>
+              {this.getPairs()}
+              <Button
+                onClick={()=>this.props.addPair()}
+                variant={"light"}>
+                +
+              </Button>
+            </Form.Row>
+          </Col>
         </Form.Row>
-      </div>
+        </Form.Group>
     );
   }
 }

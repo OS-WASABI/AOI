@@ -13,12 +13,18 @@ import { sendAlert } from "../../../actions/alertActions";
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import InputGroup from 'react-bootstrap/InputGroup';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
 import Col from 'react-bootstrap/Col';
+
 import Polygon from './polygon';
+import Severity from './severity';
+import Status from './status';
+import Type from './type';
+import Scope from './scope';
+import Certainty from "./certainty";
+import Urgency from "./urgency";
+import Category from "./category";
+import Area from "./area";
 
 const options = {
   categories: [
@@ -103,6 +109,8 @@ class AlertForm extends Component {
     this.popInfoSelection = this.popInfoSelection.bind(this);
 
     this.addPolygonPair = this.addPolygonPair.bind(this);
+    this.editPolygonPair = this.editPolygonPair.bind(this);
+    this.removePolygonPair = this.removePolygonPair.bind(this);
 
   }
 
@@ -163,90 +171,47 @@ class AlertForm extends Component {
     }))
   }
 
-  getStatuses() {
-    return options.statuses.map(status => (
-      <Dropdown.Item
-        key={status}
-        onClick={()=>this.addAlert('status', status)}>
-        {status}
-      </Dropdown.Item>
-    ))
-  }
 
-  getTypes() {
-    return options.types.map(type => (
-      <Dropdown.Item
-        key={type}
-        onClick={()=>this.addAlert('msgType', type)}>
-        {type}
-      </Dropdown.Item>
-    ))
-  }
-
-  getScopes() {
-    return options.scopes.map(scope => (
-      <Dropdown.Item
-        key={scope}
-        onClick={()=>this.addAlert('scope', scope)}>
-        {scope}
-      </Dropdown.Item>
-    ))
-  }
-
-  getUrgencies() {
-    return options.urgencies.map(urgency => (
-      <Dropdown.Item
-        key={urgency}
-        onClick={()=>this.addInfo('urgency', urgency)}>
-        {urgency}
-      </Dropdown.Item>
-    ))
-  }
-
-  getCertainties() {
-    return options.certainties.map(certainty => (
-      <Dropdown.Item
-        key={certainty}
-        onClick={()=>this.addInfo('certainty', certainty)}>
-        {certainty}
-      </Dropdown.Item>
-    ))
-  }
-
-
-
-  getCategories() {
-    return options.categories.map(category => (
-      <Dropdown.Item
-        key={category}
-        disabled={this.state.alert.info.category.includes(category)}
-        onClick={()=>this.pushInfoSelection('category', category)}>
-        {category}
-      </Dropdown.Item>
-    ))
-  }
-
-  showCategories() {
-    return this.state.alert.info.category.map((category, i) => (
-      <ButtonGroup key={i}>
-        <Button
-          variant={'secondary'}
-          style={{'marginLeft':10, 'marginBottom':10}}>
-          {category}
-        </Button>
-        <Button
-          variant={'secondary'}
-          style={{'marginBottom':10}}
-          onClick={()=>this.popInfoSelection('category', category)}>
-          X
-        </Button>
-      </ButtonGroup>
-    ))
-  }
 
   addPolygonPair() {
-    let newPairs = [...this.state.info.area.polygon];
+    let newPairs = [...this.state.alert.info.area.polygon];
     newPairs.push('');
+    this.setState(prevState => ({
+      ...prevState,
+      alert: {
+        ...prevState.alert,
+        info: {
+          ...prevState.alert.info,
+          area: {
+            ...prevState.alert.info.area,
+            polygon: [...newPairs]
+          }
+        }
+      }
+    }))
+  }
+
+  editPolygonPair(val, i) {
+    let newPairs = [...this.state.alert.info.area.polygon];
+    newPairs[i] = val;
+    this.setState(prevState => ({
+      ...prevState,
+      alert: {
+        ...prevState.alert,
+        info: {
+          ...prevState.alert.info,
+          area: {
+            ...prevState.alert.info.area,
+            polygon: [...newPairs]
+          }
+        }
+      }
+    }))
+  }
+
+  removePolygonPair(i) {
+    let newPairs = [...this.state.alert.info.area.polygon];
+    newPairs.splice(i, 1);
     this.setState(prevState => ({
       ...prevState,
       alert: {
@@ -270,16 +235,14 @@ class AlertForm extends Component {
           <h1>Send Alert</h1>
           <Form>
             <Form.Row>
-              <Form.Group>
-                <DropdownButton title={this.state.alert.status} variant={'light'}>
-                  {this.getStatuses()}
-                </DropdownButton>
-              </Form.Group>
-              <Form.Group style={{'marginLeft':10}}>
-                <DropdownButton title={this.state.alert.msgType} variant={'light'}>
-                  {this.getTypes()}
-                </DropdownButton>
-              </Form.Group>
+              <Status
+                status={this.state.alert.status}
+                statuses={options.statuses}
+                addAlert={alert=>this.addAlert('status', alert)}/>
+              <Type
+                type={this.state.alert.msgType}
+                types={options.types}
+                addAlert={alert=>this.addAlert('msgType', alert)}/>
             </Form.Row>
             <br/>
             <Form.Group controlId={'event'}>
@@ -288,98 +251,37 @@ class AlertForm extends Component {
               <Col>
                 <InputGroup>
                   <Form.Control placeholder={'Event Title'} type={'text'}/>
-                  <DropdownButton
-                    as={InputGroup.Append}
-                    variant={'light'}
-                    title={this.state.alert.info.urgency}>
-                    {this.getUrgencies()}
-                  </DropdownButton>
-                  <DropdownButton
-                    as={InputGroup.Append}
-                    variant={'light'}
-                    title={this.state.alert.info.certainty}>
-                    {this.getCertainties()}
-                  </DropdownButton>
-                  <DropdownButton
-                    as={InputGroup.Append}
-                    variant={'light'}
-                    title={this.state.alert.scope}>
-                    {this.getScopes()}
-                  </DropdownButton>
+                    <Urgency
+                      urgency={this.state.alert.info.urgency}
+                      urgencies={options.urgencies}
+                      addInfo={(name, val)=>this.addInfo(name,val)}/>
+                    <Certainty
+                      certainty={this.state.alert.info.certainty}
+                      certainties={options.certainties}
+                      addInfo={info=>this.addInfo('certainty',info)}/>
+                    <Scope
+                      scope={this.state.alert.scope}
+                      scopes={options.scopes}
+                      addAlert={alert=>this.addAlert('scope', alert)}/>
                 </InputGroup>
               </Col>
               </Form.Row>
             </Form.Group>
-            <Form.Group controlId={'severity'}>
-              <Form.Row>
-              <Form.Label column sm={2}>Severity</Form.Label>
-              <ButtonGroup style={{'marginLeft': 5}}>
-                <Button
-                  variant={'outline-danger'}
-                  onClick={()=>this.addInfo('severity','Extreme')}
-                  active={this.state.alert.info.severity==='Extreme'}>
-                  Extreme
-                </Button>
-                <Button
-                  variant={'outline-warning'}
-                  onClick={()=>this.addInfo('severity','Severe')}
-                  active={this.state.alert.info.severity==='Severe'}>
-                  Severe
-                </Button>
-                <Button
-                  variant={'outline-info'}
-                  onClick={()=>this.addInfo('severity','Moderate')}
-                  active={this.state.alert.info.severity==='Moderate'}>
-                  Moderate
-                </Button>
-                <Button
-                  variant={'outline-primary'}
-                  onClick={()=>this.addInfo('severity','Minor')}
-                  active={this.state.alert.info.severity==='Minor'}>
-                  Minor
-                </Button>
-                <Button
-                  variant={'outline-secondary'}
-                  onClick={()=>this.addInfo('severity','Unknown')}
-                  active={this.state.alert.info.severity==='Unknown'}>
-                  Unknown
-                </Button>
-              </ButtonGroup>
-              </Form.Row>
-            </Form.Group>
-            <Form.Group controlId={'category'}>
-              <Form.Row>
-                <Form.Label column sm={2}>Category</Form.Label>
-                <Col sm={2}>
-                  <DropdownButton
-                    variant={'light'}
-                    title={'Choose'}>
-                  {this.getCategories()}
-                  </DropdownButton>
-                </Col>
-                <Col>
-                  {this.showCategories()}
-                </Col>
-              </Form.Row>
-            </Form.Group>
-            <Form.Group controlId={'areaDesc'}>
-              <Form.Row>
-                <Form.Label column sm={2}>Area</Form.Label>
-                <Col>
-                  <Form.Control placeholder={'Description'} type={'text'}/>
-                </Col>
-              </Form.Row>
-            </Form.Group>
-            <Form.Group controlId={'polygon'}>
-              <Form.Row>
-                <Form.Label column sm={2}>Area Polygon</Form.Label>
-                <Col>
-                  <Polygon
-                    addPair={()=>this.addPolygonPair()}
-                  />
-                </Col>
-              </Form.Row>
-            </Form.Group>
+            <Severity
+              severity={this.state.alert.info.severity}
+              addInfo={info=>this.addInfo('severity', info)}/>
+            <Category
+              category={this.state.alert.info.category}
+              categories={options.categories}
+              pushInfoSelection={info=>this.pushInfoSelection('category',info)}
+              popInfoSelection={info=>this.popInfoSelection('category',info)}/>
+            <Area>
+              <Polygon
+                pairs={this.state.alert.info.area.polygon}
+                addPair={()=>this.addPolygonPair()}
+                editPair={(val, i)=>this.editPolygonPair(val, i)}
+                removePair={(i)=>this.removePolygonPair(i)}/>
+            </Area>
             <Button variant={'dark'} onClick={()=>this.props.sendAlert(this.state)}>Send Alert</Button>
           </Form>
         </Container>
