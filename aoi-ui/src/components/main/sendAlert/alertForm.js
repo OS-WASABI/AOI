@@ -9,7 +9,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { sendAlert } from "../../actions/alertActions";
+import { sendAlert } from "../../../actions/alertActions";
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -18,6 +18,7 @@ import Button from 'react-bootstrap/Button';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Col from 'react-bootstrap/Col';
+import Polygon from './polygon';
 
 const options = {
   categories: [
@@ -86,18 +87,26 @@ class AlertForm extends Component {
           certainty: "Certainty",
           area: {
             areaDesc: "",
-            polygon: []
+            polygon: [
+              '',
+              '',
+              '',
+              ''
+            ]
           }
         }
       }
     };
     this.addInfo = this.addInfo.bind(this);
     this.addAlert = this.addAlert.bind(this);
-    this.pushSelection = this.pushSelection.bind(this);
-    this.popSelection = this.popSelection.bind(this);
+    this.pushInfoSelection = this.pushInfoSelection.bind(this);
+    this.popInfoSelection = this.popInfoSelection.bind(this);
+
+    this.addPolygonPair = this.addPolygonPair.bind(this);
+
   }
 
-  popSelection(name, value) {
+  popInfoSelection(name, value) {
     let option = [...this.state.alert.info[name]];
     for(let i=0; i<option.length; i++) {
       if(option[i] === value) {
@@ -116,7 +125,7 @@ class AlertForm extends Component {
     }))
   }
 
-  pushSelection(name, value) {
+  pushInfoSelection(name, value) {
     if(!this.state.alert.info[name].includes(value)) {
       this.setState(prevState => ({
         ...prevState,
@@ -204,12 +213,14 @@ class AlertForm extends Component {
     ))
   }
 
+
+
   getCategories() {
     return options.categories.map(category => (
       <Dropdown.Item
         key={category}
         disabled={this.state.alert.info.category.includes(category)}
-        onClick={()=>this.pushSelection('category', category)}>
+        onClick={()=>this.pushInfoSelection('category', category)}>
         {category}
       </Dropdown.Item>
     ))
@@ -226,11 +237,29 @@ class AlertForm extends Component {
         <Button
           variant={'secondary'}
           style={{'marginBottom':10}}
-          onClick={()=>this.popSelection('category', category)}>
+          onClick={()=>this.popInfoSelection('category', category)}>
           X
         </Button>
       </ButtonGroup>
     ))
+  }
+
+  addPolygonPair() {
+    let newPairs = [...this.state.info.area.polygon];
+    newPairs.push('');
+    this.setState(prevState => ({
+      ...prevState,
+      alert: {
+        ...prevState.alert,
+        info: {
+          ...prevState.alert.info,
+          area: {
+            ...prevState.alert.info.area,
+            polygon: [...newPairs]
+          }
+        }
+      }
+    }))
   }
 
   render() {
@@ -284,7 +313,7 @@ class AlertForm extends Component {
             <Form.Group controlId={'severity'}>
               <Form.Row>
               <Form.Label column sm={2}>Severity</Form.Label>
-              <ButtonGroup>
+              <ButtonGroup style={{'marginLeft': 5}}>
                 <Button
                   variant={'outline-danger'}
                   onClick={()=>this.addInfo('severity','Extreme')}
@@ -320,7 +349,7 @@ class AlertForm extends Component {
             </Form.Group>
             <Form.Group controlId={'category'}>
               <Form.Row>
-              <Form.Label column sm={2}>Category</Form.Label>
+                <Form.Label column sm={2}>Category</Form.Label>
                 <Col sm={2}>
                   <DropdownButton
                     variant={'light'}
@@ -333,11 +362,21 @@ class AlertForm extends Component {
                 </Col>
               </Form.Row>
             </Form.Group>
-            <Form.Group controlId={'area'}>
+            <Form.Group controlId={'areaDesc'}>
               <Form.Row>
                 <Form.Label column sm={2}>Area</Form.Label>
                 <Col>
                   <Form.Control placeholder={'Description'} type={'text'}/>
+                </Col>
+              </Form.Row>
+            </Form.Group>
+            <Form.Group controlId={'polygon'}>
+              <Form.Row>
+                <Form.Label column sm={2}>Area Polygon</Form.Label>
+                <Col>
+                  <Polygon
+                    addPair={()=>this.addPolygonPair()}
+                  />
                 </Col>
               </Form.Row>
             </Form.Group>
