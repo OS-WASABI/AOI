@@ -1,4 +1,4 @@
-/// Send Live Alert form.
+/// Polygon widget.
 /**
  * Copyright 2018   Vaniya Agrawal, Ross Arcemont, Kristofer Hoadley,
  *                  Shawn Hulce, Michael McCulley

@@ -1,8 +1,8 @@
-/// Severity widget.
+/// Scope widget.
 /**
  * Copyright 2018   Vaniya Agrawal, Ross Arcemont, Kristofer Hoadley,
  *                  Shawn Hulce, Michael McCulley
- * @file severity.js
+ * @file scope.js
  * @date March 2019
  * @authors Vaniya Agrawal
  */

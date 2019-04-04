@@ -1,8 +1,8 @@
-/// Severity widget.
+/// Certainty widget.
 /**
  * Copyright 2018   Vaniya Agrawal, Ross Arcemont, Kristofer Hoadley,
  *                  Shawn Hulce, Michael McCulley
- * @file severity.js
+ * @file certainty.js
  * @date March 2019
  * @authors Vaniya Agrawal
  */
