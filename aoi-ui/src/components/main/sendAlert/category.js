@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
+import SplitButton from "react-bootstrap/SplitButton";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 
@@ -30,12 +30,13 @@ class Category extends Component {
     return this.props.category.map((category, i) => (
       <ButtonGroup key={i}>
         <Button
-          variant={'secondary'}
+          variant={'light'}
           style={{'marginLeft': 10, 'marginBottom': 10}}>
           {category}
         </Button>
         <Button
-          variant={'secondary'}
+          size={'sm'}
+          variant={'light'}
           style={{'marginBottom': 10}}
           onClick={() => this.props.popInfoSelection(category)}>
           X
@@ -50,11 +51,12 @@ class Category extends Component {
         <Form.Row>
           <Form.Label column sm={2}>Category</Form.Label>
           <Col sm={2}>
-            <DropdownButton
+            <SplitButton
+              drop={'right'}
               variant={'light'}
               title={'Choose'}>
               {this.getCategories()}
-            </DropdownButton>
+            </SplitButton>
           </Col>
           <Col>
             {this.showCategories()}

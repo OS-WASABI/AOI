@@ -10,12 +10,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { sendAlert } from "../../../actions/alertActions";
+
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 
+import Confirmation from './confirm';
 import Polygon from './polygon';
 import Severity from './severity';
 import Status from './status';
@@ -101,7 +103,8 @@ class AlertForm extends Component {
             ]
           }
         }
-      }
+      },
+      confirming: true
     };
     this.addInfo = this.addInfo.bind(this);
     this.addAlert = this.addAlert.bind(this);
@@ -159,19 +162,34 @@ class AlertForm extends Component {
   }
 
   addInfo(name, value) {
-    this.setState(prevState => ({
-      ...prevState,
-      alert: {
-        ...prevState["alert"],
-        info: {
-          ...prevState.alert.info,
-          [name]: value
-        }
-      },
-    }))
+    if (name === "areaDesc") {
+      this.setState(prevState => ({
+        ...prevState,
+        alert: {
+          ...prevState["alert"],
+          info: {
+            ...prevState.alert.info,
+            area: {
+              ...prevState.alert.info.area,
+              [name]: value
+            }
+          }
+        },
+      }))
+    }
+    else {
+      this.setState(prevState => ({
+        ...prevState,
+        alert: {
+          ...prevState["alert"],
+          info: {
+            ...prevState.alert.info,
+            [name]: value
+          }
+        },
+      }))
+    }
   }
-
-
 
   addPolygonPair() {
     let newPairs = [...this.state.alert.info.area.polygon];
@@ -228,9 +246,12 @@ class AlertForm extends Component {
   }
 
   render() {
+    let confirmationClose = () => this.setState({confirming: false});
+
     return (
       <div id='Alerts'>
         <br/><br/><br/>
+        <Confirmation alert={this.state.alert} show={this.state.confirming} onHide={confirmationClose}/>
         <Container>
           <h1>Send Alert</h1>
           <Form>
@@ -243,46 +264,62 @@ class AlertForm extends Component {
                 type={this.state.alert.msgType}
                 types={options.types}
                 addAlert={alert=>this.addAlert('msgType', alert)}/>
+              <Scope
+                scope={this.state.alert.scope}
+                scopes={options.scopes}
+                addAlert={alert=>this.addAlert('scope', alert)}/>
             </Form.Row>
             <br/>
             <Form.Group controlId={'event'}>
               <Form.Row>
-              <Form.Label column sm={2}>Event Title</Form.Label>
+              <Form.Label column sm={2}>
+                Event Title
+              </Form.Label>
               <Col>
                 <InputGroup>
-                  <Form.Control placeholder={'Event Title'} type={'text'}/>
+                  <Form.Control
+                    placeholder={'Event Title'}
+                    onChange={event => this.addInfo('event', event.target.value)}
+                    type={'text'}/>
                     <Urgency
                       urgency={this.state.alert.info.urgency}
                       urgencies={options.urgencies}
-                      addInfo={(name, val)=>this.addInfo(name,val)}/>
+                      addInfo={val=>this.addInfo("urgency",val)}/>
                     <Certainty
                       certainty={this.state.alert.info.certainty}
                       certainties={options.certainties}
                       addInfo={info=>this.addInfo('certainty',info)}/>
-                    <Scope
-                      scope={this.state.alert.scope}
-                      scopes={options.scopes}
-                      addAlert={alert=>this.addAlert('scope', alert)}/>
                 </InputGroup>
               </Col>
               </Form.Row>
             </Form.Group>
-            <Severity
-              severity={this.state.alert.info.severity}
-              addInfo={info=>this.addInfo('severity', info)}/>
             <Category
               category={this.state.alert.info.category}
               categories={options.categories}
               pushInfoSelection={info=>this.pushInfoSelection('category',info)}
               popInfoSelection={info=>this.popInfoSelection('category',info)}/>
-            <Area>
+            <Severity
+              severity={this.state.alert.info.severity}
+              addInfo={info=>this.addInfo('severity', info)}/>
+            <Area
+              addInfo={val => this.addInfo("areaDesc", val)}>
               <Polygon
                 pairs={this.state.alert.info.area.polygon}
                 addPair={()=>this.addPolygonPair()}
                 editPair={(val, i)=>this.editPolygonPair(val, i)}
                 removePair={(i)=>this.removePolygonPair(i)}/>
             </Area>
-            <Button variant={'dark'} onClick={()=>this.props.sendAlert(this.state)}>Send Alert</Button>
+            <br/>
+            <Form.Row>
+              <Col sm={2}/>
+              <Col>
+              <Button
+                variant={'info'}
+                onClick={()=> this.setState({confirming: true})}>
+                Send Alert
+              </Button>
+              </Col>
+            </Form.Row>
           </Form>
         </Container>
       </div>

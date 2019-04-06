@@ -26,7 +26,7 @@ export default class Header extends Component {
   render() {
     return (
       <div className="Header">
-        <Navbar bg={'dark'} variant={'dark'} expand={'lg'}>
+        <Navbar fixed={'top'} bg={'dark'} variant={'dark'} expand={'lg'}>
           <Navbar.Brand as={Link} to={'/'}>
             <b>OS-WASABI</b><img src={logo} alt={'logo'} width={42}/> Alert Originator
           </Navbar.Brand>

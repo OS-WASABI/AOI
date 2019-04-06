@@ -12,6 +12,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import InputGroup from "react-bootstrap/InputGroup";
+import Form from "react-bootstrap/Form";
 
 class Scope extends Component {
   getScopes() {
@@ -26,12 +27,13 @@ class Scope extends Component {
 
   render() {
     return (
-      <DropdownButton
-        as={InputGroup.Append}
-        variant={'light'}
-        title={this.props.scope}>
-        {this.getScopes()}
-      </DropdownButton>
+      <Form.Group controlId={'scope'} style={{'marginLeft':10}}>
+        <DropdownButton
+          variant={'light'}
+          title={this.props.scope}>
+          {this.getScopes()}
+        </DropdownButton>
+      </Form.Group>
     );
   }
 }

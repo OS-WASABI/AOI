@@ -12,6 +12,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import InputGroup from "react-bootstrap/InputGroup";
+import Form from "react-bootstrap/Form";
 
 class Certainty extends Component {
   getCertainties() {
@@ -26,12 +27,13 @@ class Certainty extends Component {
 
   render() {
     return (
-      <DropdownButton
-        as={InputGroup.Append}
-        variant={'light'}
-        title={this.props.certainty}>
-        {this.getCertainties()}
-      </DropdownButton>
+      <Form.Group controlId={'certainty'} style={{'marginLeft':10}}>
+        <DropdownButton
+          variant={'light'}
+          title={this.props.certainty}>
+          {this.getCertainties()}
+        </DropdownButton>
+      </Form.Group>
     );
   }
 }

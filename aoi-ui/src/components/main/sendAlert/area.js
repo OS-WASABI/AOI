@@ -22,7 +22,10 @@ class Area extends Component {
           <Form.Row>
             <Form.Label column sm={2}>Area</Form.Label>
             <Col>
-              <Form.Control placeholder={'Description'} type={'text'}/>
+              <Form.Control
+                placeholder={'Description'}
+                onChange={event => this.props.addInfo(event.target.value)}
+                type={'text'}/>
             </Col>
           </Form.Row>
         </Form.Group>

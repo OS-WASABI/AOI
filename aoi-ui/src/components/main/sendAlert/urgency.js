@@ -12,13 +12,14 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import InputGroup from "react-bootstrap/InputGroup";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import Form from "react-bootstrap/Form";
 
 class Certainty extends Component {
   getUrgencies() {
     return this.props.urgencies.map(urgency => (
       <Dropdown.Item
         key={urgency}
-        onClick={()=>this.props.addInfo('urgency', urgency)}>
+        onClick={()=>this.props.addInfo(urgency)}>
         {urgency}
       </Dropdown.Item>
     ))
@@ -26,12 +27,13 @@ class Certainty extends Component {
 
   render() {
     return (
-      <DropdownButton
-        as={InputGroup.Append}
-        variant={'light'}
-        title={this.props.urgency}>
-        {this.getUrgencies()}
-      </DropdownButton>
+      <Form.Group controlId={'urgency'} style={{'marginLeft':10}}>
+        <DropdownButton
+          variant={'light'}
+          title={this.props.urgency}>
+          {this.getUrgencies()}
+        </DropdownButton>
+      </Form.Group>
     );
   }
 }

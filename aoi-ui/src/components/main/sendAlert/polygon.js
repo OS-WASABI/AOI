@@ -31,8 +31,9 @@ class Polygon extends Component {
               onChange={(event) => this.props.editPair(event.target.value, i)}/>
             <InputGroup.Append>
               <Button
+                size={'sm'}
                 onClick={()=>this.props.removePair(i)}
-                variant={'secondary'}>
+                variant={'light'}>
                 X
               </Button>
             </InputGroup.Append>
