@@ -7,8 +7,6 @@
  * @authors Vaniya Agrawal
  */
 import React, { Component } from 'react';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
 import DropdownButton from "react-bootstrap/DropdownButton";
@@ -26,7 +24,7 @@ class Status extends Component {
 
   render() {
     return (
-      <Form.Group controlId={'status'}>
+      <Form.Group controlId={'status'} style={{'marginLeft':5}}>
         <DropdownButton title={this.props.status} variant={'light'}>
           {this.getStatuses()}
         </DropdownButton>

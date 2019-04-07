@@ -16,6 +16,7 @@ import Container from 'react-bootstrap/Container';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
+import Alert from 'react-bootstrap/Alert';
 
 import Confirmation from './confirm';
 import Polygon from './polygon';
@@ -84,15 +85,15 @@ class AlertForm extends Component {
     this.state = {
       alert: {
         sender: "dummy-sender",
-        status: "Status",
-        msgType: "Message Type",
-        scope: "Scope",
+        status: "(Status)",
+        msgType: "(Message Type)",
+        scope: "(Scope)",
         info: {
           category: [],
           event: "",
-          urgency: "Urgency",
-          severity: "Severity",
-          certainty: "Certainty",
+          urgency: "(Urgency)",
+          severity: "(Severity)",
+          certainty: "(Certainty)",
           area: {
             areaDesc: "",
             polygon: [
@@ -104,7 +105,11 @@ class AlertForm extends Component {
           }
         }
       },
-      confirming: true
+      confirming: false,
+      error: {
+        msg: "",
+        show: false
+      }
     };
     this.addInfo = this.addInfo.bind(this);
     this.addAlert = this.addAlert.bind(this);
@@ -115,6 +120,54 @@ class AlertForm extends Component {
     this.editPolygonPair = this.editPolygonPair.bind(this);
     this.removePolygonPair = this.removePolygonPair.bind(this);
 
+    this.validateAlert = this.validateAlert.bind(this);
+
+  }
+
+  validateAlert(object, error) {
+    Object.keys(object).forEach(alertOption => {
+      let val = object[alertOption];
+
+      if (typeof val === "string") {
+        if ( val === null || val.length === 0 || val.includes("(")) {
+          error.push(alertOption);
+        }
+      }
+
+      else if (val instanceof Array) {
+        if (val.length === 0) {
+          error.push(alertOption);
+
+        }
+        for (let i=0; i<val.length; i++){
+          let item = val[i];
+          if (item === null || item.length === 0) {
+            error.push(alertOption);
+            break;
+          }
+        }
+      }
+
+      else {
+        error = this.validateAlert(val, error);
+      }
+    })
+    return error;
+  }
+
+  handleValidate() {
+    let error = this.validateAlert(this.state.alert, []);
+    console.log(error.length);
+    if (error.length !== 0) {
+      let errorStr = ["Your alert is missing some required fields: "];
+      error.forEach(opt => errorStr.push(opt + ", "));
+      this.setState({error: { msg: errorStr, show: true}});
+    }
+    else {
+      this.setState({confirming: true});
+      this.setState({error: { msg: "", show: false}});
+
+    }
   }
 
   popInfoSelection(name, value) {
@@ -251,48 +304,62 @@ class AlertForm extends Component {
     return (
       <div id='Alerts'>
         <br/><br/><br/>
-        <Confirmation alert={this.state.alert} show={this.state.confirming} onHide={confirmationClose}/>
         <Container>
+          <Alert
+            style={{"position": "fixed"}}
+            variant={"danger"}
+            dismissible
+            onClose={()=> this.setState({error: {msg:'', show: false}})}
+            show={this.state.error.show}>
+            {this.state.error.msg}
+          </Alert>
+          <Confirmation
+            alert={this.state.alert}
+            show={this.state.confirming}
+            onHide={confirmationClose}/>
+          <br/>
           <h1>Send Alert</h1>
+          <br/>
           <Form>
-            <Form.Row>
-              <Status
-                status={this.state.alert.status}
-                statuses={options.statuses}
-                addAlert={alert=>this.addAlert('status', alert)}/>
-              <Type
-                type={this.state.alert.msgType}
-                types={options.types}
-                addAlert={alert=>this.addAlert('msgType', alert)}/>
-              <Scope
-                scope={this.state.alert.scope}
-                scopes={options.scopes}
-                addAlert={alert=>this.addAlert('scope', alert)}/>
-            </Form.Row>
-            <br/>
-            <Form.Group controlId={'event'}>
+            <Form.Group>
               <Form.Row>
-              <Form.Label column sm={2}>
-                Event Title
-              </Form.Label>
-              <Col>
-                <InputGroup>
-                  <Form.Control
-                    placeholder={'Event Title'}
-                    onChange={event => this.addInfo('event', event.target.value)}
-                    type={'text'}/>
-                    <Urgency
-                      urgency={this.state.alert.info.urgency}
-                      urgencies={options.urgencies}
-                      addInfo={val=>this.addInfo("urgency",val)}/>
-                    <Certainty
-                      certainty={this.state.alert.info.certainty}
-                      certainties={options.certainties}
-                      addInfo={info=>this.addInfo('certainty',info)}/>
-                </InputGroup>
-              </Col>
+                <Form.Label column sm={2}>Status/Type/Scope</Form.Label>
+                <Status
+                  status={this.state.alert.status}
+                  statuses={options.statuses}
+                  addAlert={alert=>this.addAlert('status', alert)}/>
+                <Type
+                  type={this.state.alert.msgType}
+                  types={options.types}
+                  addAlert={alert=>this.addAlert('msgType', alert)}/>
+                <Scope
+                  scope={this.state.alert.scope}
+                  scopes={options.scopes}
+                  addAlert={alert=>this.addAlert('scope', alert)}/>
+              </Form.Row>
+              <Form.Row>
+                <Form.Label column sm={2}>Event</Form.Label>
+                <Col>
+                  <InputGroup>
+                    <Form.Control
+                      placeholder={'Event Title'}
+                      onChange={event => this.addInfo('event', event.target.value)}
+                      type={'text'}/>
+                  </InputGroup>
+                </Col>
               </Form.Row>
             </Form.Group>
+            <Form.Row>
+              <Form.Label column sm={2}>Urgency/Certainty</Form.Label>
+              <Urgency
+                urgency={this.state.alert.info.urgency}
+                urgencies={options.urgencies}
+                addInfo={val=>this.addInfo("urgency",val)}/>
+              <Certainty
+                certainty={this.state.alert.info.certainty}
+                certainties={options.certainties}
+                addInfo={info=>this.addInfo('certainty',info)}/>
+            </Form.Row>
             <Category
               category={this.state.alert.info.category}
               categories={options.categories}
@@ -315,12 +382,13 @@ class AlertForm extends Component {
               <Col>
               <Button
                 variant={'info'}
-                onClick={()=> this.setState({confirming: true})}>
+                onClick={()=> this.handleValidate()}>
                 Send Alert
               </Button>
               </Col>
             </Form.Row>
           </Form>
+          <br/><br/>
         </Container>
       </div>
     );

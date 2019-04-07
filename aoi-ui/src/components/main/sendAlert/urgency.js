@@ -7,10 +7,7 @@
  * @authors Vaniya Agrawal
  */
 import React, { Component } from 'react';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
-import InputGroup from "react-bootstrap/InputGroup";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
 
@@ -27,7 +24,7 @@ class Certainty extends Component {
 
   render() {
     return (
-      <Form.Group controlId={'urgency'} style={{'marginLeft':10}}>
+      <Form.Group controlId={'urgency'} style={{'marginLeft':5}}>
         <DropdownButton
           variant={'light'}
           title={this.props.urgency}>
