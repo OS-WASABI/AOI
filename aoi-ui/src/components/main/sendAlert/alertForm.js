@@ -159,7 +159,7 @@ class AlertForm extends Component {
     let error = this.validateAlert(this.state.alert, []);
     console.log(error.length);
     if (error.length !== 0) {
-      let errorStr = ["Your alert is missing some required fields: "];
+      let errorStr = ["Oops! Please fix missing fields: "];
       error.forEach(opt => errorStr.push(opt + ", "));
       this.setState({error: { msg: errorStr, show: true}});
     }
@@ -305,14 +305,6 @@ class AlertForm extends Component {
       <div id='Alerts'>
         <br/><br/><br/>
         <Container>
-          <Alert
-            style={{"position": "fixed"}}
-            variant={"danger"}
-            dismissible
-            onClose={()=> this.setState({error: {msg:'', show: false}})}
-            show={this.state.error.show}>
-            {this.state.error.msg}
-          </Alert>
           <Confirmation
             alert={this.state.alert}
             show={this.state.confirming}
@@ -320,6 +312,13 @@ class AlertForm extends Component {
           <br/>
           <h1>Send Alert</h1>
           <br/>
+          <Alert
+            variant={"danger"}
+            dismissible
+            onClose={()=> this.setState({error: {msg:'', show: false}})}
+            show={this.state.error.show}>
+            {this.state.error.msg}
+          </Alert>
           <Form>
             <Form.Group>
               <Form.Row>
