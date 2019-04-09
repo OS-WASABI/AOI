@@ -28,6 +28,7 @@ import Certainty from "./certainty";
 import Urgency from "./urgency";
 import Category from "./category";
 import Area from "./area";
+import Modal from "react-bootstrap/Modal";
 
 const options = {
   categories: [
@@ -84,7 +85,6 @@ class AlertForm extends Component {
     super(props);
     this.state = {
       alert: {
-        sender: "dummy-sender",
         status: "(Status)",
         msgType: "(Message Type)",
         scope: "(Scope)",
@@ -322,7 +322,10 @@ class AlertForm extends Component {
           <Form>
             <Form.Group>
               <Form.Row>
-                <Form.Label column sm={2}>Status/Type/Scope</Form.Label>
+                <Form.Label
+                  column
+                  style={{"color": "#6c757d"}}
+                  sm={2}>Status/Type/Scope</Form.Label>
                 <Status
                   status={this.state.alert.status}
                   statuses={options.statuses}
@@ -337,7 +340,10 @@ class AlertForm extends Component {
                   addAlert={alert=>this.addAlert('scope', alert)}/>
               </Form.Row>
               <Form.Row>
-                <Form.Label column sm={2}>Event</Form.Label>
+                <Form.Label
+                  column
+                  style={{"color": "#6c757d"}}
+                  sm={2}>Event</Form.Label>
                 <Col>
                   <InputGroup>
                     <Form.Control
@@ -349,7 +355,10 @@ class AlertForm extends Component {
               </Form.Row>
             </Form.Group>
             <Form.Row>
-              <Form.Label column sm={2}>Urgency/Certainty</Form.Label>
+              <Form.Label
+                column
+                style={{"color": "#6c757d"}}
+                sm={2}>Urgency/Certainty</Form.Label>
               <Urgency
                 urgency={this.state.alert.info.urgency}
                 urgencies={options.urgencies}

@@ -17,16 +17,11 @@ import {  /// User action types.
 
 
 const initialState = {  /// Defaults to the guest user.
-  currUser: 0,
-  allUsers: {
+  currUser: {
     0: {
       username: 'guest',
       name: 'Guest',
     },
-    1: {
-      username: 'vsagrawal',
-      name: 'Vaniya'
-    }
   }
 }
 

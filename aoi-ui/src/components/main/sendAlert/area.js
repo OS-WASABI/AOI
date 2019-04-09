@@ -16,7 +16,10 @@ class Area extends Component {
       <div id={'area'}>
         <Form.Group controlId={'areaDesc'}>
           <Form.Row>
-            <Form.Label column sm={2}>Area</Form.Label>
+            <Form.Label
+              column
+              style={{"color": "#6c757d"}}
+              sm={2}>Area</Form.Label>
             <Col>
               <Form.Control
                 placeholder={'Description'}

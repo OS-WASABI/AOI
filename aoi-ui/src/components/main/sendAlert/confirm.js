@@ -27,7 +27,7 @@ class Confirm extends Component {
                onHide={this.props.onHide} centered>
           <Modal.Header closeButton>
             <Container>
-            <Modal.Title>Alert Confirmation</Modal.Title>
+            <Modal.Title >Confirm Alert</Modal.Title>
             </Container>
           </Modal.Header>
           <Modal.Body>
@@ -36,15 +36,15 @@ class Confirm extends Component {
               <h5>Summary</h5>
               <Row>
                 <Col sm={4}>Status</Col>
-                <Col>{this.props.alert.status}</Col>
+                <Col style={{"color": "#6c757d"}}>{this.props.alert.status}</Col>
               </Row>
               <Row>
                 <Col sm={4}>Message Type </Col>
-                <Col>{this.props.alert.msgType}</Col>
+                <Col style={{"color": "#6c757d"}}>{this.props.alert.msgType}</Col>
               </Row>
               <Row>
                 <Col sm={4}>Scope</Col>
-                <Col>{this.props.alert.scope}</Col>
+                <Col style={{"color": "#6c757d"}}>{this.props.alert.scope}</Col>
               </Row>
             </Container>
             <hr/>
@@ -52,23 +52,23 @@ class Confirm extends Component {
               <h5>Info</h5>
               <Row>
                 <Col sm={4}>Event</Col>
-                <Col>{this.props.alert.info.event}</Col>
+                <Col style={{"color": "#6c757d"}}>{this.props.alert.info.event}</Col>
               </Row>
               <Row>
                 <Col sm={4}>Urgency</Col>
-                <Col>{this.props.alert.info.urgency}</Col>
+                <Col style={{"color": "#6c757d"}}>{this.props.alert.info.urgency}</Col>
               </Row>
               <Row>
                 <Col sm={4}>Certainty</Col>
-                <Col>{this.props.alert.info.certainty}</Col>
+                <Col style={{"color": "#6c757d"}}>{this.props.alert.info.certainty}</Col>
               </Row>
               <Row>
                 <Col sm={4}>Category</Col>
-                <Col>{this.props.alert.info.category.map(cat => cat + ", ")}</Col>
+                <Col style={{"color": "#6c757d"}}>{this.props.alert.info.category.map(cat => cat + ", ")}</Col>
               </Row>
               <Row>
                 <Col sm={4}>Severity</Col>
-                <Col>{this.props.alert.info.severity}</Col>
+                <Col style={{"color": "#6c757d"}}>{this.props.alert.info.severity}</Col>
               </Row>
             </Container>
             <hr/>
@@ -76,11 +76,11 @@ class Confirm extends Component {
               <h5>Area</h5>
               <Row>
                 <Col sm={4}>Description</Col>
-                <Col>{this.props.alert.info.area.areaDesc}</Col>
+                <Col style={{"color": "#6c757d"}}>{this.props.alert.info.area.areaDesc}</Col>
               </Row>
               <Row>
                 <Col sm={4}/>
-                <Col>{this.props.alert.info.area.polygon.map(pair => pair + ", ")} </Col>
+                <Col style={{"color": "#6c757d"}}>{this.props.alert.info.area.polygon.map(pair => pair + ", ")} </Col>
               </Row>
             </Container>
             </Container>

@@ -49,7 +49,10 @@ class Category extends Component {
     return (
       <Form.Group controlId={'category'}>
         <Form.Row>
-          <Form.Label column sm={2}>Category</Form.Label>
+          <Form.Label
+            column
+            style={{"color": "#6c757d"}}
+            sm={2}>Category</Form.Label>
           <Col sm={2}>
             <SplitButton
               drop={'right'}

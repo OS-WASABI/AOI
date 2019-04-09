@@ -57,7 +57,10 @@ class Polygon extends Component {
     return (
       <Form.Group controlId={'polygon'}>
         <Form.Row>
-          <Form.Label column sm={2}>Area Polygon</Form.Label>
+          <Form.Label
+            column
+            style={{"color": "#6c757d"}}
+            sm={2}>Area Polygon</Form.Label>
           <Col>
             <Form.Row>
               {this.getPairs()}
