@@ -4,8 +4,13 @@ services:
                 build: ../docker-aoi-apache
                 ports:
                         - "8080:80"
+                depends_on:
+                        - "aoi"
+                        - "aoi-ui"
                 networks:
                         - aoinet
+                volumes:
+                        - "react-app:/usr/local/apache2/htdocs"
         aoi:
                 build: ../rest-server/
                 networks:
@@ -24,5 +29,11 @@ services:
                 build: ../aoi-db
                 networks:
                         - aoinet
+        aoi-ui:
+                build: ../aoi-ui
+                volumes:
+                        - "react-app:/aoi-ui/build"
 networks:
         aoinet:
+volumes:
+        react-app:
