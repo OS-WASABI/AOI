@@ -11,9 +11,9 @@
  */
 import {
   GET_ALERTS,
-  SEND_ALERT,
-  UPDATE_ALERT,
-  CANCEL_ALERT } from "./types";
+  SENDING_ALERT,
+  SENT_ALERT,
+  RECEIVE_ERROR } from "./types";
 
 /// Get alert data.
 /**
@@ -25,14 +25,27 @@ import {
  * @param query The search parameter in the form {key: value}
  * @returns {Function}  Dispatches an action.
  */
-export const getAlerts = (query) => dispatch => {
-  fetch('https://jsonplaceholder.typicode.com/posts')
+export const getAlerts = (query) => (dispatch, getState) => {
+  fetch(window.location.origin + getState().config.alertEndpoint + query)
     .then(res => res.json())
     .then(alerts => dispatch({
       type: GET_ALERTS,
       payload: alerts
     }));
 };
+
+const sendingAlert = () => {
+  return {
+    type: SENDING_ALERT
+  }
+}
+
+const receiveError = (err) => {
+  return {
+    type: RECEIVE_ERROR,
+    payload: err
+  }
+}
 
 /// Post alert data.
 /**
@@ -41,21 +54,29 @@ export const getAlerts = (query) => dispatch => {
  * @param alert Contains all necessary items defined by the CAP standard.
  * @returns {Function}  Dispatches an action.
  */
-export const sendAlert = (alert) => dispatch => {
+export const sendAlert = (alert) => (dispatch, getState) => {
   alert.sender = "dummy-sender";
   alert.sent = new Date();
 
-  fetch('https://jsonplaceholder.typicode.com/posts', {
+  dispatch(sendingAlert());
+
+  fetch(window.location.origin + getState().config.alertEndpoint, {
     method: 'POST',
     headers: {
       'content-type': 'application/json'
     },
     body: JSON.stringify(alert)
   })
-    .then(res => res.json())
+    .then(res => {
+      if (res.status !== 201) {
+        dispatch(receiveError('Error ' + res.status + ": Unable to complete request."))
+      }
+      else return res.json();
+    })
     .then(res => dispatch({
-      type: SEND_ALERT,
+      type: SENT_ALERT,
       payload: res
-    }));
+    }))
+    .catch(err => dispatch(receiveError("Unexpected error. Unable to fulfill request.")));
 };
 

@@ -18,7 +18,6 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 
 class Confirm extends Component {
-
   render() {
     return (
       <div id='Confirmation'>
@@ -93,6 +92,10 @@ class Confirm extends Component {
       </div>
     );
   }
+}
+
+function mapStateToProps(props) {
+
 }
 
 function mapDispatchToProps(dispatch) {

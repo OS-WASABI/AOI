@@ -28,7 +28,6 @@ import Certainty from "./certainty";
 import Urgency from "./urgency";
 import Category from "./category";
 import Area from "./area";
-import Modal from "react-bootstrap/Modal";
 
 const options = {
   categories: [
@@ -157,7 +156,6 @@ class AlertForm extends Component {
 
   handleValidate() {
     let error = this.validateAlert(this.state.alert, []);
-    console.log(error.length);
     if (error.length !== 0) {
       let errorStr = ["Oops! Please fix missing fields: "];
       error.forEach(opt => errorStr.push(opt + ", "));

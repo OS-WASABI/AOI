@@ -5,15 +5,12 @@
  *
  * Copyright 2018   Vaniya Agrawal, Ross Arcemont, Kristofer Hoadley,
  *                  Shawn Hulce, Michael McCulley
- * @file userReducer.js
+ * @file configReducer.js
  * @date February 2019
  * @authors Vaniya Agrawal
  */
-import {  /// User action types.
-  GET_USERS,
-  CREATE_USER,
-  UPDATE_USER,
-  REMOVE_USER } from "../actions/types";
+// import {  /// action types.
+//    } from "../actions/types";
 
 
 const initialState = {  /// Defaults to the guest user.
@@ -22,12 +19,13 @@ const initialState = {  /// Defaults to the guest user.
       username: 'guest',
       name: 'Guest',
     },
-  }
+  },
+  alertEndpoint: '/v1/cadg/api/alerts'
 }
 
 /// Main reducer for user actions.
 /**
- * Uses a switch statement to modify the user store. Switch statement is used
+ * Uses a switch statement to modify the config store. Switch statement is used
  * to determine which action has been dispatched and to modify the store accordingly.
  *
  * IMPORTANT!! The store is IMMUTABLE. ALL cases must return a COPY of the store,
@@ -40,22 +38,6 @@ const initialState = {  /// Defaults to the guest user.
  */
 export default (state = initialState, action) => {
   switch(action.type) {
-    case GET_USERS:
-      return {
-        ...state
-      };
-    case CREATE_USER:
-      return {
-        ...state,
-      }
-    case UPDATE_USER:
-      return {
-        ...state,
-      };
-    case REMOVE_USER:
-      return {
-        ...state,
-      };
     default:
       return state;
   }

@@ -10,13 +10,13 @@
  * @authors Vaniya Agrawal
  */
 import {  /// Alert action types.
-  GET_ALERTS,
-  SEND_ALERT,
-  UPDATE_ALERT,
-  CANCEL_ALERT } from "../actions/types";
+  SENT_ALERT,
+  SENDING_ALERT,
+  RECEIVE_ERROR } from "../actions/types";
 
 const initialState = {  /// Initialized with no active alerts.
-  activeAlerts: {},
+  isFetching: false,
+  response: ''
 }
 
 /// Main reducer for alert actions.
@@ -34,22 +34,27 @@ const initialState = {  /// Initialized with no active alerts.
  */
 export default (state = initialState, action) => {
   switch(action.type) {
-    case GET_ALERTS:
-      return {
-        ...state
-      };
-    case SEND_ALERT:
+    case SENDING_ALERT:
+      console.log("sending alert...");
       return {
         ...state,
+        isFetching: true
+      };
+    case RECEIVE_ERROR:
+      console.log("received an error...");
+      return {
+        ...state,
+        isFetching: false,
+        response: "Error " + action.payload + ": Unable to complete request."
       }
-    case UPDATE_ALERT:
+    case SENT_ALERT:
+      console.log("received a response...");
       return {
         ...state,
-      };
-    case CANCEL_ALERT:
-      return {
-        ...state,
-      };
+        isFetching: false,
+        response: action.payload
+      }
+
     default:
       return state;
   }
