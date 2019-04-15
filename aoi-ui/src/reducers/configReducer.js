@@ -9,9 +9,6 @@
  * @date February 2019
  * @authors Vaniya Agrawal
  */
-// import {  /// action types.
-//    } from "../actions/types";
-
 
 const initialState = {  /// Defaults to the guest user.
   currUser: {

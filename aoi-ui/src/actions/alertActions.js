@@ -49,7 +49,7 @@ const receiveError = (err) => {
 
 /// Post alert data.
 /**
- * Posts alert data to the server. The alert data is contained in the body
+ * Posts alert data to the back-end service. The alert data is contained in the body
  * of the request and contains all necessary information.
  * @param alert Contains all necessary items defined by the CAP standard.
  * @returns {Function}  Dispatches an action.
@@ -71,12 +71,12 @@ export const sendAlert = (alert) => (dispatch, getState) => {
       if (res.status !== 201) {
         dispatch(receiveError('Error ' + res.status + ": Unable to complete request."))
       }
-      else return res.json();
-    })
-    .then(res => dispatch({
-      type: SENT_ALERT,
-      payload: res
-    }))
-    .catch(err => dispatch(receiveError("Unexpected error. Unable to fulfill request.")));
+      else {
+        dispatch({
+          type: SENT_ALERT,
+          payload: res.json()
+        })
+      }
+    }).catch(err => dispatch(receiveError("Unexpected error. Unable to fulfill request.")));
 };
 

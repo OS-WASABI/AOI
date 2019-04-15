@@ -387,7 +387,7 @@ class AlertForm extends Component {
               <Col sm={2}/>
               <Col>
               <Button
-                variant={'info'}
+                variant={'dark'}
                 onClick={()=> this.handleValidate()}>
                 Send Alert
               </Button>

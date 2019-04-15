@@ -16,7 +16,10 @@ import {  /// Alert action types.
 
 const initialState = {  /// Initialized with no active alerts.
   isFetching: false,
-  response: ''
+  response: {
+    success: '',
+    error: ''
+  }
 }
 
 /// Main reducer for alert actions.
@@ -45,14 +48,20 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isFetching: false,
-        response: "Error " + action.payload + ": Unable to complete request."
+        response: {
+          error: action.payload,
+          success: ''
+        }
       }
     case SENT_ALERT:
       console.log("received a response...");
       return {
         ...state,
         isFetching: false,
-        response: action.payload
+        response: {
+          success: 'Success! Your alert has been sent.',
+          error: ''
+        }
       }
 
     default:

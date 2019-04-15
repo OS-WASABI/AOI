@@ -25,7 +25,7 @@ export default class Header extends Component {
       <div className="Header">
         <Navbar fixed={'top'} bg={'dark'} variant={'dark'} expand={'lg'}>
           <Navbar.Brand as={Link} to={'/'}>
-            <b>OS-WASABI</b><img style={{'marginLeft': 10}} src={logo} alt={'logo'} width={24}/> Alert Originator
+            <b>OS-WASABI</b><img style={{'marginLeft': 10}} src={logo} alt={'logo'} width={36}/> Alert Originator
           </Navbar.Brand>
           <Navbar.Toggle onClick={() => this.toggle()}/>
           <Navbar.Collapse id={'responsive-navbar-nav'}>

@@ -16,21 +16,47 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import success from "../../../images/success.svg";
+import error from "../../../images/error.svg";
 
 class Confirm extends Component {
-  render() {
-    return (
-      <div id='Confirmation'>
-        <Modal alert={this.props.alert}
-               show={this.props.show}
-               onHide={this.props.onHide} centered>
+  getContent() {
+    if (this.props.response.error || this.props.response.success) {
+      let response = this.props.response.error ? this.props.response.error : this.props.response.success;
+      let image = this.props.response.error ? error : success;
+      return (
+        <div>
           <Modal.Header closeButton>
-            <Container>
-            <Modal.Title >Confirm Alert</Modal.Title>
-            </Container>
           </Modal.Header>
           <Modal.Body>
             <Container>
+              <Row>
+                <Col/>
+                <Col><img src={image} alt={image}/></Col>
+                <Col/>
+              </Row>
+              <br/>
+              <Container>
+                <h5>{response}</h5>
+              </Container>
+            </Container>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant={'light'} onClick={this.props.onHide}>Close</Button>
+          </Modal.Footer>
+        </div>
+      )
+    }
+
+    else return (
+      <div>
+        <Modal.Header closeButton>
+          <Container>
+            <Modal.Title>Confirm Alert</Modal.Title>
+          </Container>
+        </Modal.Header>
+        <Modal.Body>
+          <Container>
             <Container>
               <h5>Summary</h5>
               <Row>
@@ -82,21 +108,33 @@ class Confirm extends Component {
                 <Col style={{"color": "#6c757d"}}>{this.props.alert.info.area.polygon.map(pair => pair + ", ")} </Col>
               </Row>
             </Container>
-            </Container>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant={'light'} onClick={this.props.onHide}>Edit</Button>
-            <Button variant={'info'} onClick={()=>this.props.sendAlert(this.props.alert)}>Send</Button>
-          </Modal.Footer>
+          </Container>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant={'light'} onClick={this.props.onHide}>Edit</Button>
+          <Button variant={'dark'} onClick={()=>this.props.sendAlert(this.props.alert)}>Send</Button>
+        </Modal.Footer>
+      </div>
+    )
+  }
+
+  render() {
+    return (
+      <div id='Confirmation'>
+        <Modal alert={this.props.alert}
+               show={this.props.show}
+               onHide={this.props.onHide} centered>
+          {this.getContent()}
         </Modal>
       </div>
     );
   }
 }
 
-function mapStateToProps(props) {
-
-}
+const mapStateToProps = state => ({
+  isFetching: state.alerts.isFetching,
+  response: state.alerts.response
+})
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
@@ -104,4 +142,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(Confirm);
+export default connect(mapStateToProps, mapDispatchToProps)(Confirm);
