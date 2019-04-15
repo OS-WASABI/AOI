@@ -17,7 +17,7 @@ const initialState = {  /// Defaults to the guest user.
       name: 'Guest',
     },
   },
-  alertEndpoint: '/v1/cadg/api/alerts'
+  alertEndpoint: '/v1/aoi/api/alerts'
 }
 
 /// Main reducer for user actions.
