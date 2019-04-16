@@ -39,7 +39,7 @@ namespace aoi_soap {
             logger__.Log(LogLevel::DEBUG, "JSON Received: " + body, "SoapController", "HandlePost");
 
             // TODO(Kris): parse CAP json from string
-            const web::json::value body_json = message.extract_json().get();
+             web::json::value body_json = message.extract_json().get();
             _ns4__alert incoming_alert;
             if (aoi_soap::json_to_gsoap(body_json, incoming_alert)) {
                 struct soap context = *soap_new2(SOAP_XML_STRICT, SOAP_XML_INDENT);

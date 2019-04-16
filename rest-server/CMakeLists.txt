@@ -56,13 +56,13 @@ add_executable(${PROJECT_NAME}
 		./src/rest_server.cpp
 		./src/controller/controller.cpp
 		./src/controller/soap_controller.cpp
+		./src/model/alert.cpp
 		./src/nanodbc/nanodbc.cpp
 		./src/gSoapFiles/client/soapCAPSoapHttpProxy.cpp
 		./src/gSoapFiles/client/soapC.cpp
 		./src/gSoapFiles/client/stdsoap2.cpp
 		./src/services/logger.cpp
-		./src/util/network_utils.cpp
-		./src/services/alert_conversion.hpp)
+		./src/util/network_utils.cpp)
 
 # header locations
 set(CONTROLLER_INCLUDE_DIR "./src/controller")
