@@ -14,7 +14,7 @@
 #include <string>
 #include "soap_controller.hpp"
 #include "log_level.hpp"
-#include "../gSoapFiles/client/ns2.nsmap"
+#include "../gSoapFiles/client/CAPSoapHttp.nsmap"
 using aoi_rest::LogLevel;
 
 namespace aoi_soap {
