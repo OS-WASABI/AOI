@@ -16,6 +16,15 @@ class Expires extends Component {
     this.state = {
       expires: new Date()
     }
+
+    this.onChange = this.onChange.bind(this);
+  }
+
+  onChange = (moment) => {
+    try {
+      let date = moment.toDate();
+      this.props.addAlert(date);
+    } catch {}
   }
 
   render() {
@@ -24,7 +33,7 @@ class Expires extends Component {
         <DateTime
           defaultValue={this.state.expires}
           timeFormat={'HH:mm'}
-          onChange={moment => this.props.addAlert(moment.toDate())}/>
+          onChange={this.onChange}/>
       </div>
     );
   }
