@@ -14,6 +14,7 @@ import store, { history } from "./store";
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css';
+import './css/index.css'
 
 ReactDOM.render(
   <Provider store={store}>
