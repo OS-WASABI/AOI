@@ -88,8 +88,8 @@ class AlertForm extends Component {
         status: "Status ",
         msgType: "Message Type",
         scope: "Scope ",
-        expires: '',
         info: {
+          expires: '',
           category: [],
           event: "",
           urgency: "Urgency ",
@@ -345,7 +345,7 @@ class AlertForm extends Component {
                   Expires
                 </Form.Label>
                 <Expires
-                  addAlert={date=>this.addAlert('expires', date)}/>
+                  addInfo={date=>this.addInfo('expires', date)}/>
               </Form.Row>
             </Form.Group>
             <hr/>

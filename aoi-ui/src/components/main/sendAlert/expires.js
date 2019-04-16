@@ -23,7 +23,7 @@ class Expires extends Component {
   onChange = (moment) => {
     try {
       let date = moment.toDate();
-      this.props.addAlert(date);
+      this.props.addInfo(date);
     } catch {}
   }
 
