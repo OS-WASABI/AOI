@@ -205,8 +205,6 @@ class AlertForm extends Component {
   }
 
   addAlert(name, value) {
-    console.log("Changing " + name);
-    console.log(value);
     this.setState(prevState => ({
       ...prevState,
       alert: {
