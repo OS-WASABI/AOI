@@ -31,13 +31,12 @@ class Category extends Component {
       <ButtonGroup key={i}>
         <Button
           variant={'light'}
-          style={{'marginLeft': 10, 'marginBottom': 10}}>
+          style={{'marginLeft': 10}}>
           {category}
         </Button>
         <Button
           size={'sm'}
           variant={'light'}
-          style={{'marginBottom': 10}}
           onClick={() => this.props.popInfoSelection(category)}>
           X
         </Button>
@@ -51,17 +50,14 @@ class Category extends Component {
         <Form.Row>
           <Form.Label
             column
-            style={{"color": "#6c757d"}}
             sm={2}>Category</Form.Label>
-          <Col sm={2}>
+          <Col>
             <SplitButton
               drop={'right'}
               variant={'light'}
               title={'Choose'}>
               {this.getCategories()}
             </SplitButton>
-          </Col>
-          <Col>
             {this.showCategories()}
           </Col>
       </Form.Row>

@@ -18,7 +18,6 @@ class Severity extends Component {
         <Form.Row>
           <Form.Label
             column
-            style={{"color": "#6c757d"}}
             sm={2}>Severity</Form.Label>
           <ButtonGroup style={{'marginLeft': 5}}>
             <Button

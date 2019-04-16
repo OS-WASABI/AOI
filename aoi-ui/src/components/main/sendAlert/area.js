@@ -18,7 +18,6 @@ class Area extends Component {
           <Form.Row>
             <Form.Label
               column
-              style={{"color": "#6c757d"}}
               sm={2}>Area</Form.Label>
             <Col>
               <Form.Control

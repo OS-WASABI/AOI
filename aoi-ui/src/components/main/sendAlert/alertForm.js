@@ -28,6 +28,7 @@ import Certainty from "./certainty";
 import Urgency from "./urgency";
 import Category from "./category";
 import Area from "./area";
+import Expires from "./expires";
 
 const options = {
   categories: [
@@ -84,15 +85,16 @@ class AlertForm extends Component {
     super(props);
     this.state = {
       alert: {
-        status: "(Status)",
-        msgType: "(Message Type)",
-        scope: "(Scope)",
+        status: "Status ",
+        msgType: "Message Type",
+        scope: "Scope ",
         info: {
+          expires: '',
           category: [],
           event: "",
-          urgency: "(Urgency)",
-          severity: "(Severity)",
-          certainty: "(Certainty)",
+          urgency: "Urgency ",
+          severity: "Severity ",
+          certainty: "Certainty ",
           area: {
             areaDesc: "",
             polygon: [
@@ -128,7 +130,7 @@ class AlertForm extends Component {
       let val = object[alertOption];
 
       if (typeof val === "string") {
-        if ( val === null || val.length === 0 || val.includes("(")) {
+        if ( val === null || val.length === 0 || val.includes(" ")) {
           error.push(alertOption);
         }
       }
@@ -309,7 +311,6 @@ class AlertForm extends Component {
             onHide={confirmationClose}/>
           <br/>
           <h1>Send Alert</h1>
-          <br/>
           <Alert
             variant={"danger"}
             dismissible
@@ -317,13 +318,12 @@ class AlertForm extends Component {
             show={this.state.error.show}>
             {this.state.error.msg}
           </Alert>
+          <hr/>
           <Form>
-            <Form.Group>
               <Form.Row>
                 <Form.Label
                   column
-                  style={{"color": "#6c757d"}}
-                  sm={2}>Status/Type/Scope</Form.Label>
+                  sm={2}>Alert Options</Form.Label>
                 <Status
                   status={this.state.alert.status}
                   statuses={options.statuses}
@@ -337,10 +337,22 @@ class AlertForm extends Component {
                   scopes={options.scopes}
                   addAlert={alert=>this.addAlert('scope', alert)}/>
               </Form.Row>
+            <Form.Group>
               <Form.Row>
                 <Form.Label
                   column
-                  style={{"color": "#6c757d"}}
+                  sm={2}>
+                  Expires
+                </Form.Label>
+                <Expires
+                  addInfo={date=>this.addInfo('expires', date)}/>
+              </Form.Row>
+            </Form.Group>
+            <hr/>
+            <Form.Group>
+              <Form.Row>
+                <Form.Label
+                  column
                   sm={2}>Event</Form.Label>
                 <Col>
                   <InputGroup>
@@ -355,8 +367,8 @@ class AlertForm extends Component {
             <Form.Row>
               <Form.Label
                 column
-                style={{"color": "#6c757d"}}
-                sm={2}>Urgency/Certainty</Form.Label>
+                className={'grey'}
+                sm={2}>Info Options</Form.Label>
               <Urgency
                 urgency={this.state.alert.info.urgency}
                 urgencies={options.urgencies}
@@ -382,7 +394,7 @@ class AlertForm extends Component {
                 editPair={(val, i)=>this.editPolygonPair(val, i)}
                 removePair={(i)=>this.removePolygonPair(i)}/>
             </Area>
-            <br/>
+            <hr/>
             <Form.Row>
               <Col sm={2}/>
               <Col>

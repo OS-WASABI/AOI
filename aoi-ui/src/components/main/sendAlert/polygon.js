@@ -59,7 +59,6 @@ class Polygon extends Component {
         <Form.Row>
           <Form.Label
             column
-            style={{"color": "#6c757d"}}
             sm={2}>Area Polygon</Form.Label>
           <Col>
             <Form.Row>
