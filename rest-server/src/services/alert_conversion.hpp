@@ -12,7 +12,8 @@
 #include <time.h>
 #include <regex>
 
-bool json_to_gsoap(web::json::value alert_json, _ns4__alert alert) {
+namespace aoi_soap {
+bool json_to_gsoap(web::json::value &alert_json, _ns4__alert &alert) {
     try {
         // Required
         if (alert_json.has_field("identifier") && alert_json["identifier"].is_string()) {
@@ -122,5 +123,5 @@ bool json_to_gsoap(web::json::value alert_json, _ns4__alert alert) {
         return false;
     }
 }
-
+}
 #endif //AOI_REST_SERVER_ALERT_CONVERSION_HPP
