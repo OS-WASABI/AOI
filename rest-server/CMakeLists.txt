@@ -57,6 +57,7 @@ add_executable(${PROJECT_NAME}
 		./src/controller/controller.cpp
 		./src/controller/soap_controller.cpp
 		./src/nanodbc/nanodbc.cpp
+		./src/gSoapFiles/client/soapCAPSoapHttpProxy.cpp
 		./src/gSoapFiles/client/soapC.cpp
 		./src/gSoapFiles/client/stdsoap2.cpp
 		./src/services/logger.cpp
@@ -68,7 +69,7 @@ set(CONTROLLER_INCLUDE_DIR "./src/controller")
 set(MODEL_INCLUDE_DIR "./src/model")
 set(SERVICES_INCLUDE_DIR "./src/services")
 set(SOAP_CLIENT_DIR "./src/soap/")
-set(SOAP_INCLUDE_DIR "./src/gSoapFiles/CAP")
+set(SOAP_INCLUDE_DIR "./src/gSoapFiles/client")
 set(UTILITIES_INCLUDE_DIR "./src/util")
 set(NANODBC_INCLUDE_DIR "./src/nanodbc")
 set(HEADER_PATHS ${CONTROLLER_INCLUDE_DIR} ${MODEL_INCLUDE_DIR} ${NANODBC_INCLUDE_DIR} ${SERVICES_INCLUDE_DIR}

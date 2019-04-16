@@ -15,9 +15,16 @@
 #include "soap_controller.hpp"
 #include "log_level.hpp"
 #include "../gSoapFiles/client/CAPSoapHttp.nsmap"
+#include "../gSoapFiles/client/soapH.h"
+#include "../gSoapFiles/client/soapStub.h"
+#include "../gSoapFiles/client/soapCAPSoapHttpProxy.h"
+#include "../services/alert_conversion.hpp"
 using aoi_rest::LogLevel;
 
 namespace aoi_soap {
+
+    const char server_address[] = "https://localhost:8443/cadg/soap";
+
     void SoapController::InitHandlers() {
         listener__.support(methods::GET, std::bind(&SoapController::HandleGet, this, std::placeholders::_1));
         listener__.support(methods::PUT, std::bind(&SoapController::HandlePut, this, std::placeholders::_1));
@@ -32,13 +39,28 @@ namespace aoi_soap {
             logger__.Log(LogLevel::DEBUG, "JSON Received: " + body, "SoapController", "HandlePost");
 
             // TODO(Kris): parse CAP json from string
-            const json::value body_json = message.extract_json().get();
+            const web::json::value body_json = message.extract_json().get();
+            _ns4__alert incoming_alert;
+            if (aoi_soap::json_to_gsoap(body_json, incoming_alert)) {
+                struct soap context = *soap_new2(SOAP_XML_STRICT, SOAP_XML_INDENT);
+                CAPSoapHttpProxy server;
+                _ns1__postCAPRequestTypeDef request;
+                _ns1__postCAPResponseTypeDef response;
+                request.ns4__alert = &incoming_alert;
+                request.soap_serialize(&context);
+                server.CAPSoapHttpProxy_init(SOAP_XML_INDENT, SOAP_XML_INDENT);
+                server.soap_endpoint = server_address;
+                server.postCAP(&request, response);
 
-            // TODO(Kris): validate CAP
-
-            // TODO(Kris): use SOAP client to send CAP to CADG
-
-            message.reply(status_codes::OK, "Recieved: " + body);
+                if (!server.soap->error) {
+                    logger__.Log(LogLevel::DEBUG, std::string("Sent Alert Successfully. Return: ") + *response.postCAPReturn, "SoapController", "HandlePost");
+                    message.reply(status_codes::Created);
+                } else {
+                    message.reply(status_codes::BadRequest);
+                }
+            } else {
+                message.reply(status_codes::BadRequest);
+            }
         } catch (std::exception& e) {
             message.reply(status_codes::BadRequest);
         }

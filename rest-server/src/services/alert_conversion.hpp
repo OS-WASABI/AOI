@@ -13,15 +13,17 @@
 #include <regex>
 
 namespace aoi_soap {
-bool json_to_gsoap(web::json::value &alert_json, _ns4__alert &alert) {
+bool json_to_gsoap(const web::json::value &alert_json, _ns4__alert &alert) {
     try {
         // Required
-        if (alert_json.has_field("identifier") && alert_json["identifier"].is_string()) {
-            alert.identifier = alert_json["identifier"].as_string();
+        /**
+        if (alert_json.has_field("identifier") && alert_json.get("identifier").is_string()) {
+            alert.identifier = alert_json.get("identifier").as_string();
         } else {
             return false;
         }
-
+        **/
+        return false;
 
         /*
         // Required
