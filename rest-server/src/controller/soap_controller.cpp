@@ -23,7 +23,7 @@ using aoi_rest::LogLevel;
 
 namespace aoi_soap {
 
-    const char server_address[] = "https://localhost:8443/cadg/soap";
+    const char server_address[] = "https://wasabi.group/cadg/soap";
 
     void SoapController::InitHandlers() {
         listener__.support(methods::GET, std::bind(&SoapController::HandleGet, this, std::placeholders::_1));
