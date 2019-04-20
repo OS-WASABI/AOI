@@ -283,6 +283,54 @@ bool Alert::validate_incidents(const std::vector<std::string> incidents) {
     return true;
 }
 
+std::optional<std::string> Alert::get_identifier() {
+    return identifier__;
+}
+
+std::optional<std::string> Alert::get_sender() {
+    return sender__;
+}
+
+std::optional<std::time_t> Alert::get_sent_time() {
+    return sent_time__;
+}
+
+std::optional<std::string> Alert::get_status() {
+    return status__;
+}
+
+int Alert::get_status_enum() {
+    for (int i = 0; i < status_codes.size(); i++) {
+        if (status_codes[i] == status__)
+            return i + 1;
+    }
+    return -1;
+}
+
+std::optional<std::string> Alert::get_msg_type() {
+    return msg_type__;
+}
+
+int Alert::get_msg_type_enum() {
+    for (int i = 0; i < status_codes.size(); i++) {
+        if (msg_type_codes[i] == msg_type__)
+            return i + 1;
+    }
+    return -1;
+}
+
+std::optional<std::string> Alert::get_scope() {
+    return scope__;
+}
+
+int Alert::get_scope_enum() {
+    for (int i = 0; i < status_codes.size(); i++) {
+        if (scope_codes[i] == scope__)
+            return i + 1;
+    }
+    return -1;
+}
+
 /*
 std::optional<std::vector<AlertInfo>> Alert::get_info() {
     return info__;

@@ -178,6 +178,25 @@ private:
     */
     bool validate_incidents(const std::vector<std::string> incidents);
 
+    // comments are for the weak
+    std::optional<std::string> get_identifier();
+
+    std::optional<std::string> get_sender();
+
+    std::optional<std::time_t> get_sent_time();
+
+    std::optional<std::string> get_status();
+
+    int get_status_enum();
+
+    std::optional<std::string> get_msg_type();
+
+    int get_msg_type_enum();
+
+    std::optional<std::string> get_scope();
+
+    int get_scope_enum();
+
 public:
     Alert();
 

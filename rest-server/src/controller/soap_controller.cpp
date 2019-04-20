@@ -53,7 +53,8 @@ namespace aoi_soap {
                 server.postCAP(&request, response);
 
                 if (!server.soap->error) {
-                    logger__.Log(LogLevel::DEBUG, std::string("Sent Alert Successfully. Return: ") + *response.postCAPReturn, "SoapController", "HandlePost");
+                    logger__.Log(LogLevel::DEBUG, std::string("Sent Alert Successfully. Return: ") +
+                    *response.postCAPReturn, "SoapController", "HandlePost");
                     message.reply(status_codes::Created);
                 } else {
                     message.reply(status_codes::BadRequest);
