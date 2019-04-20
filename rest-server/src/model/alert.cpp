@@ -302,7 +302,7 @@ std::optional<std::string> Alert::get_status() {
 int Alert::get_status_enum() {
     for (int i = 0; i < status_codes.size(); i++) {
         if (status_codes[i] == status__)
-            return i + 1;
+            return i;
     }
     return -1;
 }
@@ -314,7 +314,7 @@ std::optional<std::string> Alert::get_msg_type() {
 int Alert::get_msg_type_enum() {
     for (int i = 0; i < status_codes.size(); i++) {
         if (msg_type_codes[i] == msg_type__)
-            return i + 1;
+            return i;
     }
     return -1;
 }
@@ -326,7 +326,7 @@ std::optional<std::string> Alert::get_scope() {
 int Alert::get_scope_enum() {
     for (int i = 0; i < status_codes.size(); i++) {
         if (scope_codes[i] == scope__)
-            return i + 1;
+            return i;
     }
     return -1;
 }
