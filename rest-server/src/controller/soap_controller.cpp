@@ -35,8 +35,6 @@ namespace aoi_soap {
     void SoapController::HandlePost(http_request message) {
         logger__.LogNetworkActivity(message, endpoint(), 1);
         try {
-            auto body = message.extract_string().get();
-            logger__.Log(LogLevel::DEBUG, "JSON Received: " + body, "SoapController", "HandlePost");
             web::json::value body_json = message.extract_json().get();
             _ns4__alert incoming_alert;
             if (aoi_soap::json_to_gsoap(body_json, incoming_alert)) {
@@ -53,12 +51,13 @@ namespace aoi_soap {
                 server.soap_endpoint = server_address;
                 server.postCAP(&request, response);
 
-                if (!server.soap->error) {
-                    logger__.Log(LogLevel::DEBUG, std::string("Sent Alert Successfully. Return: ") +
-                    *response.postCAPReturn, "SoapController", "HandlePost");
-                    message.reply(status_codes::Created);
-                } else {
+                if (server.soap->error) {
+                    logger__.Log(LogLevel::DEBUG, std::string("Failed to send alert Return: "), "SoapController", "HandlePost");
                     message.reply(status_codes::BadRequest);
+                } else {
+                    logger__.Log(LogLevel::DEBUG, std::string("Sent Alert Successfully. Return: ") +
+                                                  *response.postCAPReturn, "SoapController", "HandlePost");
+                    message.reply(status_codes::Created);
                 }
             } else {
                 message.reply(status_codes::BadRequest);

@@ -32,16 +32,7 @@ bool json_to_gsoap(web::json::value &alert_json, _ns4__alert &gsoap_alert) {
                 gsoap_alert.scope = (_ns4__alert_scope)alert.value().get_scope_enum();
         } else {
             logger__.Log(aoi_rest::LogLevel::DEBUG, "Alert not created from json.", "alert_conversion.hpp", "json_to_gsoap");
-            //Mock data until we fix it.
-            gsoap_alert.identifier = "ZingZang!";
-            gsoap_alert.sender = "Your mother.";
-            gsoap_alert.sent = 0;
-            gsoap_alert.status = (_ns4__alert_status)0;
-            gsoap_alert.msgType = (_ns4__alert_msgType)0;
-            gsoap_alert.scope = (_ns4__alert_scope)0;
-
-            return true;
-            //return false;
+            return false;
         }
         return true;
     } catch (std::exception &e) {
