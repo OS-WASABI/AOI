@@ -13,11 +13,13 @@
 #include <string>
 #include <vector>
 #include <array>
-#include <time.h>
 #include <optional>
 #include <time.h>
 #include <regex>
 #include <cpprest/json.h>
+#include <logger.hpp>
+#include <logger_interface.hpp>
+#include "log_level.hpp"
 
 namespace aoi_soap {
 // Allowed codes as per CAP 1.2.
@@ -30,6 +32,7 @@ static const std::string restricted_chars = " ,<&";
 class Alert {
 
 private:
+    aoi_rest::LoggerInterface& logger__;
 
     // Required elements
     std::optional<std::string> identifier__;
@@ -178,6 +181,23 @@ private:
     */
     bool validate_incidents(const std::vector<std::string> incidents);
 
+public:
+    Alert();
+
+    /**
+     * Creates an optional<Alert> from a web::json::value.
+     *
+     * If the json value does not contain all required fields,
+     * a std::nullopt is returned.
+     *
+     * @return std::optional<Alert>
+     */
+    //std::optional<std::vector<AlertInfo>> get_info();
+
+    static std::optional<Alert> from_json(web::json::value &alert_json);
+
+    friend bool operator==(const Alert &a, const Alert &b);
+
     // comments are for the weak
     std::optional<std::string> get_identifier();
 
@@ -196,23 +216,6 @@ private:
     std::optional<std::string> get_scope();
 
     int get_scope_enum();
-
-public:
-    Alert();
-
-    /**
-     * Creates an optional<Alert> from a web::json::value.
-     *
-     * If the json value does not contain all required fields,
-     * a std::nullopt is returned.
-     *
-     * @return std::optional<Alert>
-     */
-    //std::optional<std::vector<AlertInfo>> get_info();
-
-    static std::optional<Alert> from_json(web::json::value &alert_json);
-
-    friend bool operator==(const Alert &a, const Alert &b);
 };
 
 /// Necessary for comparing if two entities are equal.

@@ -37,11 +37,12 @@ namespace aoi_soap {
         try {
             auto body = message.extract_string().get();
             logger__.Log(LogLevel::DEBUG, "JSON Received: " + body, "SoapController", "HandlePost");
-
-            // TODO(Kris): parse CAP json from string
-             web::json::value body_json = message.extract_json().get();
+            web::json::value body_json = message.extract_json().get();
             _ns4__alert incoming_alert;
             if (aoi_soap::json_to_gsoap(body_json, incoming_alert)) {
+                logger__.Log(LogLevel::DEBUG, "Alert conversion successful.", "SoapController", "HandlePost");
+                logger__.Log(LogLevel::DEBUG, "Alert identifier: " + incoming_alert.identifier, "SoapController", "HandlePost");
+
                 struct soap context = *soap_new2(SOAP_XML_STRICT, SOAP_XML_INDENT);
                 CAPSoapHttpProxy server;
                 _ns1__postCAPRequestTypeDef request;

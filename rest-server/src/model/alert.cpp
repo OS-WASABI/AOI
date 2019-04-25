@@ -20,9 +20,7 @@
 
 namespace aoi_soap {
 
-Alert::Alert() {
-
-}
+Alert::Alert() : logger__(aoi_rest::Logger::Instance()) {}
 
 std::optional<std::vector<std::string>> json_value_to_string_vector_optional(web::json::value json_value) {
     if (!json_value.is_array())
@@ -40,16 +38,27 @@ std::optional<std::vector<std::string>> json_value_to_string_vector_optional(web
 }
 
 std::optional<Alert> Alert::from_json(web::json::value &alert_json) {
+    aoi_rest::LoggerInterface& logger__(aoi_rest::Logger::Instance());
     try {
         Alert alert = Alert();
-
         // Required
-        if (!alert_json.has_field("identifier") && !alert.validate_identifier(""))
-            return std::nullopt;
-        if (!alert_json["identifier"].is_string())
-            return std::nullopt;
-        if (!alert.validate_identifier(alert_json["identifier"].as_string()))
-            return std::nullopt;
+        if (!alert_json.has_field("identifier")) {
+            logger__.Log(aoi_rest::LogLevel::DEBUG, "Validating empty identifier. ", "Alert.cpp", "from_json");
+            if (!alert.validate_identifier(""))
+                return std::nullopt;
+        } else {
+            logger__.Log(aoi_rest::LogLevel::DEBUG, "Still here. ", "Alert.cpp", "from_json");
+            if (!alert_json.at("identifier").is_string()) {
+                logger__.Log(aoi_rest::LogLevel::DEBUG, "Identifier not a string. ", "Alert.cpp", "from_json");
+                return std::nullopt;
+            }
+            if (!alert.validate_identifier(alert_json.at("identifier").as_string())) {
+                logger__.Log(aoi_rest::LogLevel::DEBUG,
+                             "Validating identifier: " + alert_json.at("identifier").as_string(), "Alert.cpp",
+                             "from_json");
+                return std::nullopt;
+            }
+        }
 
         // Required
         if (!alert_json.has_field("sender") && !alert.validate_sender(""))
@@ -167,11 +176,13 @@ std::optional<Alert> Alert::from_json(web::json::value &alert_json) {
         */
         return alert;
     } catch (std::exception &e) {
+        logger__.Log(aoi_rest::LogLevel::DEBUG, e.what(), "Alert.cpp", "from_json exception");
         return std::nullopt;
     }
 }
 
 bool Alert::validate_identifier(const std::string &identifier) {
+    logger__.Log(aoi_rest::LogLevel::DEBUG, "Validating identifier: " + identifier, "Alert.cpp", "validate_identifier");
     if (identifier.find_first_of(restricted_chars) == std::string::npos) {
         identifier__ = identifier;
         return true;
@@ -180,6 +191,7 @@ bool Alert::validate_identifier(const std::string &identifier) {
 }
 
 bool Alert::validate_sender(const std::string &sender) {
+    logger__.Log(aoi_rest::LogLevel::DEBUG, "Validating sender: " + sender, "Alert.cpp", "validate_sender");
     if (sender.find_first_of(restricted_chars) == std::string::npos) {
         sender__ = sender;
         return true;
@@ -193,6 +205,7 @@ bool Alert::validate_sent_time(const time_t &sent_time) {
 }
 
 bool Alert::validate_status(const std::string &status) {
+    logger__.Log(aoi_rest::LogLevel::DEBUG, "Validating status: " + status, "Alert.cpp", "validate_status");
     std::string status_proper = status;
     for (std::string::size_type i = 0; i < status_proper.length(); ++i) {
         if (i == 0)
