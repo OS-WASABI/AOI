@@ -39,7 +39,8 @@ namespace aoi_soap {
             _ns4__alert incoming_alert;
             if (aoi_soap::json_to_gsoap(body_json, incoming_alert)) {
                 logger__.Log(LogLevel::DEBUG, "Alert conversion successful.", "SoapController", "HandlePost");
-                logger__.Log(LogLevel::DEBUG, "Alert identifier: " + incoming_alert.identifier, "SoapController", "HandlePost");
+                logger__.Log(LogLevel::DEBUG, "Alert identifier: " + incoming_alert.identifier,
+                        "SoapController", "HandlePost");
 
                 struct soap context = *soap_new2(SOAP_XML_STRICT, SOAP_XML_INDENT);
                 CAPSoapHttpProxy server;
@@ -52,7 +53,8 @@ namespace aoi_soap {
                 server.postCAP(&request, response);
 
                 if (server.soap->error) {
-                    logger__.Log(LogLevel::DEBUG, std::string("Failed to send alert Return: "), "SoapController", "HandlePost");
+                    logger__.Log(LogLevel::DEBUG, std::string("Failed to send alert Return: "),
+                            "SoapController", "HandlePost");
                     message.reply(status_codes::BadRequest);
                 } else {
                     logger__.Log(LogLevel::DEBUG, std::string("Sent Alert Successfully. Return: ") +
