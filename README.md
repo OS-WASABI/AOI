@@ -29,7 +29,7 @@ mkdir build
 cd build
 cmake -G "Unix Makefiles" ..
 make
-./cadg-rest-server
+./aoi-rest-server
 ```
 ### Testing
 From the [test](test) directory

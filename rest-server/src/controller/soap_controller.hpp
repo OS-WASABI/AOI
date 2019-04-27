@@ -29,4 +29,4 @@ class SoapController: public aoi_rest::Controller {
     LoggerInterface& logger__;
 };
 } //end aoi_soap
-#endif //CADG_REST_SERVER_SOAP_CONTROLLER_HPP
+#endif // SOAP_CONTROLLER_HPP
