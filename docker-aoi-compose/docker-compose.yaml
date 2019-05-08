@@ -4,19 +4,36 @@ services:
                 build: ../docker-aoi-apache
                 ports:
                         - "8080:80"
+                depends_on:
+                        - "aoi"
+                        - "aoi-ui"
                 networks:
                         - aoinet
+                volumes:
+                        - "react-app:/usr/local/apache2/htdocs"
         aoi:
                 build: ../rest-server/
                 networks:
                         - aoinet
                 tty: true
-        db:
-                image: mysql
+                depends_on:
+                        - "aoi-db"
+                environment:
+                        - AOI_DB_NAME=${AOI_DB_NAME}
+                        - AOI_DB_USER_TABLE=${AOI_DB_USER_TABLE}
+                        - AOI_DB_PASSWORD=${AOI_DB_PASSWORD}
+                        - AOI_DB_PORT=${AOI_DB_PORT}
+                        - AOI_DB_SERVER=${AOI_DB_SERVER}
+                        - AOI_DB_UID=${AOI_DB_UID}
+        aoi-db:
+                build: ../aoi-db
                 networks:
                         - aoinet
-                command: --default-authentication-plugin=mysql_native_password
-                environment:
-                        MYSQL_ROOT_PASSWORD: example
+        aoi-ui:
+                build: ../aoi-ui
+                volumes:
+                        - "react-app:/aoi-ui/build"
 networks:
         aoinet:
+volumes:
+        react-app:

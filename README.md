@@ -1,9 +1,51 @@
 # Alert Originator Interface  
 
-This is an open source solution that can be run on commodity hardware to allow alert originators to easily interface to FEMA IPAWS.
+This is an open source solution that can be run on commodity hardware to allow alert originators to easily interface to FEMA IPAWS. [![Build Status](https://api.travis-ci.org/OS-WASABI/AOI.svg?branch=dev)](https://travis-ci.org/OS-WASABI/AOI)
 
-## Using Docker to Build and Test Locally
-To run locally
+## Table of Contents
+* [Docker Compose](#docker-compose)
+* [Install](#install)
+* [Running](#running)
+* [Credits](#credits)
+
+## Docker-Compose
+The preferred and simplest 
+Launch the application with Docker compose from the [docker-aoi-compose](docker-aoi-compose) directory with
 ```
-docker build --rm -t aoi:test-1 -f ./test/Dockerfile
+docker-compose up
 ```
+
+## Install
+On Ubuntu 18.04 LTS, run the following [env-setup.sh](docker-test-env/env-setup.sh) to install all needed dependencies.
+```
+sudo ./env-setup.sh
+```
+## Running
+How to run individual modules.
+### REST-Server
+From the [rest-server](rest-server) directory
+```
+mkdir build
+cd build
+cmake -G "Unix Makefiles" ..
+make
+./cadg-rest-server
+```
+### Testing
+From the [test](test) directory
+```
+mkdir build
+cd build
+cmake -G "Unix Makefiles" ..
+make
+./runTests
+```
+
+## Credits
+Dev | Name
+-------|------
+<img src="./img/vaniya.png" width="200" height="200"> | [Vaniya Agrawal](https://github.com/vsagrawal0)
+<img src="./img/ross.png" width="200" height="200"> | [Ross Arcemont](https://github.com/SilverStar07)
+<img src="./img/kris.png" width="200" height="200"> | [Kristofer Hoadley](https://github.com/kchoadley)
+<img src="./img/shawn.jpg" width="200" height="200"> | [Shawn Hulce](https://github.com/SHulce)
+<img src="./img/mike.png" width="200" height="200"> | [Mike McCulley](https://github.com/ASUMike)

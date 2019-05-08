@@ -3,4 +3,6 @@ language: generic
 
 services: docker
 
-script: docker build --rm -t aoi:test -f ./test/Dockerfile .
+script: 
+  - docker build --rm -t aoi:test -f ./test/Dockerfile .
+  - docker build --rm -t aoi-rest-server:test -f ./rest-server/Dockerfile ./rest-server/
